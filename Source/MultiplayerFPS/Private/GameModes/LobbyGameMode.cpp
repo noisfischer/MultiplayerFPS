@@ -13,6 +13,11 @@ void ALobbyGameMode::PostLogin(APlayerController* NewPlayer)
 	int32 NumberOfPlayers = GameState.Get()->PlayerArray.Num();
 	if(NumberOfPlayers == 2)
 	{
-	//	UWorld::ServerTravel()
+		UWorld* World = GetWorld();
+		if(World)
+		{
+			bUseSeamlessTravel = true;	// Needed so that client doesn't need to disconnect
+			World->ServerTravel("/Game/Maps/FPSMap?listen");
+		}
 	}
 }
