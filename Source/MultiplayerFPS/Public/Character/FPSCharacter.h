@@ -41,6 +41,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = Camera)
 	class UCameraComponent* FollowCamera;
+
+	UPROPERTY(EditAnywhere)
+	class UWidgetComponent* OverheadWidget;
 	
 public:	
 	

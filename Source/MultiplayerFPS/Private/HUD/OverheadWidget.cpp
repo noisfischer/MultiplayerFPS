@@ -31,6 +31,8 @@ void UOverheadWidget::ShowPlayerNetRole(APawn* InPawn)
 	case ENetRole::ROLE_None:
 		Role = FString("None");
 		break;
+	default:
+		break;
 	}
 
 	FString LocalRoleString = FString::Printf(TEXT("Local Role: %s"), *Role);
