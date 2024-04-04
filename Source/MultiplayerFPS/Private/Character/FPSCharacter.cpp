@@ -172,6 +172,11 @@ void AFPSCharacter::SetOverlappingWeapon(AWeapon* Weapon)
 	}
 }
 
+bool AFPSCharacter::IsWeaponEquipped()
+{
+	return (Combat && Combat->EquippedWeapon);
+}
+
 // ONLY CALLED ON THE CLIENT
 void AFPSCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)
 {
