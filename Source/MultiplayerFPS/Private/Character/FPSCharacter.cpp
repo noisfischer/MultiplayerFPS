@@ -34,6 +34,8 @@ AFPSCharacter::AFPSCharacter()
 
 	Combat = CreateDefaultSubobject<UCombatComponent>(TEXT("CombatComponent"));
 	Combat->SetIsReplicated(true);
+
+	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 }
 
 void AFPSCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
