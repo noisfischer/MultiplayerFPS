@@ -89,8 +89,8 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AFPSCharacter::Move);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AFPSCharacter::Look);
 		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &AFPSCharacter::EquipButtonPressed);
-		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &AFPSCharacter::CrouchButtonPressed);
-		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Canceled, this, &AFPSCharacter::CrouchButtonPressed);
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &AFPSCharacter::CrouchButtonPressed);
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AFPSCharacter::CrouchButtonReleased);
 	}	
 }
 
@@ -156,7 +156,18 @@ void AFPSCharacter::ServerEquipButtonPressed_Implementation()
 
 void AFPSCharacter::CrouchButtonPressed()
 {
-	Crouch();	// pre-defined function from ACharacter. Replicated by default
+	if(!bIsCrouched)
+	{
+		Crouch();	// pre-defined function from ACharacter. Replicated by default
+	}
+}
+
+void AFPSCharacter::CrouchButtonReleased()
+{
+	if(bIsCrouched)
+	{
+		UnCrouch(); // pre-defined function from ACharacter. Replicated by default
+	}
 }
 
 // ONLY CALLED ON THE SERVER
