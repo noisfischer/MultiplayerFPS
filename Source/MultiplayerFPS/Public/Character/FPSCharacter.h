@@ -55,11 +55,16 @@ private:
 	UPROPERTY(ReplicatedUsing = OnRep_OverlappingWeapon)
 	class AWeapon* OverlappingWeapon;
 
+	// RepNotify function
 	UFUNCTION()
 	void OnRep_OverlappingWeapon(AWeapon* LastWeapon); // ONLY CALLED ON THE CLIENT
 
 	UPROPERTY(VisibleAnywhere)
 	class UCombatComponent* Combat;
+	
+	// Remote Procedure Call
+	UFUNCTION(Server, Reliable)
+	void ServerEquipButtonPressed();
 	
 public:	
 	void SetOverlappingWeapon(AWeapon* Weapon); // ONLY CALLED ON THE SERVER

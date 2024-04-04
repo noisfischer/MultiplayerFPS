@@ -125,9 +125,26 @@ void AFPSCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+// FOR SERVER
 void AFPSCharacter::EquipButtonPressed()
 {
-	if(Combat && HasAuthority())
+	if(Combat)
+	{
+		if(HasAuthority())
+		{
+			Combat->EquipWeapon(OverlappingWeapon);
+		}
+		else
+		{
+			ServerEquipButtonPressed(); // this calls the _Implementation function!
+		}
+	}
+}
+
+// FOR CLIENTS
+void AFPSCharacter::ServerEquipButtonPressed_Implementation()
+{
+	if(Combat)
 	{
 		Combat->EquipWeapon(OverlappingWeapon);	
 	}
