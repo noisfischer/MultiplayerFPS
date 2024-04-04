@@ -177,7 +177,7 @@ void AFPSCharacter::AimButtonPressed()
 {
 	if(Combat)
 	{
-		Combat->bAiming = true;
+		Combat->SetAiming(true);
 	}
 }
 
@@ -185,7 +185,7 @@ void AFPSCharacter::AimButtonReleased()
 {
 	if(Combat)
 	{
-		Combat->bAiming = false;
+		Combat->SetAiming(false);
 	}
 }
 
