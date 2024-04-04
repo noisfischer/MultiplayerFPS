@@ -17,6 +17,8 @@ public:
 	class UTextBlock* DisplayText; // text block in child BP must have same name 'DisplayText' and must re-parent to this class type
 
 	void SetDisplayText(FString TextToDisplay);
+
+	UFUNCTION(BlueprintCallable)
 	void ShowPlayerNetRole(APawn* InPawn);
 	
 protected:
