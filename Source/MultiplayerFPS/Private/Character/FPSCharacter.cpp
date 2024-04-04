@@ -57,11 +57,7 @@ void AFPSCharacter::BeginPlay()
 void AFPSCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if(OverlappingWeapon)
-	{
-		OverlappingWeapon->ShowPickupWidget(true);
-	}
+	
 }
 
 
@@ -110,5 +106,13 @@ void AFPSCharacter::Look(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+	}
+}
+
+void AFPSCharacter::OnRep_OverlappingWeapon()
+{
+	if(OverlappingWeapon)
+	{
+		OverlappingWeapon->ShowPickupWidget(true);
 	}
 }
