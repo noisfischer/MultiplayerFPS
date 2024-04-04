@@ -36,6 +36,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* CrouchAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* AimAction;
+	
 	virtual void PostInitializeComponents() override;
 
 protected:
@@ -46,6 +49,8 @@ protected:
 	void EquipButtonPressed();
 	void CrouchButtonPressed();
 	void CrouchButtonReleased();
+	void AimButtonPressed();
+	void AimButtonReleased();
 	
 private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
@@ -74,4 +79,5 @@ private:
 public:	
 	void SetOverlappingWeapon(AWeapon* Weapon); // ONLY CALLED ON THE SERVER
 	bool IsWeaponEquipped();
+	bool isAiming();
 };

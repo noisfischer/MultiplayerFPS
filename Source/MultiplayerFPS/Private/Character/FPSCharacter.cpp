@@ -90,7 +90,10 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AFPSCharacter::Look);
 		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &AFPSCharacter::EquipButtonPressed);
 		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &AFPSCharacter::CrouchButtonPressed);
-		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AFPSCharacter::CrouchButtonReleased);
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AFPSCharacter::CrouchButtonPressed);
+		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &AFPSCharacter::AimButtonPressed);
+		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &AFPSCharacter::AimButtonReleased);
+
 	}	
 }
 
@@ -170,6 +173,16 @@ void AFPSCharacter::CrouchButtonReleased()
 	}
 }
 
+void AFPSCharacter::AimButtonPressed()
+{
+	
+}
+
+void AFPSCharacter::AimButtonReleased()
+{
+	
+}
+
 // ONLY CALLED ON THE SERVER
 void AFPSCharacter::SetOverlappingWeapon(AWeapon* Weapon)
 {
@@ -195,6 +208,11 @@ void AFPSCharacter::SetOverlappingWeapon(AWeapon* Weapon)
 bool AFPSCharacter::IsWeaponEquipped()
 {
 	return (Combat && Combat->EquippedWeapon);
+}
+
+bool AFPSCharacter::isAiming()
+{
+	return (Combat && Combat->bAiming);
 }
 
 // ONLY CALLED ON THE CLIENT
