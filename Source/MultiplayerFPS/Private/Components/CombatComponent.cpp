@@ -27,6 +27,16 @@ void UCombatComponent::SetAiming(bool bIsAiming)
 	ServerSetAiming(bIsAiming);
 }
 
+void UCombatComponent::OnRep_EquippedWeapon()
+{
+	if(EquippedWeapon && PlayerRef)
+	{
+		// Character always faces forwards when holding weapon
+		PlayerRef->GetCharacterMovement()->bOrientRotationToMovement = false;
+		PlayerRef->bUseControllerRotationYaw = true;
+	}
+}
+
 void UCombatComponent::ServerSetAiming_Implementation(bool bIsAiming)
 {
 	bAiming = bIsAiming;
@@ -64,8 +74,4 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	}
 
 	EquippedWeapon->SetOwner(PlayerRef);
-
-	// Character always faces forwards when holding weapon
-	PlayerRef->GetCharacterMovement()->bOrientRotationToMovement = false;
-	PlayerRef->bUseControllerRotationYaw = true;
 }
