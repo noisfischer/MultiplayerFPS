@@ -51,6 +51,9 @@ private:
 
 	UFUNCTION()
 	void OnRep_OverlappingWeapon(AWeapon* LastWeapon); // ONLY CALLED ON THE CLIENT
+
+	UPROPERTY(VisibleAnywhere)
+	class UCombatComponent* Combat;
 	
 public:	
 	void SetOverlappingWeapon(AWeapon* Weapon); // ONLY CALLED ON THE SERVER
