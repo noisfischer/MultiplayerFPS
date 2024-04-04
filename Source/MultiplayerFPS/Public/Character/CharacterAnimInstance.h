@@ -47,4 +47,5 @@ private:
 
 	FRotator PlayerRotationLastFrame;
 	FRotator PlayerRotation;
+	FRotator DeltaRotation;
 };

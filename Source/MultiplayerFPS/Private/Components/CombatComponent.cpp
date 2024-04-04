@@ -74,4 +74,8 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	}
 
 	EquippedWeapon->SetOwner(PlayerRef);
+	
+	// Character always faces forwards when holding weapon
+	PlayerRef->GetCharacterMovement()->bOrientRotationToMovement = false;
+	PlayerRef->bUseControllerRotationYaw = true;
 }
