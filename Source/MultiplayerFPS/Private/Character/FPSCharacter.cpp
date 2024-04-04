@@ -109,6 +109,7 @@ void AFPSCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+// ONLY CALLED ON THE SERVER
 void AFPSCharacter::SetOverlappingWeapon(AWeapon* Weapon)
 {
 	if(IsLocallyControlled()) // If the affected player is NOT a client
@@ -130,6 +131,7 @@ void AFPSCharacter::SetOverlappingWeapon(AWeapon* Weapon)
 	}
 }
 
+// ONLY CALLED ON THE CLIENT
 void AFPSCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)
 {
 	if(OverlappingWeapon)
