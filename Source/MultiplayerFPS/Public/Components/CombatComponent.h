@@ -14,7 +14,8 @@ class MULTIPLAYERFPS_API UCombatComponent : public UActorComponent
 
 public:	
 	UCombatComponent();
-
+	friend class UFPSCharacter;
+	
 protected:
 	virtual void BeginPlay() override;
 
