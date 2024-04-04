@@ -16,6 +16,9 @@ public:
 	UPROPERTY(meta = (BindWidget)) // any changes we make in C++ will be applied to the widget BP
 	class UTextBlock* DisplayText; // text block in child BP must have same name 'DisplayText' and must re-parent to this class type
 
+	void SetDisplayText(FString TextToDisplay);
+	void ShowPlayerNetRole(APawn* InPawn);
+	
 protected:
 	virtual void NativeDestruct() override;
 };
