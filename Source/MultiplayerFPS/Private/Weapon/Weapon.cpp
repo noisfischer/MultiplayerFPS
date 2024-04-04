@@ -38,8 +38,9 @@ void AWeapon::BeginPlay()
 		AreaSphere->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		AreaSphere->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 		
-		// Bind to function
+		// Bind to functions
 		AreaSphere->OnComponentBeginOverlap.AddDynamic(this, &AWeapon::OnSphereBeginOverlap);
+		AreaSphere->OnComponentEndOverlap.AddDynamic(this, &AWeapon::OnSphereEndOverlap);
 	}
 
 	if(PickupWidget)
@@ -61,6 +62,16 @@ void AWeapon::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 	if(PlayerRef)
 	{
 		PlayerRef->SetOverlappingWeapon(this);
+	}
+}
+
+void AWeapon::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	AFPSCharacter* PlayerRef = Cast<AFPSCharacter>(OtherActor);
+	if(PlayerRef)
+	{
+		PlayerRef->SetOverlappingWeapon(nullptr);
 	}
 }
 

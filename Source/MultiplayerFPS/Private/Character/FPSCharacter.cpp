@@ -122,10 +122,14 @@ void AFPSCharacter::SetOverlappingWeapon(AWeapon* Weapon)
 	}
 }
 
-void AFPSCharacter::OnRep_OverlappingWeapon()
+void AFPSCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)
 {
 	if(OverlappingWeapon)
 	{
 		OverlappingWeapon->ShowPickupWidget(true);
+	}
+	if(LastWeapon)
+	{
+		LastWeapon->ShowPickupWidget(false);
 	}
 }
