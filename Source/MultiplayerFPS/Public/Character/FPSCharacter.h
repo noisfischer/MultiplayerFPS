@@ -30,11 +30,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* EquipAction;
+
 protected:
 	virtual void BeginPlay() override;
 
 	void Move(const struct FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
+	void Equip();
 	
 private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
