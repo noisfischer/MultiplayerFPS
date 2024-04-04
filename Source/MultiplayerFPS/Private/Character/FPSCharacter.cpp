@@ -87,8 +87,9 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AFPSCharacter::Move);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AFPSCharacter::Look);
 		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &AFPSCharacter::EquipButtonPressed);
-
-	}
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &AFPSCharacter::CrouchButtonPressed);
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Canceled, this, &AFPSCharacter::CrouchButtonPressed);
+	}	
 }
 
 void AFPSCharacter::Move(const FInputActionValue& Value)
@@ -141,6 +142,7 @@ void AFPSCharacter::EquipButtonPressed()
 	}
 }
 
+
 // FOR CLIENTS
 void AFPSCharacter::ServerEquipButtonPressed_Implementation()
 {
@@ -148,6 +150,11 @@ void AFPSCharacter::ServerEquipButtonPressed_Implementation()
 	{
 		Combat->EquipWeapon(OverlappingWeapon);
 	}
+}
+
+void AFPSCharacter::CrouchButtonPressed()
+{
+	Crouch();	// pre-defined function from ACharacter. Replicated by default
 }
 
 // ONLY CALLED ON THE SERVER
