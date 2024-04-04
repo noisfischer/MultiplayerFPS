@@ -33,4 +33,5 @@ void UCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	bIsInAir = PlayerRef->GetCharacterMovement()->IsFalling();
 	bIsAccelerating = PlayerRef->GetCharacterMovement()->GetCurrentAcceleration().Size() > 0 ? true : false;
+	bWeaponEquipped = PlayerRef->IsWeaponEquipped();
 }

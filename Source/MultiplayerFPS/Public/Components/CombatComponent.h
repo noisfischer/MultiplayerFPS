@@ -15,7 +15,8 @@ class MULTIPLAYERFPS_API UCombatComponent : public UActorComponent
 public:	
 	UCombatComponent();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	
 	friend class AFPSCharacter; // allows access to its variables and functions
 	void EquipWeapon(class AWeapon* WeaponToEquip);
 	
@@ -24,6 +25,9 @@ protected:
 
 private:
 	class AFPSCharacter* PlayerRef;
+
+	// replicated to all clients (no repnotify)
+	UPROPERTY(Replicated)
 	class AWeapon* EquippedWeapon;
 
 public:	
