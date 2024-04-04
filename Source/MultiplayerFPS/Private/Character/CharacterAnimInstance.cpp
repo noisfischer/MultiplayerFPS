@@ -5,6 +5,7 @@
 #include "Character/FPSCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
+// BeginPlay
 void UCharacterAnimInstance::NativeInitializeAnimation()
 {
 	Super::NativeInitializeAnimation();
@@ -12,6 +13,7 @@ void UCharacterAnimInstance::NativeInitializeAnimation()
 	PlayerRef = Cast<AFPSCharacter>(TryGetPawnOwner());
 }
 
+// Tick
 void UCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
@@ -36,4 +38,6 @@ void UCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	bWeaponEquipped = PlayerRef->IsWeaponEquipped();
 	bIsCrouched = PlayerRef->bIsCrouched; // bIsCrouched is pre-existing in ACharacter
 	bAiming = PlayerRef->IsAiming();
+
+	FRotator AimRotation = PlayerRef->GetBaseAimRotation();
 }
