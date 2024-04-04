@@ -48,20 +48,27 @@ void AWeapon::BeginPlay()
 	}
 }
 
+void AWeapon::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
 void AWeapon::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	AFPSCharacter* PlayerRef = Cast<AFPSCharacter>(OtherActor);
 	if(PlayerRef)
 	{
-		PickupWidget->SetVisibility(true);
 		PlayerRef->SetOverlappingWeapon(this);
 	}
 }
 
-void AWeapon::Tick(float DeltaTime)
+void AWeapon::ShowPickupWidget(bool bShowWidget)
 {
-	Super::Tick(DeltaTime);
-
+	if(PickupWidget)
+	{
+		PickupWidget->SetVisibility(bShowWidget);
+	}
 }
 
