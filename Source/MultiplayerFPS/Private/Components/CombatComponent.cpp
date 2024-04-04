@@ -3,6 +3,8 @@
 
 #include "Components/CombatComponent.h"
 #include "Weapon/Weapon.h"
+#include "Character/FPSCharacter.h"
+#include "Engine/SkeletalMeshSocket.h"
 
 UCombatComponent::UCombatComponent()
 {
@@ -28,4 +30,16 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	{
 		return;
 	}
+
+	EquippedWeapon = WeaponToEquip;
+	EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
+
+	const USkeletalMeshSocket* HandSocket = PlayerRef->GetMesh()->GetSocketByName(FName("RightHandSocket"));
+	if(HandSocket)
+	{
+		HandSocket->AttachActor(EquippedWeapon, PlayerRef->GetMesh());
+	}
+
+	EquippedWeapon->SetOwner(PlayerRef);
+	EquippedWeapon->ShowPickupWidget(false);
 }
