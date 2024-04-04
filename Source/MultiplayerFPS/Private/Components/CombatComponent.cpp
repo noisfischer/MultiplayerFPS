@@ -22,11 +22,8 @@ void UCombatComponent::BeginPlay()
 
 void UCombatComponent::SetAiming(bool bIsAiming)
 {
-	bAiming =  bIsAiming;
-	if(!PlayerRef->HasAuthority())
-	{
-		ServerSetAiming(bIsAiming);
-	}
+	bAiming =  bIsAiming; // so the client can aim before the server receives the RPC message
+	ServerSetAiming(bIsAiming);
 }
 
 void UCombatComponent::ServerSetAiming_Implementation(bool bIsAiming)
