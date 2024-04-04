@@ -3,6 +3,7 @@
 
 #include "HUD/OverheadWidget.h"
 #include "Components/TextBlock.h"
+#include "GameFramework/PlayerState.h"
 
 void UOverheadWidget::SetDisplayText(FString TextToDisplay)
 {
