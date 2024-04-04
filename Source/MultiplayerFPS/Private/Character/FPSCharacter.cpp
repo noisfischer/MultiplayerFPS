@@ -146,7 +146,7 @@ void AFPSCharacter::ServerEquipButtonPressed_Implementation()
 {
 	if(Combat)
 	{
-		Combat->EquipWeapon(OverlappingWeapon);	
+		Combat->EquipWeapon(OverlappingWeapon);
 	}
 }
 

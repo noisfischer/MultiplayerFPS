@@ -5,6 +5,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Character/FPSCharacter.h"
+#include "Net/UnrealNetwork.h"
 
 AWeapon::AWeapon()
 {
@@ -55,8 +56,16 @@ void AWeapon::Tick(float DeltaTime)
 
 }
 
+void AWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	// Register all replicated variables here
+	DOREPLIFETIME(AWeapon, WeaponState);
+}
+
 void AWeapon::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                   UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	AFPSCharacter* PlayerRef = Cast<AFPSCharacter>(OtherActor);
 	if(PlayerRef)
