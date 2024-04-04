@@ -86,7 +86,7 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &AFPSCharacter::StopJumping);
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AFPSCharacter::Move);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AFPSCharacter::Look);
-		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &AFPSCharacter::Equip);
+		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &AFPSCharacter::EquipButtonPressed);
 
 	}
 }
@@ -125,9 +125,12 @@ void AFPSCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
-void AFPSCharacter::Equip()
+void AFPSCharacter::EquipButtonPressed()
 {
-	
+	if(Combat && HasAuthority())
+	{
+		Combat->EquipWeapon(OverlappingWeapon);	
+	}
 }
 
 // ONLY CALLED ON THE SERVER

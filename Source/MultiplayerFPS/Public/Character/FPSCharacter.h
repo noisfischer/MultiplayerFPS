@@ -40,7 +40,7 @@ protected:
 
 	void Move(const struct FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
-	void Equip();
+	void EquipButtonPressed();
 	
 private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
