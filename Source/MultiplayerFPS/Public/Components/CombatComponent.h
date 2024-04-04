@@ -28,11 +28,14 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void ServerSetAiming(bool bIsAiming); // RPC! It can have input parameters
 
+	UFUNCTION()
+	void OnRep_EquippedWeapon();
+
 private:
 	class AFPSCharacter* PlayerRef;
 
 	// replicated to all clients (no repnotify)
-	UPROPERTY(Replicated)
+	UPROPERTY(ReplicatedUsing = OnRep_EquippedWeapon)
 	class AWeapon* EquippedWeapon;
 
 	UPROPERTY(Replicated)
