@@ -37,7 +37,7 @@ void AFPSCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	// Register all replicated variables here
-	DOREPLIFETIME(AFPSCharacter, OverlappingWeapon);
+	DOREPLIFETIME_CONDITION(AFPSCharacter, OverlappingWeapon, COND_OwnerOnly);
 }
 
 void AFPSCharacter::BeginPlay()
