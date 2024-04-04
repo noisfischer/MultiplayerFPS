@@ -79,5 +79,5 @@ private:
 public:	
 	void SetOverlappingWeapon(AWeapon* Weapon); // ONLY CALLED ON THE SERVER
 	bool IsWeaponEquipped();
-	bool isAiming();
+	bool IsAiming();
 };

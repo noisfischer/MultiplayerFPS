@@ -210,7 +210,7 @@ bool AFPSCharacter::IsWeaponEquipped()
 	return (Combat && Combat->EquippedWeapon);
 }
 
-bool AFPSCharacter::isAiming()
+bool AFPSCharacter::IsAiming()
 {
 	return (Combat && Combat->bAiming);
 }
