@@ -175,12 +175,18 @@ void AFPSCharacter::CrouchButtonReleased()
 
 void AFPSCharacter::AimButtonPressed()
 {
-	
+	if(Combat)
+	{
+		Combat->bAiming = true;
+	}
 }
 
 void AFPSCharacter::AimButtonReleased()
 {
-	
+	if(Combat)
+	{
+		Combat->bAiming = false;
+	}
 }
 
 // ONLY CALLED ON THE SERVER
