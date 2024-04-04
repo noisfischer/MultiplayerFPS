@@ -109,6 +109,19 @@ void AFPSCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+void AFPSCharacter::SetOverlappingWeapon(AWeapon* Weapon)
+{
+	OverlappingWeapon = Weapon;
+	
+	if(IsLocallyControlled()) // If the affected player is NOT a client
+	{
+		if(OverlappingWeapon)
+		{
+			OverlappingWeapon->ShowPickupWidget(true);
+		}
+	}
+}
+
 void AFPSCharacter::OnRep_OverlappingWeapon()
 {
 	if(OverlappingWeapon)
