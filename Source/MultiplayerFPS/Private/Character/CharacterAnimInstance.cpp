@@ -4,6 +4,7 @@
 #include "Character/CharacterAnimInstance.h"
 #include "Character/FPSCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // BeginPlay
 void UCharacterAnimInstance::NativeInitializeAnimation()
@@ -40,4 +41,6 @@ void UCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	bAiming = PlayerRef->IsAiming();
 
 	FRotator AimRotation = PlayerRef->GetBaseAimRotation();
+	FRotator MovementRotation = UKismetMathLibrary::MakeRotFromX(PlayerRef->GetVelocity());
+	YawOffset = UKismetMathLibrary::NormalizedDeltaRotator(MovementRotation, AimRotation).Yaw;
 }

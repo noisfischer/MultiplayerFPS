@@ -6,6 +6,7 @@
 #include "Character/FPSCharacter.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "Components/SphereComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Net/UnrealNetwork.h"
 
 UCombatComponent::UCombatComponent()
@@ -63,4 +64,8 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	}
 
 	EquippedWeapon->SetOwner(PlayerRef);
+
+	// Character always faces forwards when holding weapon
+	PlayerRef->GetCharacterMovement()->bOrientRotationToMovement = false;
+	PlayerRef->bUseControllerRotationYaw = true;
 }
