@@ -52,9 +52,10 @@ void AWeapon::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	AFPSCharacter* PlayerRef = Cast<AFPSCharacter>(OtherActor);
-	if(PlayerRef && PickupWidget)
+	if(PlayerRef)
 	{
 		PickupWidget->SetVisibility(true);
+		PlayerRef->SetOverlappingWeapon(this);
 	}
 }
 

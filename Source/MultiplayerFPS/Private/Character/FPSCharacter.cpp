@@ -8,6 +8,7 @@
 #include "InputActionValue.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Net/UnrealNetwork.h"
 
 AFPSCharacter::AFPSCharacter()
 {
@@ -28,6 +29,14 @@ AFPSCharacter::AFPSCharacter()
 
 	OverheadWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("OverheadWidget"));
 	OverheadWidget->SetupAttachment(RootComponent);
+}
+
+void AFPSCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	// Register all replicated variables here
+	DOREPLIFETIME(AFPSCharacter, OverlappingWeapon);
 }
 
 void AFPSCharacter::BeginPlay()
