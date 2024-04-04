@@ -3,6 +3,7 @@
 
 #include "Weapon/Weapon.h"
 #include "Components/SphereComponent.h"
+#include "Components/WidgetComponent.h"
 
 AWeapon::AWeapon()
 {
@@ -10,7 +11,6 @@ AWeapon::AWeapon()
 	bReplicates = true;
 
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh"));
-	WeaponMesh->SetupAttachment(RootComponent);
 	SetRootComponent(WeaponMesh);
 	
 	WeaponMesh->SetCollisionResponseToAllChannels(ECR_Block);
@@ -23,6 +23,9 @@ AWeapon::AWeapon()
 	
 	AreaSphere->SetCollisionResponseToAllChannels(ECR_Ignore);
 	AreaSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	PickupWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("PickupWidget"));
+	PickupWidget->SetupAttachment(RootComponent);
 }
 
 void AWeapon::BeginPlay()

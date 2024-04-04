@@ -27,6 +27,8 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
 	USkeletalMeshComponent* WeaponMesh;
@@ -35,8 +37,11 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
 	class USphereComponent* AreaSphere;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
 	EWeaponState WeaponState;
+
+	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
+	class UWidgetComponent* PickupWidget;
 	
 public:	
 
