@@ -44,4 +44,7 @@ private:
 	
 	UPROPERTY(BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	float Lean;
+
+	FRotator PlayerRotationLastFrame;
+	FRotator PlayerRotation;
 };
