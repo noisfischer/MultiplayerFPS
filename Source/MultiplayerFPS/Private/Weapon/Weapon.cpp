@@ -4,6 +4,7 @@
 #include "Weapon/Weapon.h"
 #include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
+#include "Character/FPSCharacter.h"
 
 AWeapon::AWeapon()
 {
@@ -36,6 +37,24 @@ void AWeapon::BeginPlay()
 	{
 		AreaSphere->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		AreaSphere->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+		
+		// Bind to function
+		AreaSphere->OnComponentBeginOverlap.AddDynamic(this, &AWeapon::OnSphereBeginOverlap);
+	}
+
+	if(PickupWidget)
+	{
+		PickupWidget->SetVisibility(false);
+	}
+}
+
+void AWeapon::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	AFPSCharacter* PlayerRef = Cast<AFPSCharacter>(OtherActor);
+	if(PlayerRef && PickupWidget)
+	{
+		PickupWidget->SetVisibility(true);
 	}
 }
 
