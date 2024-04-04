@@ -14,12 +14,18 @@ class MULTIPLAYERFPS_API UCombatComponent : public UActorComponent
 
 public:	
 	UCombatComponent();
-	friend class UFPSCharacter;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	friend class AFPSCharacter; // allows access to its variables and functions
+	void EquipWeapon(class AWeapon* WeaponToEquip);
 	
 protected:
 	virtual void BeginPlay() override;
 
+private:
+	class AFPSCharacter* PlayerRef;
+	class AWeapon* EquippedWeapon;
+
 public:	
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	
 };

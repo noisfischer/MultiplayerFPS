@@ -2,12 +2,12 @@
 
 
 #include "Components/CombatComponent.h"
+#include "Weapon/Weapon.h"
 
 UCombatComponent::UCombatComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
-
-
+	
 }
 
 void UCombatComponent::BeginPlay()
@@ -20,4 +20,12 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
+}
+
+void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
+{
+	if(PlayerRef == nullptr || WeaponToEquip == nullptr)
+	{
+		return;
+	}
 }

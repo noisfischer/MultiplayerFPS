@@ -44,6 +44,16 @@ void AFPSCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 	DOREPLIFETIME_CONDITION(AFPSCharacter, OverlappingWeapon, COND_OwnerOnly);
 }
 
+void AFPSCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	if(Combat)
+	{
+		Combat->PlayerRef = this;
+	}
+}
+
 void AFPSCharacter::BeginPlay()
 {
 	Super::BeginPlay();

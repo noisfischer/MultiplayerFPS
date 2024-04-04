@@ -33,6 +33,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* EquipAction;
 
+	virtual void PostInitializeComponents() override;
+
 protected:
 	virtual void BeginPlay() override;
 
