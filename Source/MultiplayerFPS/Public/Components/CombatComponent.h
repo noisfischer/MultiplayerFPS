@@ -30,6 +30,7 @@ private:
 	UPROPERTY(Replicated)
 	class AWeapon* EquippedWeapon;
 
+	UPROPERTY(Replicated)
 	bool bAiming;
 
 public:	
