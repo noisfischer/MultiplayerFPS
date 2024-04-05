@@ -51,6 +51,7 @@ protected:
 	void CrouchButtonReleased();
 	void AimButtonPressed();
 	void AimButtonReleased();
+	void AimOffset(float DeltaTime);
 	
 private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
@@ -75,9 +76,14 @@ private:
 	// Remote Procedure Call
 	UFUNCTION(Server, Reliable)
 	void ServerEquipButtonPressed();
+
+	float AO_Yaw; // for left/right aim offset
+	float AO_Pitch; // for up/down aim offset
+	FRotator StartingAimRotation;
 	
 public:	
 	void SetOverlappingWeapon(AWeapon* Weapon); // ONLY CALLED ON THE SERVER
 	bool IsWeaponEquipped();
 	bool IsAiming();
+	FORCEINLINE float GetAO_Yaw() const { return AO_Yaw; }
 };

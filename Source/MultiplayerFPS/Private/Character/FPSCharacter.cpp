@@ -12,6 +12,7 @@
 #include "Net/UnrealNetwork.h"
 #include "Weapon/Weapon.h"
 #include "Components/CombatComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 AFPSCharacter::AFPSCharacter()
 {
@@ -77,7 +78,8 @@ void AFPSCharacter::BeginPlay()
 void AFPSCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+
+	AimOffset(DeltaTime);
 }
 
 
@@ -190,6 +192,34 @@ void AFPSCharacter::AimButtonReleased()
 	if(Combat)
 	{
 		Combat->SetAiming(false);
+	}
+}
+
+void AFPSCharacter::AimOffset(float DeltaTime)
+{
+	if(Combat && Combat->EquippedWeapon == nullptr)
+	{
+		return;
+	}
+	
+	// Get Character Speed
+	FVector Velocity = GetVelocity();
+	Velocity.Z = 0.f;
+	float Speed = Velocity.Size();
+	bool bIsInAir = GetCharacterMovement()->IsFalling();
+
+	if(Speed == 0.f && !bIsInAir) // standing still and not jumping
+	{
+		FRotator CurrentAimRotation = FRotator(0.f, GetBaseAimRotation().Yaw, 0.f);
+		FRotator DeltaAimRotation = UKismetMathLibrary::NormalizedDeltaRotator(StartingAimRotation, CurrentAimRotation);
+		AO_Yaw = DeltaAimRotation.Yaw;
+		bUseControllerRotationYaw = false;
+	}
+	if(Speed > 0.f || bIsInAir) // running or jumping
+	{
+		StartingAimRotation = FRotator(0.f, GetBaseAimRotation().Yaw, 0.f);
+		AO_Yaw = 0.f;
+		bUseControllerRotationYaw = true;
 	}
 }
 
