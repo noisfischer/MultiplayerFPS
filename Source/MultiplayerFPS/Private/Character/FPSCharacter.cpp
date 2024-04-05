@@ -224,7 +224,16 @@ void AFPSCharacter::AimOffset(float DeltaTime)
 	}
 
 	// UPDATE PITCH
-	AO_Pitch = GetBaseAimRotation().Pitch;
+	
+	AO_Pitch = GetBaseAimRotation().Pitch; // in character movement comp, pitch is unsigned, so we need a way to deal with negative values
+	// for the server to correct for all other clients
+	if(AO_Pitch > 90.f && !IsLocallyControlled())
+	{
+		// map pitch from [270, 360] to [-90, 0]
+		FVector2D InRange(270.f, 360.f);
+		FVector2D OutRange(-90.f, 0.f);
+		AO_Pitch = FMath::GetMappedRangeValueClamped(InRange, OutRange, AO_Pitch);
+	}
 }
 
 // ONLY CALLED ON THE SERVER
