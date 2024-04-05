@@ -37,6 +37,7 @@ void UCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	bIsInAir = PlayerRef->GetCharacterMovement()->IsFalling();
 	bIsAccelerating = PlayerRef->GetCharacterMovement()->GetCurrentAcceleration().Size() > 0 ? true : false;
 	bWeaponEquipped = PlayerRef->IsWeaponEquipped();
+	EquippedWeapon = PlayerRef->GetEquippedWeapon();
 	bIsCrouched = PlayerRef->bIsCrouched; // bIsCrouched is pre-existing in ACharacter
 	bAiming = PlayerRef->IsAiming();
 
@@ -57,5 +58,8 @@ void UCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	AO_Yaw = PlayerRef->GetAO_Yaw();
 	AO_Pitch = PlayerRef->GetAO_Pitch();
 
-	if(bWeaponEquipped)
+	if(bWeaponEquipped && EquippedWeapon)
+	{
+		
+	}
 }
