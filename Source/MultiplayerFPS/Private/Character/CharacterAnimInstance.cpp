@@ -41,6 +41,7 @@ void UCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	EquippedWeapon = PlayerRef->GetEquippedWeapon();
 	bIsCrouched = PlayerRef->bIsCrouched; // bIsCrouched is pre-existing in ACharacter
 	bAiming = PlayerRef->IsAiming();
+	TurningInPlace = PlayerRef->GetTurningInPlace();
 
 	// Offset Yaw for Strafing
 	FRotator AimRotation = PlayerRef->GetBaseAimRotation();
