@@ -5,6 +5,7 @@
 #include "Character/FPSCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Weapon/Weapon.h"
 
 // BeginPlay
 void UCharacterAnimInstance::NativeInitializeAnimation()
@@ -58,8 +59,9 @@ void UCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	AO_Yaw = PlayerRef->GetAO_Yaw();
 	AO_Pitch = PlayerRef->GetAO_Pitch();
 
-	if(bWeaponEquipped && EquippedWeapon)
+	// Make sure player and weapon are valid first
+	if(bWeaponEquipped && EquippedWeapon && EquippedWeapon->GetWeaponMesh() && PlayerRef->GetMesh())
 	{
-		
+		LeftHandTransform = EquippedWeapon->GetWeaponMesh()->GetSocketTransform(FName("LeftHandSocket"), RTS_World);
 	}
 }
