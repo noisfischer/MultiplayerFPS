@@ -268,6 +268,16 @@ bool AFPSCharacter::IsAiming()
 	return (Combat && Combat->bAiming);
 }
 
+AWeapon* AFPSCharacter::GetEquippedWeapon()
+{
+	if(Combat == nullptr)
+	{
+		return nullptr;
+	}
+	
+	return Combat->EquippedWeapon;
+}
+
 // ONLY CALLED ON THE CLIENT
 void AFPSCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)
 {

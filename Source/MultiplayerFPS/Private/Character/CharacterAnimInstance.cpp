@@ -56,4 +56,6 @@ void UCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	AO_Yaw = PlayerRef->GetAO_Yaw();
 	AO_Pitch = PlayerRef->GetAO_Pitch();
+
+	if(bWeaponEquipped)
 }
