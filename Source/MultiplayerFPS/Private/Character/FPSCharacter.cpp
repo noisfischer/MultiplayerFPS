@@ -208,6 +208,7 @@ void AFPSCharacter::AimOffset(float DeltaTime)
 	float Speed = Velocity.Size();
 	bool bIsInAir = GetCharacterMovement()->IsFalling();
 
+	// UPDATE YAW
 	if(Speed == 0.f && !bIsInAir) // standing still and not jumping
 	{
 		FRotator CurrentAimRotation = FRotator(0.f, GetBaseAimRotation().Yaw, 0.f);
@@ -221,6 +222,9 @@ void AFPSCharacter::AimOffset(float DeltaTime)
 		AO_Yaw = 0.f;
 		bUseControllerRotationYaw = true;
 	}
+
+	// UPDATE PITCH
+	AO_Pitch = GetBaseAimRotation().Pitch;
 }
 
 // ONLY CALLED ON THE SERVER
