@@ -12,19 +12,36 @@
 UCombatComponent::UCombatComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
-	
+
+	BaseWalkSpeed = 600.f;
+	AimWalkSpeed = 450.f;
 }
 
 void UCombatComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if(PlayerRef)
+	{
+		PlayerRef->GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
+	}
 }
 
+// ON SERVER
 void UCombatComponent::SetAiming(bool bIsAiming)
 {
 	bAiming =  bIsAiming; // so the client can aim before the server receives the RPC message
 	ServerSetAiming(bIsAiming);
+	if(PlayerRef)
+	{
+		PlayerRef->GetCharacterMovement()->MaxWalkSpeed = bIsAiming ? AimWalkSpeed : BaseWalkSpeed;
+	}
+}
+
+// ON CLIENT
+void UCombatComponent::ServerSetAiming_Implementation(bool bIsAiming)
+{
+	bAiming = bIsAiming;
 }
 
 void UCombatComponent::OnRep_EquippedWeapon()
@@ -35,11 +52,6 @@ void UCombatComponent::OnRep_EquippedWeapon()
 		PlayerRef->GetCharacterMovement()->bOrientRotationToMovement = false;
 		PlayerRef->bUseControllerRotationYaw = true;
 	}
-}
-
-void UCombatComponent::ServerSetAiming_Implementation(bool bIsAiming)
-{
-	bAiming = bIsAiming;
 }
 
 void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
