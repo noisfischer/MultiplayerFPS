@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "MultiplayerFPS/FPSTypes/TurningInPlace.h"
 #include "FPSCharacter.generated.h"
 
 UCLASS()
@@ -80,6 +81,8 @@ private:
 	float AO_Yaw; // for left/right aim offset
 	float AO_Pitch; // for up/down aim offset
 	FRotator StartingAimRotation;
+
+	ETurningInPlace TurningInPlace;
 	
 public:	
 	void SetOverlappingWeapon(AWeapon* Weapon); // ONLY CALLED ON THE SERVER
