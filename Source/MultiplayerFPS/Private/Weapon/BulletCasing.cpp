@@ -18,6 +18,7 @@ ABulletCasing::ABulletCasing()
 	// PHYSICS
 	CasingMesh->SetSimulatePhysics(true);
 	CasingMesh->SetEnableGravity(true);
+	CasingMesh->SetNotifyRigidBodyCollision(true);
 
 	ShellEjectionImpulse = 10.f;
 }
