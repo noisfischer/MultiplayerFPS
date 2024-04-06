@@ -140,7 +140,7 @@ void AWeapon::Fire(const FVector& HitTarget)
 					World->SpawnActor<ABulletCasing>(
 						BulletCasingClass,
 						SocketTransform.GetLocation(),
-						SocketTransform.GetRotation().Rotator(),
+						SocketTransform.GetRotation().Rotator()
 					);
 				}
 			}
