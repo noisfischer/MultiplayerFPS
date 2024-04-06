@@ -33,8 +33,11 @@ protected:
 
 	void FireWeaponButtonPressed(bool bPressed);
 
-	UFUNCTION(Server, Reliable)	// RPC
+	UFUNCTION(Server, Reliable)	// Server RPC - happens only on server
 	void ServerFire();
+
+	UFUNCTION(NetMulticast, Reliable)	// Multicast RPC - invoked on server and all clients
+	void MultiCastFire();
 
 private:
 	class AFPSCharacter* PlayerRef;

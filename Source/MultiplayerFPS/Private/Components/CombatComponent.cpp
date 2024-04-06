@@ -17,6 +17,15 @@ UCombatComponent::UCombatComponent()
 	AimWalkSpeed = 300.f;
 }
 
+void UCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	// Register replicated variables
+	DOREPLIFETIME(UCombatComponent, EquippedWeapon);
+	DOREPLIFETIME(UCombatComponent, bAiming);
+}
+
 void UCombatComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -60,38 +69,40 @@ void UCombatComponent::OnRep_EquippedWeapon()
 
 void UCombatComponent::FireWeaponButtonPressed(bool bPressed)
 {
-	bFireButtonPressed = bPressed;
+	bFireButtonPressed = bPressed; // happens on client - others don't need to know
 
+	if(bFireButtonPressed)
+	{
+		ServerFire(); // calls RPC below
+		// If called by a client, it happens on the server and shows to all clients
+		// If called by a server, it happens only on the server
+	}
+}
+
+// Server RPC - invoked only on server
+void UCombatComponent::ServerFire_Implementation()
+{
+	MultiCastFire();
+}
+
+// Multicast RPC - happens to server and all clients
+void UCombatComponent::MultiCastFire_Implementation()
+{
 	if(EquippedWeapon == nullptr)
 	{
 		return;
 	}
-	if(PlayerRef && bFireButtonPressed)
+	if(PlayerRef)
 	{
 		PlayerRef->PlayFireMontage(bAiming);
 		EquippedWeapon->Fire();
 	}
 }
 
-// RPC
-void UCombatComponent::ServerFire_Implementation()
-{
-	
-}
-
 void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
-}
-
-void UCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	// Register replicated variables
-	DOREPLIFETIME(UCombatComponent, EquippedWeapon);
-	DOREPLIFETIME(UCombatComponent, bAiming);
 }
 
 void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
