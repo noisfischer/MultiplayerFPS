@@ -6,9 +6,7 @@
 #include "Weapon/Weapon.h"
 #include "ProjectileWeapon.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class MULTIPLAYERFPS_API AProjectileWeapon : public AWeapon
 {
