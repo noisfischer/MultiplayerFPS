@@ -33,6 +33,9 @@ protected:
 
 	void FireWeaponButtonPressed(bool bPressed);
 
+	UFUNCTION(Server, Reliable)	// RPC
+	void ServerFire();
+
 private:
 	class AFPSCharacter* PlayerRef;
 

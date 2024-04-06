@@ -73,6 +73,12 @@ void UCombatComponent::FireWeaponButtonPressed(bool bPressed)
 	}
 }
 
+// RPC
+void UCombatComponent::ServerFire_Implementation()
+{
+	
+}
+
 void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
