@@ -8,6 +8,7 @@
 #include "Components/WidgetComponent.h"
 #include "Character/FPSCharacter.h"
 #include "Net/UnrealNetwork.h"
+#include "Animation/AnimationAsset.h"
 
 AWeapon::AWeapon()
 {
@@ -113,6 +114,14 @@ void AWeapon::ShowPickupWidget(bool bShowWidget)
 	if(PickupWidget)
 	{
 		PickupWidget->SetVisibility(bShowWidget);
+	}
+}
+
+void AWeapon::Fire()
+{
+	if(FireAnimation)
+	{
+		WeaponMesh->PlayAnimation(FireAnimation, false);
 	}
 }
 
