@@ -79,6 +79,7 @@ private:
 	void ServerEquipButtonPressed();
 
 	float AO_Yaw; // for left/right aim offset
+	float InterpAO_Yaw;
 	float AO_Pitch; // for up/down aim offset
 	FRotator StartingAimRotation;
 
