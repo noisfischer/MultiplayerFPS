@@ -3,25 +3,16 @@
 
 #include "Weapon/BulletCasing.h"
 
-// Sets default values
 ABulletCasing::ABulletCasing()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
+	CasingMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BulletCasingMesh"));
+	SetRootComponent(CasingMesh);
 }
 
-// Called when the game starts or when spawned
 void ABulletCasing::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
-
-// Called every frame
-void ABulletCasing::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
