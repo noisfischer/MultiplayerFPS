@@ -247,6 +247,19 @@ void AFPSCharacter::AimOffset(float DeltaTime)
 		AO_Pitch = FMath::GetMappedRangeValueClamped(InRange, OutRange, AO_Pitch);
 	}
 }
+
+void AFPSCharacter::Jump()
+{
+	if(bIsCrouched)
+	{
+		UnCrouch();
+	}
+	else
+	{
+		Super::Jump();
+	}
+}
+
 void AFPSCharacter::TurnInPlace(float DeltaTime)
 {
 	if(AO_Yaw > 90.f)
