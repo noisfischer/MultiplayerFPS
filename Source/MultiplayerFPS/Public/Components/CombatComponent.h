@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "CombatComponent.generated.h"
 
+#define TRACE_LENGTH 80000.f
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MULTIPLAYERFPS_API UCombatComponent : public UActorComponent
@@ -38,6 +39,8 @@ protected:
 
 	UFUNCTION(NetMulticast, Reliable)	// Multicast RPC - invoked on server and all clients
 	void MultiCastFire();
+
+	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
 
 private:
 	class AFPSCharacter* PlayerRef;
