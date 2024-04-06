@@ -61,6 +61,10 @@ void UCombatComponent::OnRep_EquippedWeapon()
 void UCombatComponent::FireWeaponButtonPressed(bool bPressed)
 {
 	bFireButtonPressed = bPressed;
+	if(PlayerRef && bFireButtonPressed)
+	{
+		PlayerRef->PlayFireMontage(bAiming);
+	}
 }
 
 void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
