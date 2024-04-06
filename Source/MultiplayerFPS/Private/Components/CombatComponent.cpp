@@ -60,7 +60,7 @@ void UCombatComponent::OnRep_EquippedWeapon()
 
 void UCombatComponent::FireWeaponButtonPressed(bool bPressed)
 {
-	
+	bFireButtonPressed = bPressed;
 }
 
 void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
