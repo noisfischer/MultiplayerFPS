@@ -70,7 +70,7 @@ private:
 	class UAnimationAsset* FireAnimation;
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<class ACasing> CasingClass;
+	TSubclassOf<class ABulletCasing> BulletCasingClass;
 	
 public:	
 	void SetWeaponState(EWeaponState State);
