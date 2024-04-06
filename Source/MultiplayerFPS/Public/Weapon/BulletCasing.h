@@ -18,6 +18,9 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* CasingMesh;
 
+	UPROPERTY(EditAnywhere)
+	float ShellEjectionImpulse;
+
 protected:
 	virtual void BeginPlay() override;
 

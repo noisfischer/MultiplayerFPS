@@ -15,10 +15,13 @@ ABulletCasing::ABulletCasing()
 	// PHYSICS
 	CasingMesh->SetSimulatePhysics(true);
 	CasingMesh->SetEnableGravity(true);
+
+	ShellEjectionImpulse = 1000.f;
 }
 
 void ABulletCasing::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	CasingMesh->AddImpulse(GetActorForwardVector() * ShellEjectionImpulse);
 }
