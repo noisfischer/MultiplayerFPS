@@ -9,6 +9,11 @@ void AProjectileWeapon::Fire(const FVector& HitTarget)
 {
 	Super::Fire(HitTarget);
 
+	if(!HasAuthority())
+	{
+		return;
+	}
+	
 	APawn* InstigatorPawn = Cast<APawn>(this->GetOwner()); // Owner is Player
 	
 	const USkeletalMeshSocket* MuzzleFlashSocket =
