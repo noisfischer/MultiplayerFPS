@@ -11,5 +11,8 @@ UCLASS()
 class MULTIPLAYERFPS_API AProjectileWeapon : public AWeapon
 {
 	GENERATED_BODY()
-	
+
+private:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AProjectile> ProjectileClass;
 };
