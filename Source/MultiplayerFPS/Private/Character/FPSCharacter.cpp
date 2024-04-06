@@ -13,6 +13,7 @@
 #include "Weapon/Weapon.h"
 #include "Components/CombatComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Character/CharacterAnimInstance.h"
 
 AFPSCharacter::AFPSCharacter()
 {
@@ -64,6 +65,23 @@ void AFPSCharacter::PostInitializeComponents()
 	if(Combat)
 	{
 		Combat->PlayerRef = this;
+	}
+}
+
+void AFPSCharacter::PlayFireMontage(bool bAiming)
+{
+	if(Combat == nullptr || Combat->EquippedWeapon == nullptr)
+	{
+		return;
+	}
+
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if(AnimInstance && FireWeaponMontage)
+	{
+		AnimInstance->Montage_Play(FireWeaponMontage);
+		FName SectionName;
+		SectionName = bAiming ? FName("RifleAim") : FName("RifleHip");
+		AnimInstance->Montage_JumpToSection(SectionName);
 	}
 }
 
