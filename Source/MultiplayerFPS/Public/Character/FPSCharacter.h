@@ -39,6 +39,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* AimAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* FireWeaponAction;
 	
 	virtual void PostInitializeComponents() override;
 
@@ -52,6 +55,8 @@ protected:
 	void CrouchButtonReleased();
 	void AimButtonPressed();
 	void AimButtonReleased();
+	void FireWeaponButtonPressed();
+	void FireWeaponButtonReleased();
 	void AimOffset(float DeltaTime);
 	virtual void Jump() override;
 	

@@ -31,6 +31,8 @@ protected:
 	UFUNCTION()
 	void OnRep_EquippedWeapon();
 
+	void FireWeaponButtonPressed(bool bPressed);
+
 private:
 	class AFPSCharacter* PlayerRef;
 

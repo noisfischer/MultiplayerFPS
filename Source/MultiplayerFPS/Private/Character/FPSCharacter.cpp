@@ -105,7 +105,8 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AFPSCharacter::CrouchButtonReleased);
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &AFPSCharacter::AimButtonPressed);
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &AFPSCharacter::AimButtonReleased);
-
+		EnhancedInputComponent->BindAction(FireWeaponAction, ETriggerEvent::Started, this, &AFPSCharacter::FireWeaponButtonPressed);
+		EnhancedInputComponent->BindAction(FireWeaponAction, ETriggerEvent::Completed, this, &AFPSCharacter::FireWeaponButtonReleased);
 	}	
 }
 
@@ -198,6 +199,22 @@ void AFPSCharacter::AimButtonReleased()
 	if(Combat)
 	{
 		Combat->SetAiming(false);
+	}
+}
+
+void AFPSCharacter::FireWeaponButtonPressed()
+{
+	if(Combat)
+	{
+		Combat->FireWeaponButtonPressed(true);
+	}
+}
+
+void AFPSCharacter::FireWeaponButtonReleased()
+{
+	if(Combat)
+	{
+		Combat->FireWeaponButtonPressed(false);
 	}
 }
 
