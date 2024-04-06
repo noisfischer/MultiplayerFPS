@@ -70,11 +70,14 @@ void UCombatComponent::OnRep_EquippedWeapon()
 
 void UCombatComponent::FireWeaponButtonPressed(bool bPressed)
 {
-	bFireButtonPressed = bPressed; // happens on client - others don't need to know
+	bFireButtonPressed = bPressed;
 
 	if(bFireButtonPressed)
 	{
-		ServerFire(); // calls Server RPC below
+		FHitResult HitResult;
+		TraceUnderCrosshairs(HitResult); // line trace from center screen
+		
+		ServerFire(HitResult.ImpactPoint); // calls Server RPC below
 		// Sends a message to server to perform that function
 	}
 }
@@ -112,35 +115,17 @@ void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
 			ECC_Visibility
 			// all other inputs are optional
 			);
-		if(!TraceHitResult.bBlockingHit) // if nothing hit
-		{
-			TraceHitResult.ImpactPoint = End;
-			HitTarget = End;
-		}
-		else
-		{
-			HitTarget = TraceHitResult.ImpactPoint;
-			
-			DrawDebugSphere(
-				GetWorld(),
-				TraceHitResult.ImpactPoint,
-				12.f,
-				12.f,
-				FColor::Red
-				// all other inputs are optional
-				);
-		}
 	}
 }
 
 // Server RPC - invoked only on server
-void UCombatComponent::ServerFire_Implementation()
+void UCombatComponent::ServerFire_Implementation(const FVector_NetQuantize& TraceHitTarget)
 {
-	MultiCastFire(); // Applies to ALL clients and server
+	MultiCastFire(TraceHitTarget); // Applies to ALL clients and server
 }
 
 // Multicast RPC - happens to server and all clients - Our end result
-void UCombatComponent::MultiCastFire_Implementation()
+void UCombatComponent::MultiCastFire_Implementation(const FVector_NetQuantize& TraceHitTarget)
 {
 	if(EquippedWeapon == nullptr)
 	{
@@ -149,16 +134,14 @@ void UCombatComponent::MultiCastFire_Implementation()
 	if(PlayerRef)
 	{
 		PlayerRef->PlayFireMontage(bAiming);
-		EquippedWeapon->Fire(HitTarget);
+		EquippedWeapon->Fire(TraceHitTarget);
 	}
 }
 
 void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	FHitResult HitResult;
-	TraceUnderCrosshairs(HitResult);
+	
 }
 
 void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)

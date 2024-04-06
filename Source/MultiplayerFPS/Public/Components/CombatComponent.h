@@ -35,10 +35,10 @@ protected:
 	void FireWeaponButtonPressed(bool bPressed);
 
 	UFUNCTION(Server, Reliable)	// Server RPC - happens only on server
-	void ServerFire();
+	void ServerFire(const FVector_NetQuantize& TraceHitTarget); // NetQuantize rounds vectors to whole numbers (helps lower bandwidth)
 
 	UFUNCTION(NetMulticast, Reliable)	// Multicast RPC - invoked on server and all clients
-	void MultiCastFire();
+	void MultiCastFire(const FVector_NetQuantize& TraceHitTarget);
 
 	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
 
@@ -59,8 +59,6 @@ private:
 	float AimWalkSpeed;
 
 	bool bFireButtonPressed;
-
-	FVector HitTarget;
 
 public:	
 	
