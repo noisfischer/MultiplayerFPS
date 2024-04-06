@@ -73,19 +73,18 @@ void UCombatComponent::FireWeaponButtonPressed(bool bPressed)
 
 	if(bFireButtonPressed)
 	{
-		ServerFire(); // calls RPC below
-		// If called by a client, it happens on the server and shows to all clients
-		// If called by a server, it happens only on the server
+		ServerFire(); // calls Server RPC below
+		// Sends a message to server to perform that function
 	}
 }
 
 // Server RPC - invoked only on server
 void UCombatComponent::ServerFire_Implementation()
 {
-	MultiCastFire();
+	MultiCastFire(); // Applies to ALL clients and server
 }
 
-// Multicast RPC - happens to server and all clients
+// Multicast RPC - happens to server and all clients - Our end result
 void UCombatComponent::MultiCastFire_Implementation()
 {
 	if(EquippedWeapon == nullptr)
