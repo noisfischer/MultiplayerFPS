@@ -14,6 +14,12 @@ class MULTIPLAYERFPS_API ABulletCasing : public AActor
 public:	
 	ABulletCasing();
 
+protected:
+	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	
 private:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* CasingMesh;
@@ -21,7 +27,6 @@ private:
 	UPROPERTY(EditAnywhere)
 	float ShellEjectionImpulse;
 
-protected:
-	virtual void BeginPlay() override;
-
+	UPROPERTY(EditAnywhere)
+	class USoundCue* ShellSound;
 };

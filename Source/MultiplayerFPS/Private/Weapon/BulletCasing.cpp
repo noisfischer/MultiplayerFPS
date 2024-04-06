@@ -3,6 +3,9 @@
 
 #include "Weapon/BulletCasing.h"
 
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
+
 ABulletCasing::ABulletCasing()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -22,6 +25,22 @@ ABulletCasing::ABulletCasing()
 void ABulletCasing::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
+	CasingMesh->OnComponentHit.AddDynamic(this, &ABulletCasing::OnHit);
 	CasingMesh->AddImpulse(GetActorForwardVector() * ShellEjectionImpulse);
+}
+
+void ABulletCasing::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	FVector NormalImpulse, const FHitResult& Hit)
+{
+	if(ShellSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(
+			GetWorld(),
+			ShellSound,
+			GetActorLocation()
+		);
+	}
+
+	Destroy(); // maybe make a timer instead to make it linger
 }
