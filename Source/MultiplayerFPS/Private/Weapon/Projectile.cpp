@@ -9,6 +9,7 @@
 AProjectile::AProjectile()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	bReplicates =  true;
 
 	CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision Box"));
 	SetRootComponent(CollisionBox);
