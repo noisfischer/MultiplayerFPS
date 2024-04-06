@@ -11,6 +11,10 @@ ABulletCasing::ABulletCasing()
 	SetRootComponent(CasingMesh);
 	CasingMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
 	CasingMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
+
+	// PHYSICS
+	CasingMesh->SetSimulatePhysics(true);
+	CasingMesh->SetEnableGravity(true);
 }
 
 void ABulletCasing::BeginPlay()
