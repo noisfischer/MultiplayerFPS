@@ -77,6 +77,17 @@ void UCombatComponent::SetHUDCrosshairs(float DeltaTime)
 				HUDPackage.CrosshairsTop = nullptr;
 				HUDPackage.CrosshairsBottom = nullptr;
 			}
+			// Calculate Crosshair Spread
+			// Get player's min speed and max speed and clamp from 0 to 1
+			FVector2D WalkSpeedRange(0.f, PlayerRef->GetCharacterMovement()->MaxWalkSpeed);
+			FVector2D VelocityMultiplierRange(0.f, 1.f);
+			FVector Velocity = PlayerRef->GetVelocity();
+			Velocity.Z = 0.f;
+			
+			CrosshairVelocityFactor = FMath::GetMappedRangeValueClamped(WalkSpeedRange, VelocityMultiplierRange, Velocity.Size());
+
+			HUDPackage.CrosshairSpread = CrosshairVelocityFactor;
+			
 			HUD->SetHUDPackage(HUDPackage);
 		}
 	}
