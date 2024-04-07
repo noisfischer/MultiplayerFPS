@@ -54,6 +54,16 @@ void UCombatComponent::SetHUDCrosshairs(float DeltaTime)
 	}
 	// Should only use the Cast once, once this component is created
 	PlayerController = PlayerController == nullptr ? Cast<AFPSPlayerController>(PlayerRef->Controller) : PlayerController;
+
+	if(PlayerController)
+	{
+		HUD = HUD == nullptr ? Cast<APlayerHUD>(PlayerController->GetHUD()) : HUD;
+		if(HUD)
+		{
+			FHUDPackage HUDPackage;
+			HUDPackage.CrosshairsCenter = EquippedWeapon->CrosshairsCenter;
+		}
+	}
 }
 
 // ON SERVER
