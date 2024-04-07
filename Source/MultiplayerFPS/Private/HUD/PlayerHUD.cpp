@@ -37,7 +37,7 @@ void APlayerHUD::DrawHUD()
 		}
 		if(HUDPackage.CrosshairsBottom)
 		{
-			FVector2D Spread(0.f,-SpreadScaled);
+			FVector2D Spread(0.f,SpreadScaled);
 			DrawCrosshair(HUDPackage.CrosshairsBottom, ViewportCenter, Spread);
 		}
 	}
