@@ -9,6 +9,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
+#include "PlayerController/FPSPlayerController.h"
+#include "HUD/PlayerHUD.h"
 
 UCombatComponent::UCombatComponent()
 {

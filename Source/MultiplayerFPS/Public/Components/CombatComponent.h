@@ -46,6 +46,8 @@ protected:
 
 private:
 	class AFPSCharacter* PlayerRef;
+	class AFPSPlayerController* Controller;
+	class APlayerHUD* HUD;
 
 	// replicated to all clients (no repnotify)
 	UPROPERTY(ReplicatedUsing = OnRep_EquippedWeapon)
