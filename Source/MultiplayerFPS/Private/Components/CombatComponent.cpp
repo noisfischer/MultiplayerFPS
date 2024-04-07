@@ -37,6 +37,18 @@ void UCombatComponent::BeginPlay()
 	}
 }
 
+void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	SetHUDCrosshairs(DeltaTime);
+}
+
+void UCombatComponent::SetHUDCrosshairs(float DeltaTime)
+{
+	
+}
+
 // ON SERVER
 void UCombatComponent::SetAiming(bool bIsAiming)
 {
@@ -136,12 +148,6 @@ void UCombatComponent::MultiCastFire_Implementation(const FVector_NetQuantize& T
 		PlayerRef->PlayFireMontage(bAiming);
 		EquippedWeapon->Fire(TraceHitTarget);
 	}
-}
-
-void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	
 }
 
 void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)

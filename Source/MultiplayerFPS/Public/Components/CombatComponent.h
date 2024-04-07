@@ -42,6 +42,8 @@ protected:
 
 	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
 
+	void SetHUDCrosshairs(float DeltaTime);
+
 private:
 	class AFPSCharacter* PlayerRef;
 
