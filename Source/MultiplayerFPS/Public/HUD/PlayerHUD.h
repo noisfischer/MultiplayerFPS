@@ -6,12 +6,11 @@
 #include "GameFramework/HUD.h"
 #include "PlayerHUD.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class MULTIPLAYERFPS_API APlayerHUD : public AHUD
 {
 	GENERATED_BODY()
-	
+public:
+	virtual void DrawHUD() override; // from AHUD base class
 };

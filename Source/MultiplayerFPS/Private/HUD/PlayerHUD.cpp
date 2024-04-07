@@ -3,3 +3,8 @@
 
 #include "HUD/PlayerHUD.h"
 
+void APlayerHUD::DrawHUD()
+{
+	Super::DrawHUD();
+	
+}
