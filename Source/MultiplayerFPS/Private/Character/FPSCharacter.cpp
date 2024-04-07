@@ -359,6 +359,15 @@ AWeapon* AFPSCharacter::GetEquippedWeapon()
 	return Combat->EquippedWeapon;
 }
 
+FVector AFPSCharacter::GetHitTarget() const
+{
+	if(Combat == nullptr)
+	{
+		return FVector();
+	}
+	return Combat->HitTarget;
+}
+
 // ONLY CALLED ON THE CLIENT
 void AFPSCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)
 {
