@@ -48,7 +48,12 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 void UCombatComponent::SetHUDCrosshairs(float DeltaTime)
 {
-	
+	if(PlayerRef == nullptr || PlayerRef->Controller == nullptr)
+	{
+		return;
+	}
+	// Should only use the Cast once, once this component is created
+	PlayerController = PlayerController == nullptr ? Cast<AFPSPlayerController>(PlayerRef->Controller) : PlayerController;
 }
 
 // ON SERVER

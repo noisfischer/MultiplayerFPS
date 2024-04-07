@@ -46,7 +46,7 @@ protected:
 
 private:
 	class AFPSCharacter* PlayerRef;
-	class AFPSPlayerController* Controller;
+	class AFPSPlayerController* PlayerController;
 	class APlayerHUD* HUD;
 
 	// replicated to all clients (no repnotify)
