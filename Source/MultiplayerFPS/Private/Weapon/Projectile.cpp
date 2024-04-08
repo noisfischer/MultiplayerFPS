@@ -2,12 +2,12 @@
 
 
 #include "Weapon/Projectile.h"
-
 #include "Character/FPSCharacter.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
+#include "MultiplayerFPS/MultiplayerFPS.h"
 
 AProjectile::AProjectile()
 {
@@ -22,7 +22,7 @@ AProjectile::AProjectile()
 	CollisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECR_Block);
 	CollisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic, ECR_Block);
 	CollisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECR_Block);
-
+	CollisionBox->SetCollisionResponseToChannel(ECC_SkeletalMesh, ECR_Block); // ECC_SkeletalMesh is GameTraceChannel1. We overrode this in project settings and redefined it as ECC_SkeletalMesh in MultiplayerFPS.h
 	
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 	ProjectileMovementComponent->bRotationFollowsVelocity = true;
