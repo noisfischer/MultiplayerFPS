@@ -77,11 +77,14 @@ private:
 	 */
 	
 	float DefaultFOV; // FOV when not aiming, set to camera's base FOV in BeginPlay
-
+	float CurrentFOV;
+	
 	UPROPERTY(EditAnywhere, Category = Combat)
 	float ZoomedFOV = 30.f;
 	UPROPERTY(EditAnywhere, Category = Combat)
 	float ZoomInterpSpeed = 20.f;
+
+	void InterpFOV(float DeltaTime);
 	
 public:	
 	

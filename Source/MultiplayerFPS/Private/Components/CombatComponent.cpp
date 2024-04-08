@@ -2,6 +2,8 @@
 
 
 #include "Components/CombatComponent.h"
+
+#include "Camera/CameraComponent.h"
 #include "Weapon/Weapon.h"
 #include "Character/FPSCharacter.h"
 #include "Engine/SkeletalMeshSocket.h"
@@ -36,6 +38,12 @@ void UCombatComponent::BeginPlay()
 	if(PlayerRef)
 	{
 		PlayerRef->GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
+		if(PlayerRef->GetFollowCamera())
+		{
+			DefaultFOV = PlayerRef->GetFollowCamera()->FieldOfView;
+			CurrentFOV = DefaultFOV;
+		}
+		
 	}
 }
 
@@ -43,13 +51,18 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	SetHUDCrosshairs(DeltaTime);
+	
 	if(PlayerRef && PlayerRef->IsLocallyControlled())
 	{
 		FHitResult HitResult;
 		TraceUnderCrosshairs(HitResult);
 		HitTarget = HitResult.ImpactPoint;
+
+		SetHUDCrosshairs(DeltaTime);
+		
+		InterpFOV(DeltaTime); // for aiming
 	}
+	
 }
 
 void UCombatComponent::SetHUDCrosshairs(float DeltaTime)
@@ -108,6 +121,37 @@ void UCombatComponent::SetHUDCrosshairs(float DeltaTime)
 			
 			HUD->SetHUDPackage(HUDPackage);
 		}
+	}
+}
+
+void UCombatComponent::InterpFOV(float DeltaTime)
+{
+	if(EquippedWeapon == nullptr)
+	{
+		return;
+	}
+
+	if(bAiming)
+	{
+		CurrentFOV = FMath::FInterpTo(
+			CurrentFOV,
+			EquippedWeapon->GetZoomedFov(),
+			DeltaTime,
+			EquippedWeapon->GetZoomInterpSpeed()
+			);
+	}
+	else
+	{
+		CurrentFOV = FMath::FInterpTo(
+			CurrentFOV,
+			DefaultFOV,
+			DeltaTime,
+			ZoomInterpSpeed
+			);
+	}
+	if(PlayerRef && PlayerRef->GetFollowCamera())
+	{
+		PlayerRef->GetFollowCamera()->SetFieldOfView(CurrentFOV);
 	}
 }
 
