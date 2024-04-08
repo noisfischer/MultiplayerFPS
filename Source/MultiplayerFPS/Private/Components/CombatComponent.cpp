@@ -2,7 +2,6 @@
 
 
 #include "Components/CombatComponent.h"
-
 #include "Camera/CameraComponent.h"
 #include "Weapon/Weapon.h"
 #include "Character/FPSCharacter.h"
@@ -13,6 +12,7 @@
 #include "Net/UnrealNetwork.h"
 #include "PlayerController/FPSPlayerController.h"
 #include "HUD/PlayerHUD.h"
+#include "TimerManager.h"
 
 UCombatComponent::UCombatComponent()
 {
@@ -165,6 +165,27 @@ void UCombatComponent::InterpFOV(float DeltaTime)
 	}
 }
 
+void UCombatComponent::StartFireTimer()
+{
+	if(EquippedWeapon == nullptr || PlayerRef == nullptr) return;
+	PlayerRef->GetWorldTimerManager().SetTimer(
+		FireTimer,
+		this,
+		&UCombatComponent::FireTimerFinished,
+		EquippedWeapon->FireRate
+		);
+}
+
+void UCombatComponent::FireTimerFinished()
+{
+	if(EquippedWeapon == nullptr) return;
+	bCanFire = true;
+	if(bFireButtonPressed && EquippedWeapon->bAutomatic)
+	{
+		Fire();
+	}
+}
+
 // ON SERVER
 void UCombatComponent::SetAiming(bool bIsAiming)
 {
@@ -196,22 +217,29 @@ void UCombatComponent::OnRep_EquippedWeapon()
 	}
 }
 
-void UCombatComponent::FireWeaponButtonPressed(bool bPressed)
+void UCombatComponent::Fire()
 {
-	bFireButtonPressed = bPressed;
-
-	if(bFireButtonPressed)
+	if(bCanFire)
 	{
-		FHitResult HitResult;
-		TraceUnderCrosshairs(HitResult); // line trace from center screen
-		
-		ServerFire(HitResult.ImpactPoint); // calls Server RPC below
+		bCanFire = false;
+		ServerFire(HitTarget); // calls Server RPC below
 		// Sends a message to server to perform that function
 
 		if(EquippedWeapon)
 		{
 			CrosshairShootingFactor = 2.f;
 		}
+		StartFireTimer();
+	}
+}
+
+void UCombatComponent::FireWeaponButtonPressed(bool bPressed)
+{
+	bFireButtonPressed = bPressed;
+
+	if(bFireButtonPressed && EquippedWeapon)
+	{
+		Fire();
 	}
 }
 

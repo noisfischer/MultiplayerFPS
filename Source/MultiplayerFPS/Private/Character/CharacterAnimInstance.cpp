@@ -42,6 +42,7 @@ void UCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	bIsCrouched = PlayerRef->bIsCrouched; // bIsCrouched is pre-existing in ACharacter
 	bAiming = PlayerRef->IsAiming();
 	TurningInPlace = PlayerRef->GetTurningInPlace();
+	bRotateRootBone = PlayerRef->GetShouldRotateRootBone();
 
 	// Offset Yaw for Strafing
 	FRotator AimRotation = PlayerRef->GetBaseAimRotation();
