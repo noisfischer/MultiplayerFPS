@@ -57,7 +57,7 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 	AFPSCharacter* FPSCharacter = Cast<AFPSCharacter>(OtherActor);
 	if(FPSCharacter)
 	{
-		FPSCharacter->PlayHitReactMontage();
+		FPSCharacter->MulticastHit();
 	}
 	
 	Destroy();

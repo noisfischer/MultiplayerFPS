@@ -335,6 +335,12 @@ void AFPSCharacter::TurnInPlace(float DeltaTime)
 	}
 }
 
+// RPC
+void AFPSCharacter::MulticastHit_Implementation()
+{
+	PlayHitReactMontage();
+}
+
 void AFPSCharacter::HideCameraIfCharacterClose()
 {
 	if(!IsLocallyControlled())

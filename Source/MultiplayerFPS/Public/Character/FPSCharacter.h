@@ -21,7 +21,10 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void PostInitializeComponents() override;
 	void PlayFireMontage(bool bAiming);
-	void PlayHitReactMontage();
+
+	// RPC, unreliable because it's cosmetic and not an essential function
+	UFUNCTION(NetMulticast, Unreliable)
+	void MulticastHit();
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputMappingContext* DefaultMappingContext;
@@ -62,6 +65,7 @@ protected:
 	void FireWeaponButtonReleased();
 	void AimOffset(float DeltaTime);
 	virtual void Jump() override;
+	void PlayHitReactMontage();
 	
 private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
