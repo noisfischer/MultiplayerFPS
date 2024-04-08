@@ -215,7 +215,7 @@ void UCombatComponent::FireWeaponButtonPressed(bool bPressed)
 
 		if(EquippedWeapon)
 		{
-			CrosshairShootingFactor = 0.2f;
+			CrosshairShootingFactor = 0.75f;
 		}
 	}
 }
