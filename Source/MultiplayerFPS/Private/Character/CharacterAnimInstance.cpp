@@ -74,7 +74,8 @@ void UCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		{
 			bLocallyControlled = true;
 			FTransform RightHandTransform = PlayerRef->GetMesh()->GetSocketTransform(FName("hand_r"), RTS_World);
-			RightHandRotation = UKismetMathLibrary::FindLookAtRotation(RightHandTransform.GetLocation(), RightHandTransform.GetLocation() + (RightHandTransform.GetLocation() - PlayerRef->GetHitTarget()));
+			FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(RightHandTransform.GetLocation(), RightHandTransform.GetLocation() + (RightHandTransform.GetLocation() - PlayerRef->GetHitTarget()));
+			RightHandRotation = FMath::RInterpTo(RightHandRotation, LookAtRotation, DeltaSeconds, 30.f);
 		}
 	}
 }
