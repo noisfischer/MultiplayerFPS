@@ -83,6 +83,14 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ABulletCasing> BulletCasingClass;
+
+	/*
+	 * Zoomed FOV while aiming
+	 */
+	UPROPERTY(EditAnywhere)
+	float ZoomedFOV = 30.f;
+	UPROPERTY(EditAnywhere)
+	float ZoomInterpSpeed = 20.f;
 	
 public:	
 	void SetWeaponState(EWeaponState State);
