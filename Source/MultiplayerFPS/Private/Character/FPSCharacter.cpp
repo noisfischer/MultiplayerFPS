@@ -14,6 +14,7 @@
 #include "Components/CombatComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Character/CharacterAnimInstance.h"
+#include "MultiplayerFPS/MultiplayerFPS.h"
 
 AFPSCharacter::AFPSCharacter()
 {
@@ -40,6 +41,7 @@ AFPSCharacter::AFPSCharacter()
 
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetMesh()->SetCollisionObjectType(ECC_SkeletalMesh);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 0.f, 850.f);
@@ -50,6 +52,7 @@ AFPSCharacter::AFPSCharacter()
 	NetUpdateFrequency = 66.f;
 	MinNetUpdateFrequency = 33.f;
 }
+
 
 void AFPSCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
