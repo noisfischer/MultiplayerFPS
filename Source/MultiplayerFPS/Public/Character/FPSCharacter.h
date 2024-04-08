@@ -5,10 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "MultiplayerFPS/FPSTypes/TurningInPlace.h"
+#include "Interfaces/InteractWithCrosshairsInterface.h"
 #include "FPSCharacter.generated.h"
 
 UCLASS()
-class MULTIPLAYERFPS_API AFPSCharacter : public ACharacter
+class MULTIPLAYERFPS_API AFPSCharacter : public ACharacter, public IInteractWithCrosshairsInterface
 {
 	GENERATED_BODY()
 
