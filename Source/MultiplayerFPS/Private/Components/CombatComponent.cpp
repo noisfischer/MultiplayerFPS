@@ -239,6 +239,13 @@ void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
 	if(bScreenToWorld)
 	{
 		FVector Start = CrosshairWorldPosition;
+
+		if(PlayerRef)	// prevent line trace from starting behind player
+		{
+			float DistanceToPlayer = (PlayerRef->GetActorLocation() - Start).Size();
+			Start += CrosshairWorldDirection * (DistanceToPlayer + 100.f);
+		}
+		
 		FVector End = Start + (CrosshairWorldDirection * TRACE_LENGTH); // Macro assigned in header
 
 		GetWorld()->LineTraceSingleByChannel(
