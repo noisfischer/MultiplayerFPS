@@ -44,8 +44,12 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	SetHUDCrosshairs(DeltaTime);
-	FHitResult HitResult;
-	HitTarget = HitResult.ImpactPoint;
+	if(PlayerRef && PlayerRef->IsLocallyControlled())
+	{
+		FHitResult HitResult;
+		TraceUnderCrosshairs(HitResult);
+		HitTarget = HitResult.ImpactPoint;
+	}
 }
 
 void UCombatComponent::SetHUDCrosshairs(float DeltaTime)

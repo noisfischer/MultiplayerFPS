@@ -70,7 +70,11 @@ void UCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		LeftHandTransform.SetLocation(OutPosition);
 		LeftHandTransform.SetRotation(FQuat(OutRotation));
 
-		FTransform RightHandTransform = EquippedWeapon->GetWeaponMesh()->GetSocketTransform(FName("hand_r"), RTS_World);
-		RightHandRotation = UKismetMathLibrary::FindLookAtRotation(RightHandTransform.GetLocation(), RightHandTransform.GetLocation() + (RightHandTransform.GetLocation() - PlayerRef->GetHitTarget()));
+		if(PlayerRef->IsLocallyControlled())
+		{
+			bLocallyControlled = true;
+			FTransform RightHandTransform = PlayerRef->GetMesh()->GetSocketTransform(FName("hand_r"), RTS_World);
+			RightHandRotation = UKismetMathLibrary::FindLookAtRotation(RightHandTransform.GetLocation(), RightHandTransform.GetLocation() + (RightHandTransform.GetLocation() - PlayerRef->GetHitTarget()));
+		}
 	}
 }
