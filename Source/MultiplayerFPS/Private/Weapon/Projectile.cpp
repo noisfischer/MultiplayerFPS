@@ -2,6 +2,8 @@
 
 
 #include "Weapon/Projectile.h"
+
+#include "Character/FPSCharacter.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -50,6 +52,12 @@ void AProjectile::BeginPlay()
 void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	FVector NormalImpulse, const FHitResult& Hit)
 {
+	AFPSCharacter* FPSCharacter = Cast<AFPSCharacter>(OtherActor);
+	if(FPSCharacter)
+	{
+		FPSCharacter->PlayHitReactMontage();
+	}
+	
 	Destroy();
 }
 
