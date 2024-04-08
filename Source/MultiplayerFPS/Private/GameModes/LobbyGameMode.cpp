@@ -3,6 +3,7 @@
 
 #include "GameModes/LobbyGameMode.h"
 #include "GameFramework/GameStateBase.h"
+#include "MultiplayerSessionsSubsystem.h"
 
 // Keeps track of incoming players
 void ALobbyGameMode::PostLogin(APlayerController* NewPlayer)
@@ -11,13 +12,20 @@ void ALobbyGameMode::PostLogin(APlayerController* NewPlayer)
 
 	// Gets number of players that are in the game
 	int32 NumberOfPlayers = GameState.Get()->PlayerArray.Num();
-	if(NumberOfPlayers == 2)
+
+	UGameInstance* GameInstance = GetGameInstance();
+	if(GameInstance)
 	{
-		UWorld* World = GetWorld();
-		if(World)
+		UMultiplayerSessionsSubsystem* Subsystem = GameInstance->GetSubsystem<UMultiplayerSessionsSubsystem>();
+		check(Subsystem);
+		if(NumberOfPlayers == 2)
 		{
-			bUseSeamlessTravel = true;	// Needed so that client doesn't need to disconnect
-			World->ServerTravel("/Game/Maps/FPSMap?listen");
+			UWorld* World = GetWorld();
+			if(World)
+			{
+				bUseSeamlessTravel = true;	// Needed so that client doesn't need to disconnect
+				World->ServerTravel("/Game/Maps/FPSMap?listen");
+			}
 		}
 	}
 }
