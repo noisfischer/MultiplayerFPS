@@ -17,7 +17,7 @@ void APlayerHUD::BeginPlay()
 void APlayerHUD::AddCharacterOverlay()
 {
 	APlayerController* PlayerController = GetOwningPlayerController();
-	if(PlayerController && CharacterOverlay)
+	if(PlayerController && CharacterOverlayClass)
 	{
 		CharacterOverlay = CreateWidget<UCharacterOverlay>(PlayerController, CharacterOverlayClass);
 		CharacterOverlay->AddToViewport();
