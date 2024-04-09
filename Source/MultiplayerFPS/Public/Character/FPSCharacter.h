@@ -6,10 +6,11 @@
 #include "GameFramework/Character.h"
 #include "MultiplayerFPS/FPSTypes/TurningInPlace.h"
 #include "Interfaces/InteractWithCrosshairsInterface.h"
+#include "Interfaces/RagdollInterface.h"
 #include "FPSCharacter.generated.h"
 
 UCLASS()
-class MULTIPLAYERFPS_API AFPSCharacter : public ACharacter, public IInteractWithCrosshairsInterface
+class MULTIPLAYERFPS_API AFPSCharacter : public ACharacter, public IInteractWithCrosshairsInterface, public IRagdollInterface
 {
 	GENERATED_BODY()
 
@@ -25,6 +26,9 @@ public:
 	// RPC - happens on all clients
 	UFUNCTION(NetMulticast, Reliable)
 	void Elim();
+
+	// RagdollInterface function
+	virtual void GetRagdollInfo_Implementation(const FName& BoneName, const FVector& ImpulseDirection) override;
 	
 	// Inherited from AActor class
 	virtual void OnRep_ReplicatedMovement() override;
@@ -141,6 +145,12 @@ private:
 	void OnRep_Health();
 
 	class AFPSPlayerController* FPSPlayerController;
+
+	// Ragdoll on elim information
+	UPROPERTY(Replicated)
+	FName LastHitBone;
+	UPROPERTY(Replicated)
+	FVector RagdollDirection;
 	
 public:	
 	void SetOverlappingWeapon(AWeapon* Weapon); // ONLY CALLED ON THE SERVER

@@ -63,6 +63,8 @@ void AFPSCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 	// Register all replicated variables here
 	DOREPLIFETIME_CONDITION(AFPSCharacter, OverlappingWeapon, COND_OwnerOnly);
 	DOREPLIFETIME(AFPSCharacter, Health);
+	DOREPLIFETIME(AFPSCharacter, LastHitBone);
+	DOREPLIFETIME(AFPSCharacter, RagdollDirection);
 }
 
 void AFPSCharacter::PostInitializeComponents()
@@ -92,9 +94,19 @@ void AFPSCharacter::PlayFireMontage(bool bAiming)
 	}
 }
 
+// RPC function
 void AFPSCharacter::Elim_Implementation()
 {
 	GetMesh()->SetSimulatePhysics(true);
+	GetMesh()->AddImpulseToAllBodiesBelow(RagdollDirection * 1000, LastHitBone, true, true);
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *LastHitBone.ToString());
+}
+
+// Interface event called on ProjectileBullet
+void AFPSCharacter::GetRagdollInfo_Implementation(const FName& BoneName, const FVector& ImpulseDirection)
+{
+	LastHitBone = BoneName;
+	RagdollDirection = ImpulseDirection;
 }
 
 // Updates whenever there is movement
