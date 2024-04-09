@@ -3,6 +3,10 @@
 
 #include "HUD/PlayerHUD.h"
 
+#include "Blueprint/UserWidget.h"
+#include "GameFramework/PlayerController.h"
+#include "HUD/CharacterOverlay.h"
+
 void APlayerHUD::BeginPlay()
 {
 	Super::BeginPlay();
@@ -12,7 +16,12 @@ void APlayerHUD::BeginPlay()
 
 void APlayerHUD::AddCharacterOverlay()
 {
-	
+	APlayerController* PlayerController = GetOwningPlayerController();
+	if(PlayerController && CharacterOverlay)
+	{
+		CharacterOverlay = CreateWidget<UCharacterOverlay>(PlayerController, CharacterOverlayClass);
+		CharacterOverlay->AddToViewport();
+	}
 }
 
 void APlayerHUD::DrawHUD()
