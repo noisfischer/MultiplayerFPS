@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/TimelineComponent.h"
 #include "GameFramework/Character.h"
 #include "MultiplayerFPS/FPSTypes/TurningInPlace.h"
 #include "Interfaces/InteractWithCrosshairsInterface.h"
@@ -160,6 +161,18 @@ private:
 	void ElimTimerFinished();
 	UPROPERTY(EditDefaultsOnly)
 	float ElimDelay = 3.f;
+
+	/*
+	 * Dissolve Effect
+	 */
+	UPROPERTY(VisibleAnywhere)
+	UTimelineComponent* DissolveTimeline;
+	
+	FOnTimelineFloat DissolveTrack;
+
+	void UpdateDissolveMaterial(float DissolveValue);
+
+	void StartDissolve();
 	
 public:	
 	void SetOverlappingWeapon(AWeapon* Weapon); // ONLY CALLED ON THE SERVER

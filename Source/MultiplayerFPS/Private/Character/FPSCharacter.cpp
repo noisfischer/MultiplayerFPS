@@ -524,6 +524,16 @@ void AFPSCharacter::OnRep_Health()
 	PlayHitReactMontage();
 }
 
+void AFPSCharacter::UpdateDissolveMaterial(float DissolveValue)
+{
+	
+}
+
+void AFPSCharacter::StartDissolve()
+{
+	
+}
+
 // ONLY CALLED ON THE SERVER
 void AFPSCharacter::SetOverlappingWeapon(AWeapon* Weapon)
 {
