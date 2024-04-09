@@ -91,6 +91,11 @@ void AFPSCharacter::PlayFireMontage(bool bAiming)
 	}
 }
 
+void AFPSCharacter::Elim()
+{
+	
+}
+
 // Updates whenever there is movement
 void AFPSCharacter::OnRep_ReplicatedMovement()
 {
