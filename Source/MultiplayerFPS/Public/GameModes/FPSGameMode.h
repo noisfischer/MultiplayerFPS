@@ -14,5 +14,5 @@ class MULTIPLAYERFPS_API AFPSGameMode : public AGameMode
 
 public:
 	virtual void PlayerEliminated(class AFPSCharacter* ElimmedCharacter, class AFPSPlayerController* VictimController, AFPSPlayerController* AttackerController);
-	
+	virtual void RequestRespawn(ACharacter* ElimmedCharacter, AController* ElimmedController);
 };
