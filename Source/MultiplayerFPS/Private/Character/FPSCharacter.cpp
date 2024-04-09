@@ -60,6 +60,7 @@ void AFPSCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 
 	// Register all replicated variables here
 	DOREPLIFETIME_CONDITION(AFPSCharacter, OverlappingWeapon, COND_OwnerOnly);
+	DOREPLIFETIME(AFPSCharacter, Health);
 }
 
 void AFPSCharacter::PostInitializeComponents()
@@ -438,6 +439,11 @@ void AFPSCharacter::HideCameraIfCharacterClose()
 			Combat->EquippedWeapon->GetWeaponMesh()->bOwnerNoSee = false;
 		}
 	}
+}
+
+void AFPSCharacter::OnRep_Health()
+{
+	
 }
 
 // ONLY CALLED ON THE SERVER
