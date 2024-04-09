@@ -30,6 +30,8 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastElim();
 
+	virtual void Destroyed() override;
+
 	// RagdollInterface function
 	virtual void GetRagdollInfo_Implementation(const FName& BoneName, const FVector& ImpulseDirection) override;
 	

@@ -164,6 +164,11 @@ void AFPSCharacter::ElimTimerFinished()
 	}
 }
 
+void AFPSCharacter::Destroyed()
+{
+	Super::Destroyed();
+}
+
 // Interface event called on ProjectileBullet
 void AFPSCharacter::GetRagdollInfo_Implementation(const FName& BoneName, const FVector& ImpulseDirection)
 {
