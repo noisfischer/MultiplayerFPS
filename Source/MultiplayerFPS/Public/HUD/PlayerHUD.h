@@ -26,6 +26,11 @@ class MULTIPLAYERFPS_API APlayerHUD : public AHUD
 	GENERATED_BODY()
 public:
 	virtual void DrawHUD() override; // from AHUD base class
+
+	UPROPERTY(EditAnywhere, Category = "Player Stats")
+	TSubclassOf<class UUserWidget> CharacterOverlayClass;
+	
+	class UCharacterOverlay* CharacterOverlay;
 	
 private:
 	FHUDPackage HUDPackage;
