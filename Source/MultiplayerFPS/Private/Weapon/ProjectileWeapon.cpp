@@ -30,7 +30,7 @@ void AProjectileWeapon::Fire(const FVector& HitTarget)
 		if(ProjectileClass && InstigatorPawn)
 		{
 			FActorSpawnParameters SpawnParameters ;
-			SpawnParameters.Owner = this->GetOwner(); 
+			SpawnParameters.Owner = this->GetOwner();
 			SpawnParameters.Instigator = InstigatorPawn;
 				
 			UWorld* World = GetWorld();

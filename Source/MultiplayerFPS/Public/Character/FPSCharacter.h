@@ -22,10 +22,6 @@ public:
 	virtual void PostInitializeComponents() override;
 	void PlayFireMontage(bool bAiming);
 
-	// RPC, unreliable because it's cosmetic and not an essential function
-	UFUNCTION(NetMulticast, Unreliable)
-	void MulticastHit();
-
 	// Inherited from AActor class
 	virtual void OnRep_ReplicatedMovement() override;
 	
@@ -73,6 +69,12 @@ protected:
 	virtual void Jump() override;
 	void PlayHitReactMontage();
 	
+	// callback for pre-existing ApplyDamage function
+	UFUNCTION()
+	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* InstigatorController, AActor* DamageCauser);
+	
+	void UpdateHUDHealth();
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
 	class USpringArmComponent* CameraBoom;

@@ -53,13 +53,7 @@ void AProjectile::BeginPlay()
 void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	FVector NormalImpulse, const FHitResult& Hit)
 {
-	AFPSCharacter* FPSCharacter = Cast<AFPSCharacter>(OtherActor);
-	if(FPSCharacter)
-	{
-		FPSCharacter->MulticastHit();
-	}
-	
-	Destroy();
+		Destroy();
 }
 
 void AProjectile::Tick(float DeltaTime)

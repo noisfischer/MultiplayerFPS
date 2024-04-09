@@ -22,7 +22,7 @@ void AProjectileBullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 		UDamageType::StaticClass()
 		);
 		}
+		
+		Super::OnHit(HitComp, OtherActor, OtherComp, NormalImpulse, Hit);
 	}
-	
-	Super::OnHit(HitComp, OtherActor, OtherComp, NormalImpulse, Hit);
 }

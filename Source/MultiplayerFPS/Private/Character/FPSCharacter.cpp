@@ -116,6 +116,24 @@ void AFPSCharacter::PlayHitReactMontage()
 	}
 }
 
+// bound on BeginPlay
+void AFPSCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType,
+	AController* InstigatorController, AActor* DamageCauser)
+{
+	Health = FMath::Clamp(Health - Damage, 0.f, MaxHealth); // OnRep_Health is called
+	UpdateHUDHealth();
+	PlayHitReactMontage();
+}
+
+void AFPSCharacter::UpdateHUDHealth()
+{
+	FPSPlayerController = FPSPlayerController == nullptr ? Cast<AFPSPlayerController>(Controller) : FPSPlayerController; // Set the current controller
+	if(FPSPlayerController)
+	{
+		FPSPlayerController->SetHUDHealth(Health, MaxHealth);
+	}
+}
+
 void AFPSCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -129,10 +147,12 @@ void AFPSCharacter::BeginPlay()
 		}
 	}
 
-	FPSPlayerController = Cast<AFPSPlayerController>(Controller); // Set the current controller
-	if(FPSPlayerController)
+	UpdateHUDHealth();
+
+	if(HasAuthority())
 	{
-		FPSPlayerController->SetHUDHealth(Health, MaxHealth);
+		// OnTakeAnyDamage pre-existing delegate bound to ReceiveDamage()
+		OnTakeAnyDamage.AddDynamic(this, &AFPSCharacter::ReceiveDamage);
 	}
 }
 
@@ -417,12 +437,6 @@ void AFPSCharacter::TurnInPlace(float DeltaTime)
 	}
 }
 
-// RPC
-void AFPSCharacter::MulticastHit_Implementation()
-{
-	PlayHitReactMontage();
-}
-
 void AFPSCharacter::HideCameraIfCharacterClose()
 {
 	if(!IsLocallyControlled())
@@ -450,7 +464,8 @@ void AFPSCharacter::HideCameraIfCharacterClose()
 
 void AFPSCharacter::OnRep_Health()
 {
-	
+	UpdateHUDHealth();
+	PlayHitReactMontage();
 }
 
 // ONLY CALLED ON THE SERVER
