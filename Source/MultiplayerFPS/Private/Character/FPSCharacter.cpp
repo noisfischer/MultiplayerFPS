@@ -14,6 +14,7 @@
 #include "Components/CombatComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Character/CharacterAnimInstance.h"
+#include "GameModes/FPSGameMode.h"
 #include "MultiplayerFPS/MultiplayerFPS.h"
 #include "PlayerController/FPSPlayerController.h"
 
@@ -128,6 +129,15 @@ void AFPSCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const UDam
 	Health = FMath::Clamp(Health - Damage, 0.f, MaxHealth); // OnRep_Health is called
 	UpdateHUDHealth();
 	PlayHitReactMontage();
+
+	if(Health = 0.f)
+	{
+		AFPSGameMode* FPSGameMode = GetWorld()->GetAuthGameMode<AFPSGameMode>();
+		if(FPSGameMode)
+		{
+			
+		}
+	}
 }
 
 void AFPSCharacter::UpdateHUDHealth()
