@@ -130,7 +130,7 @@ void AFPSCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const UDam
 	UpdateHUDHealth();
 	PlayHitReactMontage();
 
-	if(Health = 0.f)
+	if(Health == 0.f)
 	{
 		AFPSGameMode* FPSGameMode = GetWorld()->GetAuthGameMode<AFPSGameMode>();
 		if(FPSGameMode)
