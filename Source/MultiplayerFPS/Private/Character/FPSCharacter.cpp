@@ -115,7 +115,14 @@ void AFPSCharacter::MulticastElim_Implementation()
 	if(bElimmed) return;
 	bElimmed = true;
 	GetMesh()->SetSimulatePhysics(true);
-	GetMesh()->AddImpulseToAllBodiesBelow(RagdollDirection * 5000, LastHitBone, true, true);
+
+	float ImpulsePower = 5000.f;
+	if(LastHitBone == FName("spine_04"))
+	{
+		ImpulsePower = 1000.f;
+	}
+		GetMesh()->AddImpulseToAllBodiesBelow(RagdollDirection * ImpulsePower, LastHitBone, true, true);
+	
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	if(DissolveMaterialInstance1) // top of mesh
