@@ -14,6 +14,7 @@ class MULTIPLAYERFPS_API AFPSPlayerController : public APlayerController
 
 public:
 	void SetHUDHealth(float Health, float MaxHealth);
+	void OnPossess(APawn* InPawn) override;
 	
 protected:
 	virtual void BeginPlay() override;

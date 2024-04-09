@@ -65,7 +65,6 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	virtual void PossessedBy(AController* NewController) override;;
 
 	void Move(const struct FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
@@ -202,4 +201,6 @@ public:
 	FVector GetHitTarget() const;
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 	FORCEINLINE bool GetShouldRotateRootBone() const { return bRotateRootBone; }
+	FORCEINLINE float GetHealth() const { return Health; }
+	FORCEINLINE float GetMaxHealth() const { return MaxHealth; }
 };

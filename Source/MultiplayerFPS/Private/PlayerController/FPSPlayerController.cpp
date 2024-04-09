@@ -2,6 +2,8 @@
 
 
 #include "PlayerController/FPSPlayerController.h"
+
+#include "Character/FPSCharacter.h"
 #include "Components/ProgressBar.h"
 #include "HUD/CharacterOverlay.h"
 #include "HUD/PlayerHUD.h"
@@ -23,5 +25,16 @@ void AFPSPlayerController::SetHUDHealth(float Health, float MaxHealth)
 	{
 		const float HealthPercent = Health / MaxHealth;
 		PlayerHUD->CharacterOverlay->HealthBar->SetPercent(HealthPercent);
+	}
+}
+
+void AFPSPlayerController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+
+	AFPSCharacter* FPSCharacter = Cast<AFPSCharacter>(InPawn);
+	if(FPSCharacter)
+	{
+		SetHUDHealth(FPSCharacter->GetHealth(), FPSCharacter->GetMaxHealth());
 	}
 }
