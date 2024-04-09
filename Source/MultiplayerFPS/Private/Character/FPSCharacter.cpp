@@ -115,7 +115,7 @@ void AFPSCharacter::MulticastElim_Implementation()
 	if(bElimmed) return;
 	bElimmed = true;
 	GetMesh()->SetSimulatePhysics(true);
-	GetMesh()->AddImpulseToAllBodiesBelow(RagdollDirection * 1000, LastHitBone, true, true);
+	GetMesh()->AddImpulseToAllBodiesBelow(RagdollDirection * 5000, LastHitBone, true, true);
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	if(DissolveMaterialInstance1) // top of mesh
@@ -123,14 +123,14 @@ void AFPSCharacter::MulticastElim_Implementation()
 		DynamicDissolveMaterialInstance1 = UMaterialInstanceDynamic::Create(DissolveMaterialInstance1, this);
 		GetMesh()->SetMaterial(0, DynamicDissolveMaterialInstance1);
 		DynamicDissolveMaterialInstance1->SetScalarParameterValue(TEXT("Dissolve"), 0.55f);
-		DynamicDissolveMaterialInstance1->SetScalarParameterValue(TEXT("Glow Intensity"), 200.f);
+		DynamicDissolveMaterialInstance1->SetScalarParameterValue(TEXT("Glow Intensity"), 50.f);
 	}
 	if(DissolveMaterialInstance2) // bottom of mesh
 	{
 		DynamicDissolveMaterialInstance2 = UMaterialInstanceDynamic::Create(DissolveMaterialInstance1, this);
-		GetMesh()->SetMaterial(0, DynamicDissolveMaterialInstance2);
+		GetMesh()->SetMaterial(1, DynamicDissolveMaterialInstance2);
 		DynamicDissolveMaterialInstance2->SetScalarParameterValue(TEXT("Dissolve"), 0.55f);
-		DynamicDissolveMaterialInstance2->SetScalarParameterValue(TEXT("Glow Intensity"), 200.f);
+		DynamicDissolveMaterialInstance2->SetScalarParameterValue(TEXT("Glow Intensity"), 50.f);
 	}
 	StartDissolve();
 }
