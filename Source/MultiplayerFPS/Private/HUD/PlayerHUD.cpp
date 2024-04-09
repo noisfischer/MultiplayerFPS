@@ -3,6 +3,18 @@
 
 #include "HUD/PlayerHUD.h"
 
+void APlayerHUD::BeginPlay()
+{
+	Super::BeginPlay();
+
+	AddCharacterOverlay();
+}
+
+void APlayerHUD::AddCharacterOverlay()
+{
+	
+}
+
 void APlayerHUD::DrawHUD()
 {
 	Super::DrawHUD();
