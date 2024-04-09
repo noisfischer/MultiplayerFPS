@@ -135,7 +135,10 @@ void AFPSCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const UDam
 		AFPSGameMode* FPSGameMode = GetWorld()->GetAuthGameMode<AFPSGameMode>();
 		if(FPSGameMode)
 		{
-			
+			// Eliminate player
+			FPSPlayerController = FPSPlayerController == nullptr ? Cast<AFPSPlayerController>(Controller) : FPSPlayerController;
+			AFPSPlayerController* AttackerController = Cast<AFPSPlayerController>(InstigatorController);
+			FPSGameMode->PlayerEliminated(this, FPSPlayerController, AttackerController);
 		}
 	}
 }
