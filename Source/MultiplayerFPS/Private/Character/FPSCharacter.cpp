@@ -121,10 +121,17 @@ void AFPSCharacter::MulticastElim_Implementation()
 	{
 		ImpulsePower = 1000.f;
 	}
-		GetMesh()->AddImpulseToAllBodiesBelow(RagdollDirection * ImpulsePower, LastHitBone, true, true);
-	
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
+	GetMesh()->AddImpulseToAllBodiesBelow(RagdollDirection * ImpulsePower, LastHitBone, true, true);
+	
+	if(FPSPlayerController)
+	{
+		DisableInput(FPSPlayerController);
+	}
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	GetCharacterMovement()->DisableMovement();
+	
 	if(DissolveMaterialInstance1) // top of mesh
 	{
 		DynamicDissolveMaterialInstance1 = UMaterialInstanceDynamic::Create(DissolveMaterialInstance1, this);

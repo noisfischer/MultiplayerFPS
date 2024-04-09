@@ -27,6 +27,7 @@ public:
 
 	void ShowPickupWidget(bool bShowWidget);
 	virtual void Fire(const FVector& HitTarget);
+	void Dropped();
 
 	// Textures for weapon crosshairs - set in BPs
 	UPROPERTY(EditAnywhere, Category = Crosshairs)
