@@ -6,12 +6,18 @@
 #include "GameFramework/PlayerController.h"
 #include "FPSPlayerController.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class MULTIPLAYERFPS_API AFPSPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+
+public:
+	
+protected:
+	virtual void BeginPlay() override;
+	
+private:
+	class APlayerHUD* PlayerHUD;
 	
 };

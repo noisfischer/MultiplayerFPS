@@ -2,4 +2,11 @@
 
 
 #include "PlayerController/FPSPlayerController.h"
+#include "HUD/PlayerHUD.h"
 
+void AFPSPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	PlayerHUD = Cast<APlayerHUD>(GetHUD()); // GetHUD() is a built-in function of APlayerController
+}
