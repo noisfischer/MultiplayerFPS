@@ -21,7 +21,11 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void PostInitializeComponents() override;
 	void PlayFireMontage(bool bAiming);
+
+	// RPC - happens on all clients
+	UFUNCTION(NetMulticast, Reliable)
 	void Elim();
+	
 	// Inherited from AActor class
 	virtual void OnRep_ReplicatedMovement() override;
 	

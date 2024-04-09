@@ -92,7 +92,7 @@ void AFPSCharacter::PlayFireMontage(bool bAiming)
 	}
 }
 
-void AFPSCharacter::Elim()
+void AFPSCharacter::Elim_Implementation()
 {
 	GetMesh()->SetSimulatePhysics(true);
 }
