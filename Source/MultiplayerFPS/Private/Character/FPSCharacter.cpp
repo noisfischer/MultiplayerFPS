@@ -94,7 +94,7 @@ void AFPSCharacter::PlayFireMontage(bool bAiming)
 
 void AFPSCharacter::Elim()
 {
-	
+	GetMesh()->SetSimulatePhysics(true);
 }
 
 // Updates whenever there is movement
