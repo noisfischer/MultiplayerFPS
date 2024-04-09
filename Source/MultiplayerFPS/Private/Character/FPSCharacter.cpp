@@ -114,6 +114,7 @@ void AFPSCharacter::MulticastElim_Implementation()
 	bElimmed = true;
 	GetMesh()->SetSimulatePhysics(true);
 	GetMesh()->AddImpulseToAllBodiesBelow(RagdollDirection * 1000, LastHitBone, true, true);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 // Respawns character using gamemode function
