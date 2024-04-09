@@ -249,6 +249,13 @@ void AFPSCharacter::BeginPlay()
 	}
 }
 
+void AFPSCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	UpdateHUDHealth();
+}
+
 void AFPSCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
