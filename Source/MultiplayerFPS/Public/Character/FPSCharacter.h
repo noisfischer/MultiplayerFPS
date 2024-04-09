@@ -133,6 +133,8 @@ private:
 
 	UFUNCTION() // when CurrentHealth gets updated, this is called
 	void OnRep_Health();
+
+	class AFPSPlayerController* FPSPlayerController;
 	
 public:	
 	void SetOverlappingWeapon(AWeapon* Weapon); // ONLY CALLED ON THE SERVER

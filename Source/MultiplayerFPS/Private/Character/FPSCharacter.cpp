@@ -15,6 +15,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Character/CharacterAnimInstance.h"
 #include "MultiplayerFPS/MultiplayerFPS.h"
+#include "PlayerController/FPSPlayerController.h"
 
 AFPSCharacter::AFPSCharacter()
 {
@@ -126,6 +127,12 @@ void AFPSCharacter::BeginPlay()
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
+	}
+
+	FPSPlayerController = Cast<AFPSPlayerController>(Controller); // Set the current controller
+	if(FPSPlayerController)
+	{
+		FPSPlayerController->SetHUDHealth(Health, MaxHealth);
 	}
 }
 
