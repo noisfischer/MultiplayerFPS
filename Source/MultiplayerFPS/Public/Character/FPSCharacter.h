@@ -167,12 +167,26 @@ private:
 	 */
 	UPROPERTY(VisibleAnywhere)
 	UTimelineComponent* DissolveTimeline;
+	FOnTimelineFloat DissolveTrack; // delegate bound in StartDissolve
+
+	UPROPERTY(EditAnywhere) // update in BP
+	UCurveFloat* DissolveCurve;
 	
-	FOnTimelineFloat DissolveTrack;
-
+	UFUNCTION()
 	void UpdateDissolveMaterial(float DissolveValue);
-
 	void StartDissolve();
+
+	// Dynamic instance we can change at runtime
+	UPROPERTY(VisibleAnywhere, Category = Elim)
+	UMaterialInstanceDynamic* DynamicDissolveMaterialInstance1;
+	UPROPERTY(VisibleAnywhere, Category = Elim)
+	UMaterialInstanceDynamic* DynamicDissolveMaterialInstance2;
+
+	// Material instance set in BP used with the dynamic material instance
+	UPROPERTY(EditAnywhere, Category = Elim)
+	UMaterialInstance* DissolveMaterialInstance1; // for top of mesh
+	UPROPERTY(EditAnywhere, Category = Elim)
+	UMaterialInstance* DissolveMaterialInstance2; // for bottom of mesh
 	
 public:	
 	void SetOverlappingWeapon(AWeapon* Weapon); // ONLY CALLED ON THE SERVER

@@ -53,6 +53,8 @@ AFPSCharacter::AFPSCharacter()
 	// Replication rate for character
 	NetUpdateFrequency = 66.f;
 	MinNetUpdateFrequency = 33.f;
+
+	DissolveTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("DissolveTimelineComponent"));
 }
 
 
@@ -115,6 +117,22 @@ void AFPSCharacter::MulticastElim_Implementation()
 	GetMesh()->SetSimulatePhysics(true);
 	GetMesh()->AddImpulseToAllBodiesBelow(RagdollDirection * 1000, LastHitBone, true, true);
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	if(DissolveMaterialInstance1) // top of mesh
+	{
+		DynamicDissolveMaterialInstance1 = UMaterialInstanceDynamic::Create(DissolveMaterialInstance1, this);
+		GetMesh()->SetMaterial(0, DynamicDissolveMaterialInstance1);
+		DynamicDissolveMaterialInstance1->SetScalarParameterValue(TEXT("Dissolve"), 0.55f);
+		DynamicDissolveMaterialInstance1->SetScalarParameterValue(TEXT("Glow Intensity"), 200.f);
+	}
+	if(DissolveMaterialInstance2) // bottom of mesh
+	{
+		DynamicDissolveMaterialInstance2 = UMaterialInstanceDynamic::Create(DissolveMaterialInstance1, this);
+		GetMesh()->SetMaterial(0, DynamicDissolveMaterialInstance2);
+		DynamicDissolveMaterialInstance2->SetScalarParameterValue(TEXT("Dissolve"), 0.55f);
+		DynamicDissolveMaterialInstance2->SetScalarParameterValue(TEXT("Glow Intensity"), 200.f);
+	}
+	StartDissolve();
 }
 
 // Respawns character using gamemode function
@@ -526,12 +544,21 @@ void AFPSCharacter::OnRep_Health()
 
 void AFPSCharacter::UpdateDissolveMaterial(float DissolveValue)
 {
-	
+	if(DynamicDissolveMaterialInstance1 && DynamicDissolveMaterialInstance2)
+	{
+		DynamicDissolveMaterialInstance1->SetScalarParameterValue(TEXT("Dissolve"), DissolveValue);
+		DynamicDissolveMaterialInstance2->SetScalarParameterValue(TEXT("Dissolve"), DissolveValue);
+	}
 }
 
 void AFPSCharacter::StartDissolve()
 {
-	
+	DissolveTrack.BindDynamic(this, &AFPSCharacter::UpdateDissolveMaterial);
+	if(DissolveCurve && DissolveTimeline)
+	{
+		DissolveTimeline->AddInterpFloat(DissolveCurve, DissolveTrack);
+		DissolveTimeline->Play();
+	}
 }
 
 // ONLY CALLED ON THE SERVER
