@@ -154,7 +154,12 @@ private:
 	UPROPERTY(Replicated)
 	FVector RagdollDirection;
 
+	// Elimination members
 	bool bElimmed = false;
+	FTimerHandle ElimTimer;
+	void ElimTimerFinished();
+	UPROPERTY(EditDefaultsOnly)
+	float ElimDelay = 3.f;
 	
 public:	
 	void SetOverlappingWeapon(AWeapon* Weapon); // ONLY CALLED ON THE SERVER

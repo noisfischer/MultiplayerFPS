@@ -97,7 +97,14 @@ void AFPSCharacter::PlayFireMontage(bool bAiming)
 // Server only
 void AFPSCharacter::Elim()
 {
-	MulticastElim();
+	MulticastElim(); // ragdoll replication
+	
+	GetWorldTimerManager().SetTimer(	// Start timer till respawn
+		ElimTimer,
+		this,
+		&AFPSCharacter::ElimTimerFinished,
+		ElimDelay
+	);
 }
 
 // RPC function
@@ -107,6 +114,11 @@ void AFPSCharacter::MulticastElim_Implementation()
 	bElimmed = true;
 	GetMesh()->SetSimulatePhysics(true);
 	GetMesh()->AddImpulseToAllBodiesBelow(RagdollDirection * 1000, LastHitBone, true, true);
+}
+
+void AFPSCharacter::ElimTimerFinished()
+{
+	
 }
 
 // Interface event called on ProjectileBullet
