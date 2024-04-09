@@ -116,9 +116,14 @@ void AFPSCharacter::MulticastElim_Implementation()
 	GetMesh()->AddImpulseToAllBodiesBelow(RagdollDirection * 1000, LastHitBone, true, true);
 }
 
+// Respawns character using gamemode function
 void AFPSCharacter::ElimTimerFinished()
 {
-	
+	AFPSGameMode* FPSGameMode = GetWorld()->GetAuthGameMode<AFPSGameMode>();
+	if(FPSGameMode)
+	{
+		FPSGameMode->RequestRespawn(this, Controller);
+	}
 }
 
 // Interface event called on ProjectileBullet
