@@ -23,9 +23,11 @@ public:
 	virtual void PostInitializeComponents() override;
 	void PlayFireMontage(bool bAiming);
 
+	void Elim();
+	
 	// RPC - happens on all clients
 	UFUNCTION(NetMulticast, Reliable)
-	void Elim();
+	void MulticastElim();
 
 	// RagdollInterface function
 	virtual void GetRagdollInfo_Implementation(const FName& BoneName, const FVector& ImpulseDirection) override;
@@ -151,6 +153,8 @@ private:
 	FName LastHitBone;
 	UPROPERTY(Replicated)
 	FVector RagdollDirection;
+
+	bool bElimmed = false;
 	
 public:	
 	void SetOverlappingWeapon(AWeapon* Weapon); // ONLY CALLED ON THE SERVER

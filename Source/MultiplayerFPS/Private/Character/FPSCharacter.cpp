@@ -94,17 +94,25 @@ void AFPSCharacter::PlayFireMontage(bool bAiming)
 	}
 }
 
-// RPC function
-void AFPSCharacter::Elim_Implementation()
+// Server only
+void AFPSCharacter::Elim()
 {
+	MulticastElim();
+}
+
+// RPC function
+void AFPSCharacter::MulticastElim_Implementation()
+{
+	if(bElimmed) return;
+	bElimmed = true;
 	GetMesh()->SetSimulatePhysics(true);
 	GetMesh()->AddImpulseToAllBodiesBelow(RagdollDirection * 1000, LastHitBone, true, true);
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *LastHitBone.ToString());
 }
 
 // Interface event called on ProjectileBullet
 void AFPSCharacter::GetRagdollInfo_Implementation(const FName& BoneName, const FVector& ImpulseDirection)
 {
+	if(bElimmed) return;
 	LastHitBone = BoneName;
 	RagdollDirection = ImpulseDirection;
 }
