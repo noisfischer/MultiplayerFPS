@@ -211,7 +211,12 @@ void UCombatComponent::OnRep_EquippedWeapon()
 {
 	if(EquippedWeapon && PlayerRef)
 	{
-		// Character always faces forwards when holding weapon
+		EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
+		const USkeletalMeshSocket* HandSocket = PlayerRef->GetMesh()->GetSocketByName(FName("RightHandSocket"));
+		if(HandSocket)
+		{
+			HandSocket->AttachActor(EquippedWeapon, PlayerRef->GetMesh());
+		}
 		PlayerRef->GetCharacterMovement()->bOrientRotationToMovement = false;
 		PlayerRef->bUseControllerRotationYaw = true;
 	}

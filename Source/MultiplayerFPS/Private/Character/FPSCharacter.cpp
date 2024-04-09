@@ -99,6 +99,11 @@ void AFPSCharacter::PlayFireMontage(bool bAiming)
 // Server only
 void AFPSCharacter::Elim()
 {
+	if(Combat && Combat->EquippedWeapon)
+	{
+		Combat->EquippedWeapon->Dropped();
+	}
+	
 	MulticastElim(); // ragdoll replication
 	
 	GetWorldTimerManager().SetTimer(	// Start timer till respawn
