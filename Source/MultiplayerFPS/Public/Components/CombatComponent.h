@@ -47,8 +47,11 @@ protected:
 	void SetHUDCrosshairs(float DeltaTime);
 
 private:
+	UPROPERTY()
 	class AFPSCharacter* PlayerRef;
+	UPROPERTY()
 	class AFPSPlayerController* PlayerController;
+	UPROPERTY()
 	class APlayerHUD* HUD;
 
 	// replicated to all clients (no repnotify)

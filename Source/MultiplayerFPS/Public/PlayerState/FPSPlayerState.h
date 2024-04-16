@@ -26,7 +26,10 @@ public:
 	virtual void OnRep_Deaths();
 
 private:
+	UPROPERTY()
 	class AFPSCharacter* PlayerRef;
+
+	UPROPERTY()
 	class AFPSPlayerController* Controller;
 
 	UPROPERTY(ReplicatedUsing = OnRep_Deaths)

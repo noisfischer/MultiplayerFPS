@@ -62,6 +62,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* FireWeaponAction;
 
+	UPROPERTY()
 	class AFPSPlayerState* FPSPlayerState;
 
 protected:
@@ -150,6 +151,7 @@ private:
 	UFUNCTION() // when CurrentHealth gets updated, this is called
 	void OnRep_Health();
 
+	UPROPERTY()
 	class AFPSPlayerController* FPSPlayerController;
 
 	// Ragdoll on elim information
