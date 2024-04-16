@@ -10,6 +10,7 @@
 #include "Animation/AnimationAsset.h"
 #include "Weapon/BulletCasing.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "PlayerController/FPSPlayerController.h"
 
 AWeapon::AWeapon()
 {
@@ -89,16 +90,37 @@ void AWeapon::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 	}
 }
 
-void AWeapon::OnRep_Ammo()
+void AWeapon::SetHUDAmmo()
 {
-	
+	FPSOwnerPlayer = FPSOwnerPlayer == nullptr ? Cast<AFPSCharacter>(GetOwner()) : FPSOwnerPlayer;
+	if(FPSOwnerPlayer)
+	{
+		FPSOwnerController = FPSOwnerController == nullptr ? Cast<AFPSPlayerController>(FPSOwnerPlayer->Controller) : FPSOwnerController;
+		if(FPSOwnerController)
+		{
+			FPSOwnerController->SetHUDWeaponAmmo(Ammo);
+		}
+	}
 }
 
 void AWeapon::SpendRound()
 {
 	--Ammo;
-	
+	SetHUDAmmo();
 }
+
+void AWeapon::OnRep_Ammo()
+{
+	FPSOwnerPlayer = FPSOwnerPlayer == nullptr ? Cast<AFPSCharacter>(GetOwner()) : FPSOwnerPlayer;
+	SetHUDAmmo();
+}
+
+void AWeapon::OnRep_Owner()
+{
+	Super::OnRep_Owner();
+	SetHUDAmmo();
+}
+
 
 void AWeapon::SetWeaponState(EWeaponState State)
 {
@@ -178,6 +200,7 @@ void AWeapon::Fire(const FVector& HitTarget)
 			}
 		}
 	}
+	SpendRound();
 }
 
 void AWeapon::Dropped()

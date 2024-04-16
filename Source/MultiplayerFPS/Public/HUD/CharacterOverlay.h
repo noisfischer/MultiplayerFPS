@@ -21,4 +21,7 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* DeathsAmount; // BP text block must have same name
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* WeaponAmmoAmount; // BP text block must have same name
 };

@@ -337,6 +337,7 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	}
 
 	EquippedWeapon->SetOwner(PlayerRef);
+	EquippedWeapon->SetHUDAmmo();
 	
 	// Character always faces forwards when holding weapon
 	PlayerRef->GetCharacterMovement()->bOrientRotationToMovement = false;

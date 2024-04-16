@@ -24,7 +24,9 @@ public:
 	AWeapon();
 	virtual void Tick(float DeltaTime) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
+	virtual void OnRep_Owner() override;
+	void SetHUDAmmo();
+	
 	void ShowPickupWidget(bool bShowWidget);
 	virtual void Fire(const FVector& HitTarget);
 	void Dropped();
@@ -101,15 +103,20 @@ private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ABulletCasing> BulletCasingClass;
 
+	void SpendRound();
+	
 	UFUNCTION()
 	void OnRep_Ammo();
-
-	void SpendRound();
 	
 	UPROPERTY(EditAnywhere)
 	int32 MagCapacity;
 	UPROPERTY(EditAnywhere, ReplicatedUsing=OnRep_Ammo)
 	int32 Ammo;
+
+	UPROPERTY()
+	class AFPSCharacter* FPSOwnerPlayer;
+	UPROPERTY()
+	class AFPSPlayerController* FPSOwnerController;
 	
 public:	
 	void SetWeaponState(EWeaponState State);
