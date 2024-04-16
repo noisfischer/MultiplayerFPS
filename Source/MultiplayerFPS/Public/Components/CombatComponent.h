@@ -24,6 +24,10 @@ public:
 	
 	void EquipWeapon(class AWeapon* WeaponToEquip);
 	void Reload();
+
+	UFUNCTION(BlueprintCallable)
+	void FinishReloading();
+	
 protected:
 	virtual void BeginPlay() override;
 	

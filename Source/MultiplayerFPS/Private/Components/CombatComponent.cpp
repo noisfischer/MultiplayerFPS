@@ -388,7 +388,7 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 
 void UCombatComponent::Reload()
 {
-	if(CarriedAmmo > 0)
+	if(CarriedAmmo > 0 && CombatState != ECombatState::ECS_Reloading)
 	{
 		ServerReload();
 	}
@@ -401,6 +401,15 @@ void UCombatComponent::ServerReload_Implementation()
 
 	CombatState = ECombatState::ECS_Reloading; // triggers OnRep_CombatState
 	HandleReload(); // server sees reload montage
+}
+
+void UCombatComponent::FinishReloading()
+{
+	if(PlayerRef == nullptr) return;
+	if(PlayerRef->HasAuthority())
+	{
+		CombatState = ECombatState::ECS_Unoccupied;
+	}
 }
 
 void UCombatComponent::OnRep_CombatState()
