@@ -58,6 +58,8 @@ protected:
 
 	void HandleReload();
 
+	int32 AmountToReload();
+
 private:
 	UPROPERTY()
 	class AFPSCharacter* PlayerRef;

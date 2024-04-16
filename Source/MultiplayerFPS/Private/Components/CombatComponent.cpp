@@ -399,6 +399,21 @@ void UCombatComponent::ServerReload_Implementation()
 {
 	if(PlayerRef == nullptr || EquippedWeapon == nullptr) return;
 
+	int32 ReloadAmount = AmountToReload();
+	if(CarriedAmmoMap.Contains(EquippedWeapon->GetWeaponType()))
+	{
+		CarriedAmmoMap[EquippedWeapon->GetWeaponType()] -= ReloadAmount;
+		CarriedAmmo = CarriedAmmoMap[EquippedWeapon->GetWeaponType()];
+	}
+
+	PlayerController = PlayerController == nullptr ? Cast<AFPSPlayerController>(PlayerRef->Controller) : PlayerController;
+	if(PlayerController)
+	{
+		PlayerController->SetHUDCarriedAmmo(CarriedAmmo);
+	}
+		
+	EquippedWeapon->AddAmmo(-ReloadAmount);
+	
 	CombatState = ECombatState::ECS_Reloading; // triggers OnRep_CombatState
 	HandleReload(); // server sees reload montage
 }
@@ -438,4 +453,19 @@ void UCombatComponent::HandleReload()
 	{
 		PlayerRef->PlayReloadMontage();
 	}
+}
+
+int32 UCombatComponent::AmountToReload()
+{
+	if(EquippedWeapon == nullptr) return 0;
+
+	int32 RoomInMag = EquippedWeapon->GetMagCapacity() - EquippedWeapon->GetAmmo();
+	if(CarriedAmmoMap.Contains(EquippedWeapon->GetWeaponType()))
+	{
+		int32 AmountCarried = CarriedAmmoMap[EquippedWeapon->GetWeaponType()];
+		int32 Least = FMath::Min(RoomInMag, AmountCarried);
+		return FMath::Clamp(RoomInMag, 0, Least);
+	}
+
+	return 0;
 }
