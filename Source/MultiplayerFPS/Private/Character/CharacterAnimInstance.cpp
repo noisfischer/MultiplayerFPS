@@ -82,4 +82,5 @@ void UCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	}
 
 	bUseFABRIK = PlayerRef->GetCombatState() != ECombatState::ECS_Reloading;
+	bUseAimOffsets = PlayerRef->GetCombatState() != ECombatState::ECS_Reloading;
 }

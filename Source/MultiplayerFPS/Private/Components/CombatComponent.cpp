@@ -13,6 +13,7 @@
 #include "PlayerController/FPSPlayerController.h"
 #include "HUD/PlayerHUD.h"
 #include "TimerManager.h"
+#include "Sound/SoundCue.h"
 
 UCombatComponent::UCombatComponent()
 {
@@ -224,6 +225,15 @@ void UCombatComponent::OnRep_EquippedWeapon()
 		}
 		PlayerRef->GetCharacterMovement()->bOrientRotationToMovement = false;
 		PlayerRef->bUseControllerRotationYaw = true;
+		
+		if(EquippedWeapon->EquipSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(
+				this,
+				EquippedWeapon->EquipSound,
+				PlayerRef->GetActorLocation()
+			);
+		}
 	}
 }
 
@@ -378,6 +388,15 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	if(PlayerController)
 	{
 		PlayerController->SetHUDCarriedAmmo(CarriedAmmo);
+	}
+
+	if(EquippedWeapon->EquipSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(
+			this,
+			EquippedWeapon->EquipSound,
+			PlayerRef->GetActorLocation()
+		);
 	}
 	
 	// Character always faces forwards when holding weapon
