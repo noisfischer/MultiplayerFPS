@@ -66,6 +66,7 @@ void AWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeP
 
 	// Register all replicated variables here
 	DOREPLIFETIME(AWeapon, WeaponState);
+	DOREPLIFETIME(AWeapon, Ammo);
 }
 
 void AWeapon::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -86,6 +87,17 @@ void AWeapon::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 	{
 		PlayerRef->SetOverlappingWeapon(nullptr);
 	}
+}
+
+void AWeapon::OnRep_Ammo()
+{
+	
+}
+
+void AWeapon::SpendRound()
+{
+	--Ammo;
+	
 }
 
 void AWeapon::SetWeaponState(EWeaponState State)

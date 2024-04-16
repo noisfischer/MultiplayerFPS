@@ -100,6 +100,16 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ABulletCasing> BulletCasingClass;
+
+	UFUNCTION()
+	void OnRep_Ammo();
+
+	void SpendRound();
+	
+	UPROPERTY(EditAnywhere)
+	int32 MagCapacity;
+	UPROPERTY(EditAnywhere, ReplicatedUsing=OnRep_Ammo)
+	int32 Ammo;
 	
 public:	
 	void SetWeaponState(EWeaponState State);
