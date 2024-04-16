@@ -190,6 +190,10 @@ void UCombatComponent::FireTimerFinished()
 	{
 		Fire();
 	}
+	if(EquippedWeapon->IsEmpty())
+	{
+		Reload();
+	}
 }
 
 // ON SERVER
@@ -397,6 +401,11 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 			EquippedWeapon->EquipSound,
 			PlayerRef->GetActorLocation()
 		);
+	}
+
+	if(EquippedWeapon->IsEmpty())
+	{
+		Reload();
 	}
 	
 	// Character always faces forwards when holding weapon
