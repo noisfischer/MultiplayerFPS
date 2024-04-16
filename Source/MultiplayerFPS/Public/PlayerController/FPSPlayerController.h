@@ -21,11 +21,33 @@ public:
 	void SetHUDMatchCountdown(float CountdownTime);
 	void OnPossess(APawn* InPawn) override;
 	virtual void Tick(float DeltaTime) override;
+
+	virtual float GetServerTime(); // Synced with server world clock
+	virtual void ReceivedPlayer() override; // Sync with server clock ASAP
+	void CheckTimeSync(float DeltaTime);
 	
 protected:
 	virtual void BeginPlay() override;
-	
 	void SetHUDTime();
+
+	/*
+	 * Sync time between client and server
+	 */
+	
+	// Requests current server time, passing in client's time when request was sent
+	UFUNCTION(Server, Reliable) // RPC
+	void ServerRequestServerTime(float TimeOfClientRequest);
+
+	// Reports current server time to client in respond to ServerRequestServerTime
+	UFUNCTION(Client, Reliable) // RPC
+	void ClientReportServerTime(float TimeOfClientRequest, float TimeServerReceivedClientRequest);
+
+	float ClientServerDelta = 0.f; // Difference between client and server time
+
+	UPROPERTY(EditAnywhere, Category = Time)
+	float TimeSyncFrequency = 5.f; // Sync with server every 5 seconds
+
+	float TimeSyncRunningTime = 0.f;
 	
 private:
 	UPROPERTY()
