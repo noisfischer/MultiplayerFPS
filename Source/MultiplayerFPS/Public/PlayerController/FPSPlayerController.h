@@ -17,6 +17,7 @@ public:
 	void SetHUDScore(float Score);
 	void SetHUDDeaths(int32 Deaths);
 	void SetHUDWeaponAmmo(int32 Ammo);
+	void SetHUDCarriedAmmo(int32 Ammo);
 	void OnPossess(APawn* InPawn) override;
 	
 protected:

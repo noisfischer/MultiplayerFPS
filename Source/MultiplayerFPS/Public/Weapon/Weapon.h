@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Weapon/WeaponTypes.h"
 #include "Weapon.generated.h"
 
 UENUM(BlueprintType)
@@ -117,6 +118,9 @@ private:
 	class AFPSCharacter* FPSOwnerPlayer;
 	UPROPERTY()
 	class AFPSPlayerController* FPSOwnerController;
+
+	UPROPERTY(EditAnywhere)
+	EWeaponType WeaponType;
 	
 public:	
 	void SetWeaponState(EWeaponState State);
@@ -125,4 +129,5 @@ public:
 	FORCEINLINE float GetZoomedFov() const { return ZoomedFOV; }
 	FORCEINLINE float GetZoomInterpSpeed() const {return ZoomInterpSpeed; }
 	bool IsEmpty();
+	FORCEINLINE EWeaponType GetWeaponType() const { return WeaponType; }
 };
