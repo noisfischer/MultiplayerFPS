@@ -7,6 +7,7 @@
 #include "Components/ProgressBar.h"
 #include "HUD/CharacterOverlay.h"
 #include "HUD/PlayerHUD.h"
+#include "Components/TextBlock.h"
 
 void AFPSPlayerController::BeginPlay()
 {
@@ -25,6 +26,17 @@ void AFPSPlayerController::SetHUDHealth(float Health, float MaxHealth)
 	{
 		const float HealthPercent = Health / MaxHealth;
 		PlayerHUD->CharacterOverlay->HealthBar->SetPercent(HealthPercent);
+	}
+}
+
+void AFPSPlayerController::SetHUDScore(float Score)
+{
+	PlayerHUD = PlayerHUD == nullptr ? Cast<APlayerHUD>(GetHUD()) : PlayerHUD;
+	bool bHUDValid = PlayerHUD && PlayerHUD->CharacterOverlay && PlayerHUD->CharacterOverlay->ScoreAmount;
+	if(bHUDValid)
+	{
+		FString ScoreText = FString::Printf(TEXT("%d"), FMath::FloorToInt(Score));
+		PlayerHUD->CharacterOverlay->ScoreAmount->SetText(FText::FromString(ScoreText));
 	}
 }
 

@@ -15,5 +15,7 @@ class MULTIPLAYERFPS_API UCharacterOverlay : public UUserWidget
 public:
 	UPROPERTY(meta = (BindWidget))
 	class UProgressBar* HealthBar; // BP progress bar must have same name
-	
+
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* ScoreAmount; // BP text block must have same name
 };

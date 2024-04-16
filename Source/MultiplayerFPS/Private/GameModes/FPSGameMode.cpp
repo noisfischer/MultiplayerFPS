@@ -6,10 +6,20 @@
 #include "Character/FPSCharacter.h"
 #include "GameFramework/PlayerStart.h"
 #include "Kismet/GameplayStatics.h"
+#include "PlayerController/FPSPlayerController.h"
+#include "PlayerState/FPSPlayerState.h"
 
 void AFPSGameMode::PlayerEliminated(AFPSCharacter* ElimmedCharacter, AFPSPlayerController* VictimController,
                                     AFPSPlayerController* AttackerController)
 {
+	AFPSPlayerState* AttackerPlayerState = AttackerController ? Cast<AFPSPlayerState>(AttackerController->PlayerState) : nullptr;
+	AFPSPlayerState* VictimPlayerState = VictimController ? Cast<AFPSPlayerState>(VictimController->PlayerState) : nullptr;
+
+	if(AttackerPlayerState && AttackerPlayerState != VictimPlayerState)
+	{
+		AttackerPlayerState->AddToScore(1.f);
+	}
+	
 	// only on server
 	if(ElimmedCharacter)
 	{
