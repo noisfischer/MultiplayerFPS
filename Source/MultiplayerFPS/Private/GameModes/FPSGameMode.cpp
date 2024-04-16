@@ -9,6 +9,8 @@
 #include "PlayerController/FPSPlayerController.h"
 #include "PlayerState/FPSPlayerState.h"
 
+class UEnhancedInputLocalPlayerSubsystem;
+
 AFPSGameMode::AFPSGameMode()
 {
 	bDelayedStart = true; // Game mode will stay in "Waiting To Start" state until otherwise told
@@ -17,14 +19,14 @@ AFPSGameMode::AFPSGameMode()
 void AFPSGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	LevelStartingTime = GetWorld()->GetTimeSeconds();
 }
 
 void AFPSGameMode::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-
+	
 	if(MatchState == MatchState::WaitingToStart)
 	{
 		CountdownTime = WarmupTime - GetWorld()->GetTimeSeconds() + LevelStartingTime;

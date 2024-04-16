@@ -204,6 +204,8 @@ private:
 	UMaterialInstance* DissolveMaterialInstance1; // for top of mesh
 	UPROPERTY(EditAnywhere, Category = Elim)
 	UMaterialInstance* DissolveMaterialInstance2; // for bottom of mesh
+
+	bool bInputsSet = false;
 	
 public:	
 	void SetOverlappingWeapon(AWeapon* Weapon); // ONLY CALLED ON THE SERVER

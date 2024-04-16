@@ -285,6 +285,7 @@ void AFPSCharacter::BeginPlay()
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
+			bInputsSet = true;
 		}
 	}
 
@@ -300,6 +301,19 @@ void AFPSCharacter::BeginPlay()
 void AFPSCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if(HasAuthority() && !bInputsSet && Controller)
+	{
+		FPSPlayerController = !FPSPlayerController ? Cast<AFPSPlayerController>(Controller) : FPSPlayerController;
+		if(FPSPlayerController)
+		{
+			if(UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(FPSPlayerController->GetLocalPlayer()))
+			{
+				Subsystem->AddMappingContext(DefaultMappingContext, 0);
+				bInputsSet = true;
+			}
+		}
+	}
 
 	if(GetLocalRole() > ROLE_SimulatedProxy && IsLocallyControlled())
 	{
