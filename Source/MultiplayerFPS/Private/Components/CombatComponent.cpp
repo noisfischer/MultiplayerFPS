@@ -231,7 +231,7 @@ bool UCombatComponent::CanFire()
 {
 	if(EquippedWeapon == nullptr) return false;
 
-	return !EquippedWeapon->IsEmpty() || !bCanFire;
+	return !EquippedWeapon->IsEmpty() && bCanFire && CombatState == ECombatState::ECS_Unoccupied;
 }
 
 void UCombatComponent::OnRep_CarriedAmmo()
@@ -241,7 +241,6 @@ void UCombatComponent::OnRep_CarriedAmmo()
 	{
 		PlayerController->SetHUDCarriedAmmo(CarriedAmmo);
 	}
-	
 }
 
 void UCombatComponent::InitializeCarriedAmmo()
@@ -253,12 +252,12 @@ void UCombatComponent::Fire()
 {
 	if(CanFire())
 	{
-		bCanFire = false;
 		ServerFire(HitTarget); // calls Server RPC below
 		// Sends a message to server to perform that function
 
 		if(EquippedWeapon)
 		{
+			bCanFire = false;
 			CrosshairShootingFactor = 2.f;
 		}
 		StartFireTimer();
@@ -340,7 +339,7 @@ void UCombatComponent::MultiCastFire_Implementation(const FVector_NetQuantize& T
 	{
 		return;
 	}
-	if(PlayerRef)
+	if(PlayerRef && CombatState == ECombatState::ECS_Unoccupied)
 	{
 		PlayerRef->PlayFireMontage(bAiming);
 		EquippedWeapon->Fire(TraceHitTarget);
@@ -388,16 +387,17 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 
 void UCombatComponent::Reload()
 {
-	if(CarriedAmmo > 0 && CombatState != ECombatState::ECS_Reloading)
+	if(CarriedAmmo > 0 && CombatState == ECombatState::ECS_Unoccupied && EquippedWeapon)
 	{
 		ServerReload();
+		HandleReload();
 	}
 }
 
 // For server only
 void UCombatComponent::ServerReload_Implementation()
 {
-	if(PlayerRef == nullptr) return;
+	if(PlayerRef == nullptr || EquippedWeapon == nullptr) return;
 
 	CombatState = ECombatState::ECS_Reloading; // triggers OnRep_CombatState
 	HandleReload(); // server sees reload montage
@@ -410,6 +410,10 @@ void UCombatComponent::FinishReloading()
 	{
 		CombatState = ECombatState::ECS_Unoccupied;
 	}
+	if(bFireButtonPressed)
+	{
+		Fire();
+	}
 }
 
 void UCombatComponent::OnRep_CombatState()
@@ -419,10 +423,19 @@ void UCombatComponent::OnRep_CombatState()
 	case ECombatState::ECS_Reloading:
 		HandleReload(); // all clients see reload montage
 		break;
+	case ECombatState::ECS_Unoccupied:
+		if(bFireButtonPressed)
+		{
+			Fire();
+		}
+		break;
 	}
 }
 
 void UCombatComponent::HandleReload()
 {
-	PlayerRef->PlayReloadMontage();
+	if(PlayerRef)
+	{
+		PlayerRef->PlayReloadMontage();
+	}
 }
