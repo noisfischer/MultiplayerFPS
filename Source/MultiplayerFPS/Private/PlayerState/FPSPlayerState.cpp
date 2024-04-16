@@ -15,7 +15,7 @@ void AFPSPlayerState::AddToScore(float ScoreAmount)
 		Controller = Controller == nullptr ? Cast<AFPSPlayerController>(PlayerRef->Controller) : Controller;
 		if(Controller)
 		{
-			Controller->SetHUDScore(ScoreAmount);
+			Controller->SetHUDScore(GetScore());
 		}
 	}
 }
