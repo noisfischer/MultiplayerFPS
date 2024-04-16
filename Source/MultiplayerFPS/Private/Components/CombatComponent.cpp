@@ -384,3 +384,19 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	PlayerRef->GetCharacterMovement()->bOrientRotationToMovement = false;
 	PlayerRef->bUseControllerRotationYaw = true;
 }
+
+void UCombatComponent::Reload()
+{
+	if(CarriedAmmo > 0)
+	{
+		ServerReload();
+	}
+}
+
+// Done only on server
+void UCombatComponent::ServerReload_Implementation()
+{
+	if(PlayerRef == nullptr) return;
+
+	PlayerRef->PlayReloadMontage();
+}

@@ -18,6 +18,7 @@
 #include "MultiplayerFPS/MultiplayerFPS.h"
 #include "PlayerController/FPSPlayerController.h"
 #include "PlayerState/FPSPlayerState.h"
+#include "Weapon/WeaponTypes.h"
 
 AFPSCharacter::AFPSCharacter()
 {
@@ -93,6 +94,29 @@ void AFPSCharacter::PlayFireMontage(bool bAiming)
 		AnimInstance->Montage_Play(FireWeaponMontage);
 		FName SectionName;
 		SectionName = bAiming ? FName("RifleAim") : FName("RifleHip");
+		AnimInstance->Montage_JumpToSection(SectionName);
+	}
+}
+
+void AFPSCharacter::PlayReloadMontage()
+{
+	if(Combat == nullptr || Combat->EquippedWeapon == nullptr)
+	{
+		return;
+	}
+
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if(AnimInstance && ReloadMontage)
+	{
+		AnimInstance->Montage_Play(ReloadMontage);
+		FName SectionName;
+		switch (Combat->EquippedWeapon->GetWeaponType())
+		{
+		case EWeaponType::EWT_AssaultRifle:
+			SectionName = FName("Rifle");
+			break;
+		}
+
 		AnimInstance->Montage_JumpToSection(SectionName);
 	}
 }
@@ -428,7 +452,10 @@ void AFPSCharacter::FireWeaponButtonReleased()
 
 void AFPSCharacter::ReloadButtonPressed()
 {
-	
+	if(Combat)
+	{
+		Combat->Reload();
+	}
 }
 
 void AFPSCharacter::CalculateAO_Pitch()
