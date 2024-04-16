@@ -37,6 +37,13 @@ void AFPSGameMode::Tick(float DeltaSeconds)
 	}
 }
 
+void AFPSGameMode::OnMatchStateSet()
+{
+	Super::OnMatchStateSet();
+
+	
+}
+
 void AFPSGameMode::PlayerEliminated(AFPSCharacter* ElimmedCharacter, AFPSPlayerController* VictimController,
                                     AFPSPlayerController* AttackerController)
 {

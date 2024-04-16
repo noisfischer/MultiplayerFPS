@@ -8,6 +8,7 @@
 #include "HUD/CharacterOverlay.h"
 #include "HUD/PlayerHUD.h"
 #include "Components/TextBlock.h"
+#include "Net/UnrealNetwork.h"
 
 void AFPSPlayerController::BeginPlay()
 {
@@ -33,6 +34,13 @@ void AFPSPlayerController::CheckTimeSync(float DeltaTime)
 		ServerRequestServerTime(GetWorld()->GetTimeSeconds());
 		TimeSyncRunningTime = 0.f;
 	}
+}
+
+void AFPSPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AFPSPlayerController, MatchState);
 }
 
 void AFPSPlayerController::SetHUDHealth(float Health, float MaxHealth)
@@ -155,4 +163,14 @@ void AFPSPlayerController::ReceivedPlayer()
 	{
 		ServerRequestServerTime(GetWorld()->GetTimeSeconds());
 	}
+}
+
+void AFPSPlayerController::OnMatchStateSet(FName State)
+{
+	MatchState = State;	
+}
+
+void AFPSPlayerController::OnRep_MatchState()
+{
+	// stopped at 5:53
 }

@@ -13,6 +13,7 @@ class MULTIPLAYERFPS_API AFPSPlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	void SetHUDHealth(float Health, float MaxHealth);
 	void SetHUDScore(float Score);
 	void SetHUDDeaths(int32 Deaths);
@@ -25,6 +26,7 @@ public:
 	virtual float GetServerTime(); // Synced with server world clock
 	virtual void ReceivedPlayer() override; // Sync with server clock ASAP
 	void CheckTimeSync(float DeltaTime);
+	void OnMatchStateSet(FName State);
 	
 protected:
 	virtual void BeginPlay() override;
@@ -55,5 +57,10 @@ private:
 
 	float MatchTime = 120.f; // 2 minutes (120 seconds)
 	uint32 CountdownInt = 0;
-	
+
+	UPROPERTY(ReplicatedUsing = OnRep_MatchState)
+	FName MatchState;
+
+	UFUNCTION()
+	void OnRep_MatchState();
 };
