@@ -394,11 +394,10 @@ void UCombatComponent::Reload()
 	}
 }
 
-// For server only
-void UCombatComponent::ServerReload_Implementation()
+void UCombatComponent::UpdateAmmoValues()
 {
 	if(PlayerRef == nullptr || EquippedWeapon == nullptr) return;
-
+	
 	int32 ReloadAmount = AmountToReload();
 	if(CarriedAmmoMap.Contains(EquippedWeapon->GetWeaponType()))
 	{
@@ -413,6 +412,12 @@ void UCombatComponent::ServerReload_Implementation()
 	}
 		
 	EquippedWeapon->AddAmmo(-ReloadAmount);
+}
+
+// For server only
+void UCombatComponent::ServerReload_Implementation()
+{
+	if(PlayerRef == nullptr || EquippedWeapon == nullptr) return;
 	
 	CombatState = ECombatState::ECS_Reloading; // triggers OnRep_CombatState
 	HandleReload(); // server sees reload montage
@@ -424,6 +429,7 @@ void UCombatComponent::FinishReloading()
 	if(PlayerRef->HasAuthority())
 	{
 		CombatState = ECombatState::ECS_Unoccupied;
+		UpdateAmmoValues();
 	}
 	if(bFireButtonPressed)
 	{
