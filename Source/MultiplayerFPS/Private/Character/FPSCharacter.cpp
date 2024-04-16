@@ -314,6 +314,7 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &AFPSCharacter::AimButtonReleased);
 		EnhancedInputComponent->BindAction(FireWeaponAction, ETriggerEvent::Started, this, &AFPSCharacter::FireWeaponButtonPressed);
 		EnhancedInputComponent->BindAction(FireWeaponAction, ETriggerEvent::Completed, this, &AFPSCharacter::FireWeaponButtonReleased);
+		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &AFPSCharacter::ReloadButtonPressed);
 	}	
 }
 
@@ -423,6 +424,11 @@ void AFPSCharacter::FireWeaponButtonReleased()
 	{
 		Combat->FireWeaponButtonPressed(false);
 	}
+}
+
+void AFPSCharacter::ReloadButtonPressed()
+{
+	
 }
 
 void AFPSCharacter::CalculateAO_Pitch()

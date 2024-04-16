@@ -62,6 +62,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* FireWeaponAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ReloadAction;
+
 	UPROPERTY()
 	class AFPSPlayerState* FPSPlayerState;
 
@@ -77,6 +80,7 @@ protected:
 	void AimButtonReleased();
 	void FireWeaponButtonPressed();
 	void FireWeaponButtonReleased();
+	void ReloadButtonPressed();
 	void CalculateAO_Pitch();
 	float CalculateSpeed();
 	void AimOffset(float DeltaTime);
