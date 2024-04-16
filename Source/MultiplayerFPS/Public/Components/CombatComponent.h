@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "HUD/PlayerHUD.h"
 #include "Weapon/WeaponTypes.h"
+#include "MultiplayerFPS/FPSTypes/CombatState.h"
 #include "CombatComponent.generated.h"
 
 #define TRACE_LENGTH 80000.f
@@ -125,6 +126,12 @@ private:
 	int32 StartingARAmmo = 30;
 	
 	void InitializeCarriedAmmo();
+
+	UPROPERTY(ReplicatedUsing = OnRep_CombatState)
+	ECombatState CombatState;
+
+	UFUNCTION()
+	void OnRep_CombatState();
 public:	
 	
 };

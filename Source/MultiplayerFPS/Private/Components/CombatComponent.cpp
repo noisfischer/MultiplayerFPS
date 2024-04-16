@@ -30,6 +30,7 @@ void UCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(UCombatComponent, EquippedWeapon);
 	DOREPLIFETIME(UCombatComponent, bAiming);
 	DOREPLIFETIME_CONDITION(UCombatComponent, CarriedAmmo, COND_OwnerOnly);
+	DOREPLIFETIME(UCombatComponent, CombatState);
 }
 
 void UCombatComponent::BeginPlay()
@@ -399,4 +400,9 @@ void UCombatComponent::ServerReload_Implementation()
 	if(PlayerRef == nullptr) return;
 
 	PlayerRef->PlayReloadMontage();
+}
+
+void UCombatComponent::OnRep_CombatState()
+{
+	
 }
