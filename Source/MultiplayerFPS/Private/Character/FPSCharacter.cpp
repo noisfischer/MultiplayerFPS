@@ -118,6 +118,10 @@ void AFPSCharacter::Elim()
 // RPC function
 void AFPSCharacter::MulticastElim_Implementation()
 {
+	if(FPSPlayerController)
+	{
+		FPSPlayerController->SetHUDWeaponAmmo(0);
+	}
 	if(bElimmed) return;
 	bElimmed = true;
 	GetMesh()->SetSimulatePhysics(true);

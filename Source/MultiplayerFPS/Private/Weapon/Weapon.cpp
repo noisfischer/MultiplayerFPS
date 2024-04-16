@@ -118,7 +118,15 @@ void AWeapon::OnRep_Ammo()
 void AWeapon::OnRep_Owner()
 {
 	Super::OnRep_Owner();
-	SetHUDAmmo();
+	if(Owner == nullptr)
+	{
+		FPSOwnerPlayer = nullptr;
+		FPSOwnerController = nullptr;
+	}
+	else
+	{
+		SetHUDAmmo();
+	}
 }
 
 
@@ -210,5 +218,7 @@ void AWeapon::Dropped()
 	FDetachmentTransformRules DetachRules(EDetachmentRule::KeepWorld, true);
 	WeaponMesh->DetachFromComponent(DetachRules);
 	SetOwner(nullptr); // player is dead, so shouldn't be the owner any longer
+	FPSOwnerPlayer = nullptr;
+	FPSOwnerController = nullptr;
 }
 
