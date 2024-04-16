@@ -18,13 +18,20 @@ public:
 	void SetHUDDeaths(int32 Deaths);
 	void SetHUDWeaponAmmo(int32 Ammo);
 	void SetHUDCarriedAmmo(int32 Ammo);
+	void SetHUDMatchCountdown(float CountdownTime);
 	void OnPossess(APawn* InPawn) override;
+	virtual void Tick(float DeltaTime) override;
 	
 protected:
 	virtual void BeginPlay() override;
 	
+	void SetHUDTime();
+	
 private:
 	UPROPERTY()
 	class APlayerHUD* PlayerHUD;
+
+	float MatchTime = 120.f; // 2 minutes (120 seconds)
+	uint32 CountdownInt = 0;
 	
 };

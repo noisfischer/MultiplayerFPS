@@ -16,6 +16,13 @@ void AFPSPlayerController::BeginPlay()
 	PlayerHUD = Cast<APlayerHUD>(GetHUD()); // GetHUD() is a built-in function of APlayerController
 }
 
+void AFPSPlayerController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	SetHUDTime();
+}
+
 void AFPSPlayerController::SetHUDHealth(float Health, float MaxHealth)
 {
 	// If PlayerHUD is null, set it correctly. If it's already set, leave it as PlayerHUD
@@ -73,6 +80,20 @@ void AFPSPlayerController::SetHUDCarriedAmmo(int32 Ammo)
 	}
 }
 
+void AFPSPlayerController::SetHUDMatchCountdown(float CountdownTime)
+{
+	PlayerHUD = PlayerHUD == nullptr ? Cast<APlayerHUD>(GetHUD()) : PlayerHUD;
+	bool bHUDValid = PlayerHUD && PlayerHUD->CharacterOverlay && PlayerHUD->CharacterOverlay->MatchCountdownText;
+	if(bHUDValid)
+	{
+		int32 Minutes = FMath::FloorToInt(CountdownTime / 60.f);
+		int32 Seconds = CountdownTime - (Minutes * 60);
+		
+		FString CountdownText = FString::Printf(TEXT("%02d:%02d"), Minutes, Seconds);
+		PlayerHUD->CharacterOverlay->MatchCountdownText->SetText(FText::FromString(CountdownText));
+	}
+}
+
 void AFPSPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
@@ -82,4 +103,14 @@ void AFPSPlayerController::OnPossess(APawn* InPawn)
 	{
 		SetHUDHealth(FPSCharacter->GetHealth(), FPSCharacter->GetMaxHealth());
 	}
+}
+
+void AFPSPlayerController::SetHUDTime()
+{
+	uint32 SecondsLeft = FMath::CeilToInt(MatchTime - GetWorld()->GetTimeSeconds());
+	if(CountdownInt != SecondsLeft)
+	{
+		SetHUDMatchCountdown(MatchTime - GetWorld()->GetTimeSeconds());
+	}
+	CountdownInt = SecondsLeft;
 }

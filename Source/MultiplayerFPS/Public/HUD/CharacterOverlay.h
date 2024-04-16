@@ -27,4 +27,7 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* CarriedAmmoAmount; // BP text block must have same name
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* MatchCountdownText; // BP text block must have same name
 };
