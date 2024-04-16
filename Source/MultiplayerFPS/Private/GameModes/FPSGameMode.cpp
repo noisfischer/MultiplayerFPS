@@ -19,6 +19,11 @@ void AFPSGameMode::PlayerEliminated(AFPSCharacter* ElimmedCharacter, AFPSPlayerC
 	{
 		AttackerPlayerState->AddToScore(1.f);
 	}
+
+	if(VictimPlayerState)
+	{
+		VictimPlayerState->AddToDeaths(1);
+	}
 	
 	// only on server
 	if(ElimmedCharacter)

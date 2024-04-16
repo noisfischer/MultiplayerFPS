@@ -242,6 +242,7 @@ void AFPSCharacter::PollInit()
 		if(FPSPlayerState)
 		{
 			FPSPlayerState->AddToScore(0.f);
+			FPSPlayerState->AddToDeaths(0);
 		}
 	}
 }

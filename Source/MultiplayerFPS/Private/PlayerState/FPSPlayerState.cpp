@@ -5,6 +5,14 @@
 
 #include "Character/FPSCharacter.h"
 #include "PlayerController/FPSPlayerController.h"
+#include "Net/UnrealNetwork.h"
+
+void AFPSPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AFPSPlayerState, Deaths);
+}
 
 void AFPSPlayerState::AddToScore(float ScoreAmount)
 {
@@ -31,6 +39,34 @@ void AFPSPlayerState::OnRep_Score()
 		if(Controller)
 		{
 			Controller->SetHUDScore(GetScore());
+		}
+	}
+}
+
+void AFPSPlayerState::AddToDeaths(int32 DeathsAmount)
+{
+	Deaths += DeathsAmount;
+	PlayerRef = PlayerRef == nullptr ? Cast<AFPSCharacter>(GetPawn()) : PlayerRef;
+	if(PlayerRef)
+	{
+		Controller = Controller == nullptr ? Cast<AFPSPlayerController>(PlayerRef->Controller) : Controller;
+		if(Controller)
+		{
+			Controller->SetHUDDeaths(Deaths);
+		
+		}
+	}
+}
+
+void AFPSPlayerState::OnRep_Deaths()
+{
+	PlayerRef = PlayerRef == nullptr ? Cast<AFPSCharacter>(GetPawn()) : PlayerRef;
+	if(PlayerRef)
+	{
+		Controller = Controller == nullptr ? Cast<AFPSPlayerController>(PlayerRef->Controller) : Controller;
+		if(Controller)
+		{
+			Controller->SetHUDDeaths(Deaths);
 		}
 	}
 }

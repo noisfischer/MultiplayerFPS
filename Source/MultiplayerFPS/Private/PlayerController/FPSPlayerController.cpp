@@ -40,6 +40,17 @@ void AFPSPlayerController::SetHUDScore(float Score)
 	}
 }
 
+void AFPSPlayerController::SetHUDDeaths(int32 Deaths)
+{
+	PlayerHUD = PlayerHUD == nullptr ? Cast<APlayerHUD>(GetHUD()) : PlayerHUD;
+	bool bHUDValid = PlayerHUD && PlayerHUD->CharacterOverlay && PlayerHUD->CharacterOverlay->DeathsAmount;
+	if(bHUDValid)
+	{
+		FString DeathsText = FString::Printf(TEXT("%d"), Deaths);
+		PlayerHUD->CharacterOverlay->DeathsAmount->SetText(FText::FromString(DeathsText));
+	}
+}
+
 void AFPSPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);

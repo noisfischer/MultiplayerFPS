@@ -18,4 +18,7 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* ScoreAmount; // BP text block must have same name
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* DeathsAmount; // BP text block must have same name
 };
