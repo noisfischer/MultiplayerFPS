@@ -394,15 +394,26 @@ void UCombatComponent::Reload()
 	}
 }
 
-// Done only on server
+// For server only
 void UCombatComponent::ServerReload_Implementation()
 {
 	if(PlayerRef == nullptr) return;
 
-	PlayerRef->PlayReloadMontage();
+	CombatState = ECombatState::ECS_Reloading; // triggers OnRep_CombatState
+	HandleReload(); // server sees reload montage
 }
 
 void UCombatComponent::OnRep_CombatState()
 {
-	
+	switch (CombatState)
+	{
+	case ECombatState::ECS_Reloading:
+		HandleReload(); // all clients see reload montage
+		break;
+	}
+}
+
+void UCombatComponent::HandleReload()
+{
+	PlayerRef->PlayReloadMontage();
 }

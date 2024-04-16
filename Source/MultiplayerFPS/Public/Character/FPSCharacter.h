@@ -8,6 +8,7 @@
 #include "MultiplayerFPS/FPSTypes/TurningInPlace.h"
 #include "Interfaces/InteractWithCrosshairsInterface.h"
 #include "Interfaces/RagdollInterface.h"
+#include "MultiplayerFPS/FPSTypes/CombatState.h"
 #include "FPSCharacter.generated.h"
 
 UCLASS()
@@ -217,4 +218,5 @@ public:
 	FORCEINLINE bool GetShouldRotateRootBone() const { return bRotateRootBone; }
 	FORCEINLINE float GetHealth() const { return Health; }
 	FORCEINLINE float GetMaxHealth() const { return MaxHealth; }
+	ECombatState GetCombatState() const;
 };

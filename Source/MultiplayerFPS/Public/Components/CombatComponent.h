@@ -52,6 +52,8 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void ServerReload();
 
+	void HandleReload();
+
 private:
 	UPROPERTY()
 	class AFPSCharacter* PlayerRef;
@@ -128,7 +130,7 @@ private:
 	void InitializeCarriedAmmo();
 
 	UPROPERTY(ReplicatedUsing = OnRep_CombatState)
-	ECombatState CombatState;
+	ECombatState CombatState = ECombatState::ECS_Unoccupied;
 
 	UFUNCTION()
 	void OnRep_CombatState();

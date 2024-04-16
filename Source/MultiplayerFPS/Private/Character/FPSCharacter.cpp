@@ -689,6 +689,12 @@ FVector AFPSCharacter::GetHitTarget() const
 	return Combat->HitTarget;
 }
 
+ECombatState AFPSCharacter::GetCombatState() const
+{
+	if(Combat == nullptr) return ECombatState::ECS_MAX;
+	return Combat->CombatState;
+}
+
 // ONLY CALLED ON THE CLIENT
 void AFPSCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)
 {
