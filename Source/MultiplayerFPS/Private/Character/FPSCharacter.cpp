@@ -17,6 +17,7 @@
 #include "GameModes/FPSGameMode.h"
 #include "MultiplayerFPS/MultiplayerFPS.h"
 #include "PlayerController/FPSPlayerController.h"
+#include "PlayerState/FPSPlayerState.h"
 
 AFPSCharacter::AFPSCharacter()
 {
@@ -232,6 +233,19 @@ void AFPSCharacter::UpdateHUDHealth()
 	}
 }
 
+// Called in tick until FPSPlayerState is no longer a nullptr
+void AFPSCharacter::PollInit()
+{
+	if(FPSPlayerState == nullptr)
+	{
+		FPSPlayerState = GetPlayerState<AFPSPlayerState>();
+		if(FPSPlayerState)
+		{
+			FPSPlayerState->AddToScore(0.f);
+		}
+	}
+}
+
 void AFPSCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -273,6 +287,7 @@ void AFPSCharacter::Tick(float DeltaTime)
 	}
 	
 	HideCameraIfCharacterClose();
+	PollInit();
 }
 
 

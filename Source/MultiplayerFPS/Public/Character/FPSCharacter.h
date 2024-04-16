@@ -62,6 +62,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* FireWeaponAction;
 
+	class AFPSPlayerState* FPSPlayerState;
 
 protected:
 	virtual void BeginPlay() override;
@@ -85,8 +86,8 @@ protected:
 	// callback for pre-existing ApplyDamage function
 	UFUNCTION()
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* InstigatorController, AActor* DamageCauser);
-	
 	void UpdateHUDHealth();
+	void PollInit(); // Poll for any relevant classes and init our HUD
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
