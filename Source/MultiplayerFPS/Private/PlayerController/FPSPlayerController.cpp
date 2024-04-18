@@ -18,9 +18,9 @@ void AFPSPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ServerCheckMatchState();
-
 	PlayerHUD = Cast<APlayerHUD>(GetHUD()); // GetHUD() is a built-in function of APlayerController
+
+	ServerCheckMatchState();
 }
 
 void AFPSPlayerController::Tick(float DeltaTime)
@@ -164,6 +164,20 @@ void AFPSPlayerController::SetHUDMatchCountdown(float CountdownTime)
 	}
 }
 
+void AFPSPlayerController::SetHUDAnnouncementCountdown(float CountdownTime)
+{
+	PlayerHUD = PlayerHUD == nullptr ? Cast<APlayerHUD>(GetHUD()) : PlayerHUD;
+	bool bHUDValid = PlayerHUD && PlayerHUD->Announcement && PlayerHUD->Announcement->WarmupTime;
+	if(bHUDValid)
+	{
+		int32 Minutes = FMath::FloorToInt(CountdownTime / 60.f);
+		int32 Seconds = CountdownTime - (Minutes * 60);
+		
+		FString CountdownText = FString::Printf(TEXT("%02d:%02d"), Minutes, Seconds);
+		PlayerHUD->Announcement->WarmupTime->SetText(FText::FromString(CountdownText));
+	}
+}
+
 void AFPSPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
@@ -177,10 +191,21 @@ void AFPSPlayerController::OnPossess(APawn* InPawn)
 
 void AFPSPlayerController::SetHUDTime()
 {
-	uint32 SecondsLeft = FMath::CeilToInt(MatchTime - GetServerTime());
+	float TimeLeft = 0.f;
+	if(MatchState == MatchState::WaitingToStart) TimeLeft = WarmupTime - GetServerTime() + LevelStartingTime;
+	else if(MatchState == MatchState::InProgress) TimeLeft = WarmupTime + MatchTime - GetServerTime() + LevelStartingTime;
+	
+	uint32 SecondsLeft = FMath::CeilToInt(TimeLeft);
 	if(CountdownInt != SecondsLeft)
 	{
-		SetHUDMatchCountdown(MatchTime - GetServerTime());
+		if(MatchState == MatchState::WaitingToStart)
+		{
+			SetHUDAnnouncementCountdown(TimeLeft);
+		}
+		if(MatchState == MatchState::InProgress)
+		{
+			SetHUDMatchCountdown(TimeLeft);
+		}
 	}
 	CountdownInt = SecondsLeft;
 }
