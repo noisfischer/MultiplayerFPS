@@ -40,8 +40,16 @@ void AFPSGameMode::Tick(float DeltaSeconds)
 void AFPSGameMode::OnMatchStateSet()
 {
 	Super::OnMatchStateSet();
-
 	
+	// Loops through all player controllers in the game
+	for(FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It)
+	{
+		AFPSPlayerController* FPSPlayer = Cast<AFPSPlayerController>(*It);
+		if(FPSPlayer)
+		{
+			FPSPlayer->OnMatchStateSet(MatchState); // sets the match state on each player controller
+		}
+	}
 }
 
 void AFPSGameMode::PlayerEliminated(AFPSCharacter* ElimmedCharacter, AFPSPlayerController* VictimController,

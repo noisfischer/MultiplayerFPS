@@ -8,6 +8,7 @@
 #include "HUD/CharacterOverlay.h"
 #include "HUD/PlayerHUD.h"
 #include "Components/TextBlock.h"
+#include "GameFramework/GameMode.h"
 #include "Net/UnrealNetwork.h"
 
 void AFPSPlayerController::BeginPlay()
@@ -22,8 +23,8 @@ void AFPSPlayerController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	SetHUDTime();
-
 	CheckTimeSync(DeltaTime);
+	PollInit();
 }
 
 void AFPSPlayerController::CheckTimeSync(float DeltaTime)
@@ -54,6 +55,12 @@ void AFPSPlayerController::SetHUDHealth(float Health, float MaxHealth)
 		const float HealthPercent = Health / MaxHealth;
 		PlayerHUD->CharacterOverlay->HealthBar->SetPercent(HealthPercent);
 	}
+	else
+	{
+		bInitializeCharacterOverlay = true;
+		HUDHealth = Health;
+		HUDMaxHealth = MaxHealth;
+	}
 }
 
 void AFPSPlayerController::SetHUDScore(float Score)
@@ -65,6 +72,11 @@ void AFPSPlayerController::SetHUDScore(float Score)
 		FString ScoreText = FString::Printf(TEXT("%d"), FMath::FloorToInt(Score));
 		PlayerHUD->CharacterOverlay->ScoreAmount->SetText(FText::FromString(ScoreText));
 	}
+	else
+	{
+		bInitializeCharacterOverlay = true;
+		HUDScore = Score;
+	}
 }
 
 void AFPSPlayerController::SetHUDDeaths(int32 Deaths)
@@ -75,6 +87,11 @@ void AFPSPlayerController::SetHUDDeaths(int32 Deaths)
 	{
 		FString DeathsText = FString::Printf(TEXT("%d"), Deaths);
 		PlayerHUD->CharacterOverlay->DeathsAmount->SetText(FText::FromString(DeathsText));
+	}
+	else
+	{
+		bInitializeCharacterOverlay = true;
+		HUDDeaths = Deaths;
 	}
 }
 
@@ -135,6 +152,23 @@ void AFPSPlayerController::SetHUDTime()
 	CountdownInt = SecondsLeft;
 }
 
+void AFPSPlayerController::PollInit()
+{
+	if(CharacterOverlay == nullptr)
+	{
+		if(PlayerHUD && PlayerHUD->CharacterOverlay)
+		{
+			CharacterOverlay = PlayerHUD->CharacterOverlay;
+			if(CharacterOverlay)
+			{
+				SetHUDHealth(HUDHealth, HUDMaxHealth);
+				SetHUDScore(HUDScore);
+				SetHUDDeaths(HUDDeaths);
+			}
+		}
+	}
+}
+
 void AFPSPlayerController::ServerRequestServerTime_Implementation(float TimeOfClientRequest)
 {
 	float ServerTimeOfReceipt = GetWorld()->GetTimeSeconds();
@@ -165,12 +199,30 @@ void AFPSPlayerController::ReceivedPlayer()
 	}
 }
 
+// For server
 void AFPSPlayerController::OnMatchStateSet(FName State)
 {
-	MatchState = State;	
+	MatchState = State;
+
+	if(MatchState == MatchState::InProgress) // InProgress pre-exists
+	{
+		PlayerHUD = PlayerHUD == nullptr ? Cast<APlayerHUD>(GetHUD()) : PlayerHUD;
+		if(PlayerHUD)
+		{
+			PlayerHUD->AddCharacterOverlay(); // no HUD until game is in-progress
+		}
+	}
 }
 
+// For clients
 void AFPSPlayerController::OnRep_MatchState()
 {
-	// stopped at 5:53
+	if(MatchState == MatchState::InProgress) // InProgress pre-exists
+		{
+		PlayerHUD = PlayerHUD == nullptr ? Cast<APlayerHUD>(GetHUD()) : PlayerHUD;
+		if(PlayerHUD)
+		{
+			PlayerHUD->AddCharacterOverlay(); // no HUD until game is in-progress
+		}
+		}
 }

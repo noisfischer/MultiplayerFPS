@@ -31,6 +31,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	void SetHUDTime();
+	void PollInit();
 
 	/*
 	 * Sync time between client and server
@@ -63,4 +64,13 @@ private:
 
 	UFUNCTION()
 	void OnRep_MatchState();
+
+	UPROPERTY()
+	class UCharacterOverlay* CharacterOverlay;
+	bool bInitializeCharacterOverlay = false;
+
+	float HUDHealth;
+	float HUDMaxHealth;
+	float HUDScore;
+	int32 HUDDeaths;
 };
