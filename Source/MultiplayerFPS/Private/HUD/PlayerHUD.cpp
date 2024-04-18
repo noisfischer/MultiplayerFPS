@@ -43,7 +43,7 @@ void APlayerHUD::DrawHUD()
 		GEngine->GameViewport->GetViewportSize(ViewportSize);
 		const FVector2D ViewportCenter(ViewportSize.X / 2.f, ViewportSize.Y / 2.f);
 
-	float SpreadScaled = CrosshairSpreadMax * HUDPackage.CrosshairSpread;
+		float SpreadScaled = CrosshairSpreadMax * HUDPackage.CrosshairSpread;
 		
 		if(HUDPackage.CrosshairsCenter)
 		{
@@ -83,7 +83,7 @@ void APlayerHUD::DrawCrosshair(UTexture2D* Texture, FVector2D ViewportCenter, FV
 		);
 
 	// DrawTexture() from AHUD base class
-	DrawTexture(
+		DrawTexture(
 		Texture,
 		TextureDrawPoint.X,
 		TextureDrawPoint.Y,
