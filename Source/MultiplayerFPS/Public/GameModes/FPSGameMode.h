@@ -43,4 +43,5 @@ private:
 
 public:
 	FORCEINLINE float GetLevelStartingTime() const { return LevelStartingTime; }
+	FORCEINLINE float GetCountdownTime() const { return CountdownTime; }
 };

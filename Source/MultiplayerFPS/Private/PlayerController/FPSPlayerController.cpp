@@ -204,10 +204,10 @@ void AFPSPlayerController::SetHUDTime()
 {
 	if(HasAuthority())
 	{
-		AFPSGameMode* FPSGameMode = Cast<AFPSGameMode>(UGameplayStatics::GetGameMode(this));
-		if(FPSGameMode)
+		AFPSGameMode* GameMode = Cast<AFPSGameMode>(UGameplayStatics::GetGameMode(this));
+		if(GameMode)
 		{
-			LevelStartingTime = FPSGameMode->GetLevelStartingTime();
+			LevelStartingTime = GameMode->GetLevelStartingTime();
 		}
 	}
 	
@@ -215,8 +215,17 @@ void AFPSPlayerController::SetHUDTime()
 	if(MatchState == MatchState::WaitingToStart) TimeLeft = WarmupTime - GetServerTime() + LevelStartingTime;
 	else if(MatchState == MatchState::InProgress) TimeLeft = WarmupTime + MatchTime - GetServerTime() + LevelStartingTime;
 	else if(MatchState == MatchState::Cooldown) TimeLeft = CooldownTime + WarmupTime + MatchTime - GetServerTime() + LevelStartingTime;
-
 	uint32 SecondsLeft = FMath::CeilToInt(TimeLeft);
+
+	if(HasAuthority())
+	{
+		FPSGameMode = FPSGameMode == nullptr ? Cast<AFPSGameMode>(UGameplayStatics::GetGameMode(this)) : FPSGameMode;
+		if(FPSGameMode)
+		{
+			SecondsLeft = FMath::CeilToInt(FPSGameMode->GetCountdownTime() + LevelStartingTime);
+		}
+	}
+	
 	if(CountdownInt != SecondsLeft)
 	{
 		if(MatchState == MatchState::WaitingToStart || MatchState == MatchState::Cooldown)

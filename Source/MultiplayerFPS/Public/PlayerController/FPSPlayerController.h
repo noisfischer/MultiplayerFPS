@@ -66,6 +66,9 @@ private:
 	UPROPERTY()
 	class APlayerHUD* PlayerHUD;
 
+	UPROPERTY()
+	class AFPSGameMode* FPSGameMode;
+
 	float LevelStartingTime = 0.f;
 	float MatchTime = 0.f;
 	float WarmupTime = 0.f;
