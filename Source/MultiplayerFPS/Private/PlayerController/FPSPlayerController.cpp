@@ -320,7 +320,10 @@ void AFPSPlayerController::HandleMatchHasStarted()
 	PlayerHUD = PlayerHUD == nullptr ? Cast<APlayerHUD>(GetHUD()) : PlayerHUD;
 	if(PlayerHUD)
 	{
-		PlayerHUD->AddCharacterOverlay(); // no HUD until game is in-progress
+		if(PlayerHUD->CharacterOverlay == nullptr)
+		{
+			PlayerHUD->AddCharacterOverlay(); // no HUD until game is in-progress
+		}
 		if(PlayerHUD->Announcement)
 		{
 			PlayerHUD->Announcement->SetVisibility(ESlateVisibility::Hidden);

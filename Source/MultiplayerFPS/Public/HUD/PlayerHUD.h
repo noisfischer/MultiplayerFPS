@@ -52,6 +52,7 @@ protected:
 	virtual void BeginPlay() override;
 	
 private:
+	UPROPERTY()
 	FHUDPackage HUDPackage;
 	
 	void DrawCrosshair(UTexture2D* Texture, FVector2D ViewportCenter, FVector2D Spread, FLinearColor CrosshairColor);
