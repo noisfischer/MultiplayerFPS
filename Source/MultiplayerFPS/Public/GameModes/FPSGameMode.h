@@ -32,4 +32,7 @@ protected:
 	
 private:
 	float CountdownTime = 0.f;
+
+public:
+	FORCEINLINE float GetLevelStartingTime() const { return LevelStartingTime; }
 };

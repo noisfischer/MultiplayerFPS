@@ -53,11 +53,6 @@ void AFPSPlayerController::ServerCheckMatchState_Implementation()
 		MatchState = GameMode->GetMatchState();
 
 		ClientJoinMidgame(MatchState, WarmupTime, MatchTime, LevelStartingTime);
-
-		if(PlayerHUD && MatchState == MatchState::WaitingToStart)
-		{
-			PlayerHUD->AddAnnouncement();
-		}
 	}
 }
 
@@ -68,6 +63,10 @@ void AFPSPlayerController::ClientJoinMidgame_Implementation(FName StateOfMatch, 
 	LevelStartingTime = StartingTime;
 	MatchState = StateOfMatch;
 	OnMatchStateSet(MatchState);
+	if (PlayerHUD && MatchState == MatchState::WaitingToStart)
+	{
+		PlayerHUD->AddAnnouncement();
+	}
 }
 
 void AFPSPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -191,6 +190,15 @@ void AFPSPlayerController::OnPossess(APawn* InPawn)
 
 void AFPSPlayerController::SetHUDTime()
 {
+	if(HasAuthority())
+	{
+		AFPSGameMode* FPSGameMode = Cast<AFPSGameMode>(UGameplayStatics::GetGameMode(this));
+		if(FPSGameMode)
+		{
+			LevelStartingTime = FPSGameMode->GetLevelStartingTime();
+		}
+	}
+	
 	float TimeLeft = 0.f;
 	if(MatchState == MatchState::WaitingToStart) TimeLeft = WarmupTime - GetServerTime() + LevelStartingTime;
 	else if(MatchState == MatchState::InProgress) TimeLeft = WarmupTime + MatchTime - GetServerTime() + LevelStartingTime;
