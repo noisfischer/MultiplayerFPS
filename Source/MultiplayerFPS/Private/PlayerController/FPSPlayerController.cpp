@@ -274,6 +274,10 @@ void AFPSPlayerController::OnMatchStateSet(FName State)
 	{
 		HandleMatchHasStarted();
 	}
+	else if(MatchState == MatchState::Cooldown) // Cooldown is a custom MatchState I created in FPSGameMode
+	{
+		HandleCooldown();
+	}
 }
 
 // For clients
@@ -283,6 +287,10 @@ void AFPSPlayerController::OnRep_MatchState()
 		{
 			HandleMatchHasStarted();
 		}
+	else if(MatchState == MatchState::Cooldown) // Cooldown is a custom MatchState I created in FPSGameMode
+	{
+		HandleCooldown();
+	}
 }
 
 void AFPSPlayerController::HandleMatchHasStarted()
@@ -294,6 +302,19 @@ void AFPSPlayerController::HandleMatchHasStarted()
 		if(PlayerHUD->Announcement)
 		{
 			PlayerHUD->Announcement->SetVisibility(ESlateVisibility::Hidden);
+		}
+	}
+}
+
+void AFPSPlayerController::HandleCooldown()
+{
+	PlayerHUD = PlayerHUD == nullptr ? Cast<APlayerHUD>(GetHUD()) : PlayerHUD;
+	if(PlayerHUD)
+	{
+		PlayerHUD->CharacterOverlay->RemoveFromParent();
+		if(PlayerHUD->Announcement)
+		{
+			PlayerHUD->Announcement->SetVisibility(ESlateVisibility::Visible);
 		}
 	}
 }

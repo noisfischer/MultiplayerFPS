@@ -28,6 +28,7 @@ public:
 	virtual void ReceivedPlayer() override; // Sync with server clock ASAP
 	void OnMatchStateSet(FName State);
 	void HandleMatchHasStarted();
+	void HandleCooldown();
 
 protected:
 	virtual void BeginPlay() override;

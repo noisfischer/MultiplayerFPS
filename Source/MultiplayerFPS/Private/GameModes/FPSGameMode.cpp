@@ -40,6 +40,14 @@ void AFPSGameMode::Tick(float DeltaSeconds)
 			StartMatch();
 		}
 	}
+	else if(MatchState == MatchState::InProgress)
+	{
+		CountdownTime = WarmupTime + MatchTime - GetWorld()->GetTimeSeconds() + LevelStartingTime;
+		if(CountdownTime <= 0.f)
+		{
+			SetMatchState(MatchState::Cooldown);
+		}
+	}
 }
 
 void AFPSGameMode::OnMatchStateSet()
