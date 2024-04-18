@@ -9,6 +9,7 @@
 #include "HUD/PlayerHUD.h"
 #include "Components/TextBlock.h"
 #include "GameFramework/GameMode.h"
+#include "HUD/Announcement.h"
 #include "Net/UnrealNetwork.h"
 
 void AFPSPlayerController::BeginPlay()
@@ -16,6 +17,10 @@ void AFPSPlayerController::BeginPlay()
 	Super::BeginPlay();
 
 	PlayerHUD = Cast<APlayerHUD>(GetHUD()); // GetHUD() is a built-in function of APlayerController
+	if(PlayerHUD)
+	{
+		PlayerHUD->AddAnnouncement();
+	}
 }
 
 void AFPSPlayerController::Tick(float DeltaTime)
@@ -206,11 +211,7 @@ void AFPSPlayerController::OnMatchStateSet(FName State)
 
 	if(MatchState == MatchState::InProgress) // InProgress pre-exists
 	{
-		PlayerHUD = PlayerHUD == nullptr ? Cast<APlayerHUD>(GetHUD()) : PlayerHUD;
-		if(PlayerHUD)
-		{
-			PlayerHUD->AddCharacterOverlay(); // no HUD until game is in-progress
-		}
+		HandleMatchHasStarted();
 	}
 }
 
@@ -219,10 +220,19 @@ void AFPSPlayerController::OnRep_MatchState()
 {
 	if(MatchState == MatchState::InProgress) // InProgress pre-exists
 		{
-		PlayerHUD = PlayerHUD == nullptr ? Cast<APlayerHUD>(GetHUD()) : PlayerHUD;
-		if(PlayerHUD)
+			HandleMatchHasStarted();
+		}
+}
+
+void AFPSPlayerController::HandleMatchHasStarted()
+{
+	PlayerHUD = PlayerHUD == nullptr ? Cast<APlayerHUD>(GetHUD()) : PlayerHUD;
+	if(PlayerHUD)
+	{
+		PlayerHUD->AddCharacterOverlay(); // no HUD until game is in-progress
+		if(PlayerHUD->Announcement)
 		{
-			PlayerHUD->AddCharacterOverlay(); // no HUD until game is in-progress
+			PlayerHUD->Announcement->SetVisibility(ESlateVisibility::Hidden);
 		}
-		}
+	}
 }
