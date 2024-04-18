@@ -6,6 +6,11 @@
 #include "GameFramework/GameMode.h"
 #include "FPSGameMode.generated.h"
 
+namespace MatchState
+{
+	// Create a custom match state - match duration has been reached. Display winner and begin cooldown timer.
+	extern MULTIPLAYERFPS_API const FName Cooldown; 
+}
 
 UCLASS()
 class MULTIPLAYERFPS_API AFPSGameMode : public AGameMode
@@ -23,6 +28,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	float MatchTime = 120.f;
+	
+	UPROPERTY(EditDefaultsOnly)
+	float CooldownTime = 10.f;
 
 	float LevelStartingTime = 0.f;
 	

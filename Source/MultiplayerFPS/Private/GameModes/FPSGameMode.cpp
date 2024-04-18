@@ -11,6 +11,11 @@
 
 class UEnhancedInputLocalPlayerSubsystem;
 
+namespace MatchState
+{
+	const FName Cooldown = FName("Cooldown");
+}
+
 AFPSGameMode::AFPSGameMode()
 {
 	bDelayedStart = true; // Game mode will stay in "Waiting To Start" state until otherwise told
