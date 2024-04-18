@@ -202,15 +202,6 @@ void AFPSPlayerController::OnPossess(APawn* InPawn)
 
 void AFPSPlayerController::SetHUDTime()
 {
-	if(HasAuthority())
-	{
-		AFPSGameMode* GameMode = Cast<AFPSGameMode>(UGameplayStatics::GetGameMode(this));
-		if(GameMode)
-		{
-			LevelStartingTime = GameMode->GetLevelStartingTime();
-		}
-	}
-	
 	float TimeLeft = 0.f;
 	if(MatchState == MatchState::WaitingToStart) TimeLeft = WarmupTime - GetServerTime() + LevelStartingTime;
 	else if(MatchState == MatchState::InProgress) TimeLeft = WarmupTime + MatchTime - GetServerTime() + LevelStartingTime;
@@ -219,6 +210,11 @@ void AFPSPlayerController::SetHUDTime()
 
 	if(HasAuthority())
 	{
+		if(FPSGameMode == nullptr)
+		{
+			FPSGameMode = Cast<AFPSGameMode>(UGameplayStatics::GetGameMode(this));
+			LevelStartingTime = FPSGameMode->LevelStartingTime;
+		}
 		FPSGameMode = FPSGameMode == nullptr ? Cast<AFPSGameMode>(UGameplayStatics::GetGameMode(this)) : FPSGameMode;
 		if(FPSGameMode)
 		{
@@ -334,7 +330,7 @@ void AFPSPlayerController::HandleMatchHasStarted()
 void AFPSPlayerController::HandleCooldown()
 {
 	PlayerHUD = PlayerHUD == nullptr ? Cast<APlayerHUD>(GetHUD()) : PlayerHUD;
-	if(PlayerHUD)
+	if(PlayerHUD && PlayerHUD->CharacterOverlay)
 	{
 		PlayerHUD->CharacterOverlay->RemoveFromParent();
 		
