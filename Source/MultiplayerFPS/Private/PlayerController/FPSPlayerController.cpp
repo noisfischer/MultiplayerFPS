@@ -9,18 +9,18 @@
 #include "HUD/PlayerHUD.h"
 #include "Components/TextBlock.h"
 #include "GameFramework/GameMode.h"
+#include "GameModes/FPSGameMode.h"
 #include "HUD/Announcement.h"
+#include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
 
 void AFPSPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	ServerCheckMatchState();
+
 	PlayerHUD = Cast<APlayerHUD>(GetHUD()); // GetHUD() is a built-in function of APlayerController
-	if(PlayerHUD)
-	{
-		PlayerHUD->AddAnnouncement();
-	}
 }
 
 void AFPSPlayerController::Tick(float DeltaTime)
@@ -40,6 +40,34 @@ void AFPSPlayerController::CheckTimeSync(float DeltaTime)
 		ServerRequestServerTime(GetWorld()->GetTimeSeconds());
 		TimeSyncRunningTime = 0.f;
 	}
+}
+
+void AFPSPlayerController::ServerCheckMatchState_Implementation()
+{
+	AFPSGameMode* GameMode = Cast<AFPSGameMode>(UGameplayStatics::GetGameMode(this));
+	if(GameMode)
+	{
+		LevelStartingTime = GameMode->LevelStartingTime;
+		WarmupTime = GameMode->WarmupTime;
+		MatchTime = GameMode->MatchTime;
+		MatchState = GameMode->GetMatchState();
+
+		ClientJoinMidgame(MatchState, WarmupTime, MatchTime, LevelStartingTime);
+
+		if(PlayerHUD && MatchState == MatchState::WaitingToStart)
+		{
+			PlayerHUD->AddAnnouncement();
+		}
+	}
+}
+
+void AFPSPlayerController::ClientJoinMidgame_Implementation(FName StateOfMatch, float Warmup, float Match, float StartingTime)
+{
+	WarmupTime = Warmup;
+	MatchTime = Match;
+	LevelStartingTime = StartingTime;
+	MatchState = StateOfMatch;
+	OnMatchStateSet(MatchState);
 }
 
 void AFPSPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
