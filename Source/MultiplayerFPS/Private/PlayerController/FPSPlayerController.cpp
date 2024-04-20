@@ -195,7 +195,7 @@ void AFPSPlayerController::SetHUDAnnouncementCountdown(float CountdownTime)
 void AFPSPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-
+	
 	AFPSCharacter* FPSCharacter = Cast<AFPSCharacter>(InPawn);
 	if(FPSCharacter)
 	{
@@ -241,12 +241,11 @@ void AFPSPlayerController::SetHUDTime()
 
 void AFPSPlayerController::PollInit()
 {
-	if (HasAuthority() && PlayerHUD == nullptr)
+	if(PlayerHUD == nullptr)
 	{
-		PlayerHUD = (PlayerHUD == nullptr) ? Cast<APlayerHUD>(GetHUD()) : PlayerHUD;
-		if(PlayerHUD && MatchState == MatchState::WaitingToStart && !PlayerHUD->bAnnouncementActive)
+		if(GEngine)
 		{
-			PlayerHUD->AddAnnouncement();
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("PlayerHUD invalid"));
 		}
 	}
 	
