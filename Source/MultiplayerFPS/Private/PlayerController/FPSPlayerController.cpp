@@ -17,21 +17,8 @@
 void AFPSPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if(GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("FAIL")));
-
+	
 	PlayerHUD = Cast<APlayerHUD>(GetHUD()); // GetHUD() is a built-in function of APlayerController
-	if(PlayerHUD)
-	{
-		if(GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("SUCCESS")));
-	}
-	else
-	{
-		if(GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("FAIL")));
-	}
 	ServerCheckMatchState();
 }
 
@@ -77,6 +64,10 @@ void AFPSPlayerController::ClientJoinMidgame_Implementation(FName StateOfMatch, 
 	LevelStartingTime = StartingTime;
 	MatchState = StateOfMatch;
 	OnMatchStateSet(MatchState);
+	if (HasAuthority())
+	{
+		PlayerHUD = (PlayerHUD == nullptr) ? Cast<APlayerHUD>(GetHUD()) : PlayerHUD;
+	}
 	if (PlayerHUD && MatchState == MatchState::WaitingToStart)
 	{
 		PlayerHUD->AddAnnouncement();
@@ -250,6 +241,15 @@ void AFPSPlayerController::SetHUDTime()
 
 void AFPSPlayerController::PollInit()
 {
+	if (HasAuthority())
+	{
+		PlayerHUD = (PlayerHUD == nullptr) ? Cast<APlayerHUD>(GetHUD()) : PlayerHUD;
+		if(PlayerHUD && MatchState == MatchState::WaitingToStart && !PlayerHUD->bAnnouncementActive)
+		{
+			PlayerHUD->AddAnnouncement();
+		}
+	}
+	
 	if(CharacterOverlay == nullptr)
 	{
 		if(PlayerHUD && PlayerHUD->CharacterOverlay)
