@@ -30,7 +30,6 @@ void APlayerHUD::AddAnnouncement()
 	{
 		Announcement = CreateWidget<UAnnouncement>(PlayerController, AnnouncementClass);
 		Announcement->AddToViewport();
-		bAnnouncementActive = true;
 	}
 }
 

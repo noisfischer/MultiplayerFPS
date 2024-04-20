@@ -17,7 +17,6 @@
 void AFPSPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	
 	PlayerHUD = Cast<APlayerHUD>(GetHUD()); // GetHUD() is a built-in function of APlayerController
 	ServerCheckMatchState();
 }
@@ -25,7 +24,7 @@ void AFPSPlayerController::BeginPlay()
 void AFPSPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 	SetHUDTime();
 	CheckTimeSync(DeltaTime);
 	PollInit();
@@ -241,14 +240,6 @@ void AFPSPlayerController::SetHUDTime()
 
 void AFPSPlayerController::PollInit()
 {
-	if(PlayerHUD == nullptr)
-	{
-		if(GEngine)
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("PlayerHUD invalid"));
-		}
-	}
-	
 	if(CharacterOverlay == nullptr)
 	{
 		if(PlayerHUD && PlayerHUD->CharacterOverlay)
@@ -298,7 +289,7 @@ void AFPSPlayerController::ReceivedPlayer()
 void AFPSPlayerController::OnMatchStateSet(FName State)
 {
 	MatchState = State;
-
+	
 	if(MatchState == MatchState::InProgress) // InProgress pre-exists
 	{
 		HandleMatchHasStarted();

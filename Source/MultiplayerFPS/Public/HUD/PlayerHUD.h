@@ -47,8 +47,6 @@ public:
 	class UAnnouncement* Announcement;
 
 	void AddAnnouncement();
-
-	bool bAnnouncementActive = false;
 	
 protected:
 	virtual void BeginPlay() override;
