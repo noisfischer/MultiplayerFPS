@@ -18,8 +18,20 @@ void AFPSPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	PlayerHUD = Cast<APlayerHUD>(GetHUD()); // GetHUD() is a built-in function of APlayerController
+	if(GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("FAIL")));
 
+	PlayerHUD = Cast<APlayerHUD>(GetHUD()); // GetHUD() is a built-in function of APlayerController
+	if(PlayerHUD)
+	{
+		if(GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("SUCCESS")));
+	}
+	else
+	{
+		if(GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("FAIL")));
+	}
 	ServerCheckMatchState();
 }
 
