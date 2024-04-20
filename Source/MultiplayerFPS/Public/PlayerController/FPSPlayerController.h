@@ -30,6 +30,9 @@ public:
 	void HandleMatchHasStarted();
 	void HandleCooldown();
 
+	UPROPERTY()
+	class APlayerHUD* PlayerHUD;
+
 protected:
 	virtual void BeginPlay() override;
 	void SetHUDTime();
@@ -63,8 +66,6 @@ protected:
 	void ClientJoinMidgame(FName StateOfMatch, float Warmup, float Match, float Cooldown, float StartingTime);
 	
 private:
-	UPROPERTY()
-	class APlayerHUD* PlayerHUD;
 
 	UPROPERTY()
 	class AFPSGameMode* FPSGameMode;

@@ -5,6 +5,7 @@
 
 #include "Character/FPSCharacter.h"
 #include "GameFramework/PlayerStart.h"
+#include "HUD/PlayerHUD.h"
 #include "Kismet/GameplayStatics.h"
 #include "PlayerController/FPSPlayerController.h"
 #include "PlayerState/FPSPlayerState.h"
@@ -26,9 +27,9 @@ void AFPSGameMode::BeginPlay()
 	LevelStartingTime = GetWorld()->GetTimeSeconds();
 }
 
-void AFPSGameMode::Tick(float DeltaSeconds)
+void AFPSGameMode::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaSeconds);
+	Super::Tick(DeltaTime);
 	
 	if(MatchState == MatchState::WaitingToStart)
 	{

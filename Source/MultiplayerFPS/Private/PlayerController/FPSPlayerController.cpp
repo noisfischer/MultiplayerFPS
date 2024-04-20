@@ -17,6 +17,7 @@
 void AFPSPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+	
 	PlayerHUD = Cast<APlayerHUD>(GetHUD()); // GetHUD() is a built-in function of APlayerController
 	ServerCheckMatchState();
 }
@@ -24,7 +25,6 @@ void AFPSPlayerController::BeginPlay()
 void AFPSPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
 	SetHUDTime();
 	CheckTimeSync(DeltaTime);
 	PollInit();
@@ -42,14 +42,14 @@ void AFPSPlayerController::CheckTimeSync(float DeltaTime)
 
 void AFPSPlayerController::ServerCheckMatchState_Implementation()
 {
-	AFPSGameMode* GameMode = Cast<AFPSGameMode>(UGameplayStatics::GetGameMode(this));
+	AFPSGameMode* GameMode = Cast<AFPSGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 	if(GameMode)
 	{
-		LevelStartingTime = GameMode->LevelStartingTime;
 		WarmupTime = GameMode->WarmupTime;
 		MatchTime = GameMode->MatchTime;
-		MatchState = GameMode->GetMatchState();
 		CooldownTime = GameMode->CooldownTime;
+		LevelStartingTime = GameMode->LevelStartingTime;
+		MatchState = GameMode->GetMatchState();
 
 		ClientJoinMidgame(MatchState, WarmupTime, MatchTime, CooldownTime, LevelStartingTime);
 	}
@@ -332,7 +332,7 @@ void AFPSPlayerController::HandleMatchHasStarted()
 void AFPSPlayerController::HandleCooldown()
 {
 	PlayerHUD = PlayerHUD == nullptr ? Cast<APlayerHUD>(GetHUD()) : PlayerHUD;
-	if(PlayerHUD && PlayerHUD->CharacterOverlay)
+	if(PlayerHUD)
 	{
 		PlayerHUD->CharacterOverlay->RemoveFromParent();
 		
