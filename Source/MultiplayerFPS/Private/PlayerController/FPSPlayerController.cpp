@@ -241,7 +241,7 @@ void AFPSPlayerController::SetHUDTime()
 
 void AFPSPlayerController::PollInit()
 {
-	if (HasAuthority())
+	if (HasAuthority() && PlayerHUD == nullptr)
 	{
 		PlayerHUD = (PlayerHUD == nullptr) ? Cast<APlayerHUD>(GetHUD()) : PlayerHUD;
 		if(PlayerHUD && MatchState == MatchState::WaitingToStart && !PlayerHUD->bAnnouncementActive)
