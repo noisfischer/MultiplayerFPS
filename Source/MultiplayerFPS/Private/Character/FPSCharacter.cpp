@@ -195,6 +195,11 @@ void AFPSCharacter::ElimTimerFinished()
 void AFPSCharacter::Destroyed()
 {
 	Super::Destroyed();
+
+	if(Combat && Combat->EquippedWeapon)
+	{
+		Combat->EquippedWeapon->Destroy();
+	}
 }
 
 // Interface event called on ProjectileBullet
