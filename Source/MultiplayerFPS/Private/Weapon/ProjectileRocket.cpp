@@ -6,6 +6,9 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
+#include "Components/BoxComponent.h"
+#include "Sound/SoundCue.h"
 
 AProjectileRocket::AProjectileRocket()
 {
@@ -19,9 +22,14 @@ void AProjectileRocket::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if(!HasAuthority()) // for clients
+		{
+			CollisionBox->OnComponentHit.AddDynamic(this, &AProjectileRocket::OnHit);
+		}
+
 	if(TrailSystem)
 	{
-		UNiagaraFunctionLibrary::SpawnSystemAttached(
+		TrailSystemComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(
 			TrailSystem,
 			GetRootComponent(),
 			FName(),
@@ -80,7 +88,7 @@ void AProjectileRocket::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 	
 	// GetInstigator returns the pawn that fired the rocket
 	APawn* FiringPawn = GetInstigator();
-	if(FiringPawn)
+	if(FiringPawn && HasAuthority())
 	{
 		AController* FiringController = FiringPawn->GetController();
 		if(FiringController)
@@ -107,9 +115,45 @@ void AProjectileRocket::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 		&AProjectileRocket::DestroyTimerFinished,
 		DestroyTime
 	);
+
+	if(ImpactParticles)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(
+			GetWorld(),
+			ImpactParticles,
+			GetActorTransform()
+			// other inputs optional
+		);
+	}
+	if(ImpactSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(
+			this,
+			ImpactSound,
+			GetActorLocation()
+			// other inputs optional
+		);
+	}
+	if(RocketMesh)
+	{
+		RocketMesh->SetVisibility(false);	
+	}
+	if(CollisionBox)
+	{
+		CollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+	if(TrailSystemComponent)
+	{
+		TrailSystemComponent->Deactivate();
+	}
 }
 
 void AProjectileRocket::DestroyTimerFinished()
 {
 	Destroy();
+}
+
+void AProjectileRocket::Destroyed()
+{
+	
 }

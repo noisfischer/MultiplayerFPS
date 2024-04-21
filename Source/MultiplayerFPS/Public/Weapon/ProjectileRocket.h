@@ -14,8 +14,11 @@ UCLASS()
 class MULTIPLAYERFPS_API AProjectileRocket : public AProjectile, public IRagdollInterface
 {
 	GENERATED_BODY()
+	
 public:
 	AProjectileRocket();
+
+	virtual void Destroyed() override;
 	
 protected:
 	virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) override;
@@ -28,6 +31,9 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	class UNiagaraSystem* TrailSystem;
+
+	UPROPERTY()
+	class UNiagaraComponent* TrailSystemComponent;
 	
 private:
 	UPROPERTY(VisibleAnywhere)

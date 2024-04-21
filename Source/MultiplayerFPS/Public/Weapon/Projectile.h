@@ -30,10 +30,11 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	class USoundCue* ImpactSound;
-	
-private:
+
 	UPROPERTY(EditAnywhere)
 	class UBoxComponent* CollisionBox;
+	
+private:
 
 	UPROPERTY(VisibleAnywhere)
 	class UProjectileMovementComponent* ProjectileMovementComponent;
