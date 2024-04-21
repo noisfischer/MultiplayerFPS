@@ -5,6 +5,7 @@
 
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "NiagaraFunctionLibrary.h"
 
 AProjectileRocket::AProjectileRocket()
 {
@@ -13,8 +14,26 @@ AProjectileRocket::AProjectileRocket()
 	RocketMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
-void AProjectileRocket::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-                              FVector NormalImpulse, const FHitResult& Hit)
+
+void AProjectileRocket::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if(TrailSystem)
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAttached(
+			TrailSystem,
+			GetRootComponent(),
+			FName(),
+			GetActorLocation(),
+			GetActorRotation(),
+			EAttachLocation::KeepWorldPosition,
+			false
+		);
+	}
+}
+
+void AProjectileRocket::Multicast_RagdollBlast_Implementation()
 {
 	/*
 	 * FOR RAGDOLL ON DEATH
@@ -23,7 +42,6 @@ void AProjectileRocket::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 	FCollisionQueryParams QueryParams;
 	QueryParams.bTraceComplex = false;
 	QueryParams.bReturnPhysicalMaterial = false;
-	QueryParams.AddIgnoredActor(this);
 	ECollisionChannel CollisionChannel = ECC_Pawn;
 	
 	bool bHit = GetWorld()->SweepMultiByChannel(
@@ -46,19 +64,15 @@ void AProjectileRocket::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 				FVector RagdollDirection = UKismetMathLibrary::GetDirectionUnitVector(GetActorLocation(), PlayerLocation);
 	
 				Execute_GetRagdollInfo(HitPlayer.GetActor(), FName("spine_03"), RagdollDirection);
-
-				DrawDebugLine(
-					GetWorld(),
-					GetActorLocation(),
-					PlayerLocation,
-					FColor::Red,
-					true,
-					10.f,
-					0
-				);
 			}
 		}
 	}
+}
+
+void AProjectileRocket::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+                              FVector NormalImpulse, const FHitResult& Hit)
+{
+	Multicast_RagdollBlast();
 
 	/*
 	 *Apply Radial Damage

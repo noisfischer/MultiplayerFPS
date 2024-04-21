@@ -20,6 +20,14 @@ public:
 protected:
 	virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) override;
 
+	virtual void BeginPlay() override;
+
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_RagdollBlast();
+
+	UPROPERTY(EditAnywhere)
+	class UNiagaraSystem* TrailSystem;
+	
 private:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* RocketMesh;
