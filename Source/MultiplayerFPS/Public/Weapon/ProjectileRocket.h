@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Weapon/Projectile.h"
+#include "Interfaces/RagdollInterface.h"
 #include "ProjectileRocket.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MULTIPLAYERFPS_API AProjectileRocket : public AProjectile
+class MULTIPLAYERFPS_API AProjectileRocket : public AProjectile, public IRagdollInterface
 {
 	GENERATED_BODY()
 public:
