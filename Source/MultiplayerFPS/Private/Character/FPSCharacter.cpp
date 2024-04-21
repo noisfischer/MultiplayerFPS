@@ -69,6 +69,7 @@ void AFPSCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 	DOREPLIFETIME(AFPSCharacter, Health);
 	DOREPLIFETIME(AFPSCharacter, LastHitBone);
 	DOREPLIFETIME(AFPSCharacter, RagdollDirection);
+	DOREPLIFETIME(AFPSCharacter, bDisableGameplay);
 }
 
 void AFPSCharacter::PostInitializeComponents()
@@ -158,10 +159,8 @@ void AFPSCharacter::MulticastElim_Implementation()
 
 	GetMesh()->AddImpulseToAllBodiesBelow(RagdollDirection * ImpulsePower, LastHitBone, true, true);
 	
-	if(FPSPlayerController)
-	{
-		DisableInput(FPSPlayerController);
-	}
+	bDisableGameplay = true; // Disables all input except for Look()
+	
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 	GetCharacterMovement()->DisableMovement();
@@ -315,6 +314,20 @@ void AFPSCharacter::Tick(float DeltaTime)
 		}
 	}
 
+	RotateInPlace(DeltaTime);
+	HideCameraIfCharacterClose();
+	PollInit();
+}
+
+void AFPSCharacter::RotateInPlace(float DeltaTime)
+{
+	if(bDisableGameplay)
+	{
+		bUseControllerRotationYaw = false;
+		TurningInPlace = ETurningInPlace::ETIP_NotTurning;
+		return;
+	}
+		
 	if(GetLocalRole() > ROLE_SimulatedProxy && IsLocallyControlled())
 	{
 		AimOffset(DeltaTime);
@@ -328,11 +341,7 @@ void AFPSCharacter::Tick(float DeltaTime)
 		}
 		CalculateAO_Pitch();
 	}
-	
-	HideCameraIfCharacterClose();
-	PollInit();
 }
-
 
 void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -358,6 +367,8 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 void AFPSCharacter::Move(const FInputActionValue& Value)
 {
+	if(bDisableGameplay) return;
+	
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
 	if (Controller != nullptr)
@@ -393,6 +404,8 @@ void AFPSCharacter::Look(const FInputActionValue& Value)
 // FOR SERVER
 void AFPSCharacter::EquipButtonPressed()
 {
+	if(bDisableGameplay) return;
+	
 	if(Combat)
 	{
 		if(HasAuthority())
@@ -418,6 +431,8 @@ void AFPSCharacter::ServerEquipButtonPressed_Implementation()
 
 void AFPSCharacter::CrouchButtonPressed()
 {
+	if(bDisableGameplay) return;
+	
 	if(!bIsCrouched)
 	{
 		Crouch();	// pre-defined function from ACharacter. Replicated by default
@@ -426,6 +441,8 @@ void AFPSCharacter::CrouchButtonPressed()
 
 void AFPSCharacter::CrouchButtonReleased()
 {
+	if(bDisableGameplay) return;
+	
 	if(bIsCrouched)
 	{
 		UnCrouch(); // pre-defined function from ACharacter. Replicated by default
@@ -434,6 +451,8 @@ void AFPSCharacter::CrouchButtonReleased()
 
 void AFPSCharacter::AimButtonPressed()
 {
+	if(bDisableGameplay) return;
+	
 	if(Combat)
 	{
 		Combat->SetAiming(true);
@@ -442,6 +461,8 @@ void AFPSCharacter::AimButtonPressed()
 
 void AFPSCharacter::AimButtonReleased()
 {
+	if(bDisableGameplay) return;
+	
 	if(Combat)
 	{
 		Combat->SetAiming(false);
@@ -450,6 +471,8 @@ void AFPSCharacter::AimButtonReleased()
 
 void AFPSCharacter::FireWeaponButtonPressed()
 {
+	if(bDisableGameplay) return;
+	
 	if(Combat)
 	{
 		Combat->FireWeaponButtonPressed(true);
@@ -458,6 +481,8 @@ void AFPSCharacter::FireWeaponButtonPressed()
 
 void AFPSCharacter::FireWeaponButtonReleased()
 {
+	if(bDisableGameplay) return;
+	
 	if(Combat)
 	{
 		Combat->FireWeaponButtonPressed(false);
@@ -466,6 +491,8 @@ void AFPSCharacter::FireWeaponButtonReleased()
 
 void AFPSCharacter::ReloadButtonPressed()
 {
+	if(bDisableGameplay) return;
+	
 	if(Combat)
 	{
 		Combat->Reload();

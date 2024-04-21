@@ -27,7 +27,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void FinishReloading();
-	
+
+	void FireWeaponButtonPressed(bool bPressed);
+
 protected:
 	virtual void BeginPlay() override;
 	
@@ -39,9 +41,7 @@ protected:
 	UFUNCTION()
 	void OnRep_EquippedWeapon();
 	void Fire();
-
-	void FireWeaponButtonPressed(bool bPressed);
-
+	
 	UFUNCTION(Server, Reliable)	// Server RPC - happens only on server
 	void ServerFire(const FVector_NetQuantize& TraceHitTarget); // NetQuantize rounds vectors to whole numbers (helps lower bandwidth)
 

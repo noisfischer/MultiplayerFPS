@@ -4,6 +4,7 @@
 #include "PlayerController/FPSPlayerController.h"
 
 #include "Character/FPSCharacter.h"
+#include "Components/CombatComponent.h"
 #include "Components/ProgressBar.h"
 #include "HUD/CharacterOverlay.h"
 #include "HUD/PlayerHUD.h"
@@ -347,5 +348,11 @@ void AFPSPlayerController::HandleCooldown()
 			PlayerHUD->Announcement->AnnouncementText->SetText(FText::FromString(AnnouncementText));
 			PlayerHUD->Announcement->InfoText->SetText(FText());
 		}
+	}
+	AFPSCharacter* PlayerRef = Cast<AFPSCharacter>(GetPawn());
+	if(PlayerRef && PlayerRef->GetCombat())
+	{
+		PlayerRef->bDisableGameplay = true; // Disable input except for Look()
+		PlayerRef->GetCombat()->FireWeaponButtonPressed(false); // If the player is firing when they die, they will stop firing
 	}
 }
