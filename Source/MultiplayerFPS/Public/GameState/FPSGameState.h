@@ -13,5 +13,15 @@ UCLASS()
 class MULTIPLAYERFPS_API AFPSGameState : public AGameState
 {
 	GENERATED_BODY()
+
+public:
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	void UpdateTopScore(class AFPSPlayerState* ScoringPlayer);
+	
+	UPROPERTY(Replicated)
+	TArray<AFPSPlayerState*> TopScoringPlayers;
+
+private:
+	float TopScore = 0.f;
 	
 };

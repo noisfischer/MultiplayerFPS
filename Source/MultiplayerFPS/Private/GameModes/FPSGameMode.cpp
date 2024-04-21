@@ -5,6 +5,7 @@
 
 #include "Character/FPSCharacter.h"
 #include "GameFramework/PlayerStart.h"
+#include "GameState/FPSGameState.h"
 #include "HUD/PlayerHUD.h"
 #include "Kismet/GameplayStatics.h"
 #include "PlayerController/FPSPlayerController.h"
@@ -79,9 +80,12 @@ void AFPSGameMode::PlayerEliminated(AFPSCharacter* ElimmedCharacter, AFPSPlayerC
 	AFPSPlayerState* AttackerPlayerState = AttackerController ? Cast<AFPSPlayerState>(AttackerController->PlayerState) : nullptr;
 	AFPSPlayerState* VictimPlayerState = VictimController ? Cast<AFPSPlayerState>(VictimController->PlayerState) : nullptr;
 
-	if(AttackerPlayerState && AttackerPlayerState != VictimPlayerState)
+	AFPSGameState* FPSGameState = GetGameState<AFPSGameState>();
+	
+	if(AttackerPlayerState && AttackerPlayerState != VictimPlayerState && FPSGameState)
 	{
 		AttackerPlayerState->AddToScore(1.f);
+		FPSGameState->UpdateTopScore(AttackerPlayerState);
 	}
 
 	if(VictimPlayerState)

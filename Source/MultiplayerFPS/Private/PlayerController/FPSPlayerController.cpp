@@ -11,9 +11,11 @@
 #include "Components/TextBlock.h"
 #include "GameFramework/GameMode.h"
 #include "GameModes/FPSGameMode.h"
+#include "GameState/FPSGameState.h"
 #include "HUD/Announcement.h"
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
+#include "PlayerState/FPSPlayerState.h"
 
 void AFPSPlayerController::BeginPlay()
 {
@@ -346,7 +348,35 @@ void AFPSPlayerController::HandleCooldown()
 			PlayerHUD->Announcement->SetVisibility(ESlateVisibility::Visible);
 			FString AnnouncementText("New Match Starts In:");
 			PlayerHUD->Announcement->AnnouncementText->SetText(FText::FromString(AnnouncementText));
-			PlayerHUD->Announcement->InfoText->SetText(FText());
+
+			AFPSGameState* FPSGameState = Cast<AFPSGameState>(UGameplayStatics::GetGameState(this));
+			AFPSPlayerState* FPSPlayerState = GetPlayerState<AFPSPlayerState>();
+			if(FPSGameState && FPSPlayerState)
+			{
+				TArray<AFPSPlayerState*> TopPlayers = FPSGameState->TopScoringPlayers;
+				FString InfoTextString;
+				if(TopPlayers.Num() == 0)
+				{
+					InfoTextString = FString("There is no winner.");
+				}
+				else if(TopPlayers.Num() == 1 && TopPlayers[0] == FPSPlayerState)
+				{
+					InfoTextString = FString("YOU WIN!");
+				}
+				else if(TopPlayers.Num() == 1)
+				{
+					InfoTextString = FString::Printf(TEXT("Winner: \n%s"), *TopPlayers[0]->GetPlayerName());
+				}
+				else if(TopPlayers.Num() > 1)
+				{
+					InfoTextString = FString("Players tied for the win: \n");
+					for(auto TiedPlayer : TopPlayers)
+					{
+						InfoTextString.Append(FString::Printf(TEXT("%s\n"), *TiedPlayer->GetPlayerName()));
+					}
+				}
+				PlayerHUD->Announcement->InfoText->SetText(FText::FromString(InfoTextString));
+			}
 		}
 	}
 	AFPSCharacter* PlayerRef = Cast<AFPSCharacter>(GetPawn());

@@ -15,6 +15,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Character/CharacterAnimInstance.h"
 #include "GameModes/FPSGameMode.h"
+#include "Kismet/GameplayStatics.h"
 #include "MultiplayerFPS/MultiplayerFPS.h"
 #include "PlayerController/FPSPlayerController.h"
 #include "PlayerState/FPSPlayerState.h"
@@ -160,6 +161,10 @@ void AFPSCharacter::MulticastElim_Implementation()
 	GetMesh()->AddImpulseToAllBodiesBelow(RagdollDirection * ImpulsePower, LastHitBone, true, true);
 	
 	bDisableGameplay = true; // Disables all input except for Look()
+	if(Combat)
+	{
+		Combat->FireWeaponButtonPressed(false);
+	}
 	
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
@@ -196,7 +201,10 @@ void AFPSCharacter::Destroyed()
 {
 	Super::Destroyed();
 
-	if(Combat && Combat->EquippedWeapon)
+	AFPSGameMode* FPSGameMode = Cast<AFPSGameMode>(UGameplayStatics::GetGameMode(this));
+	bool bMatchNotInProgress = FPSGameMode && FPSGameMode->GetMatchState() != MatchState::InProgress;
+
+	if(Combat && Combat->EquippedWeapon && bMatchNotInProgress)
 	{
 		Combat->EquippedWeapon->Destroy();
 	}
