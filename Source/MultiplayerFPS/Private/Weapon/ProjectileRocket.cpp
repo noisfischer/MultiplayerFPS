@@ -7,6 +7,8 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
+#include "NiagaraSystemInstanceController.h"
+#include "Components/AudioComponent.h"
 #include "Components/BoxComponent.h"
 #include "Sound/SoundCue.h"
 
@@ -38,6 +40,24 @@ void AProjectileRocket::BeginPlay()
 			EAttachLocation::KeepWorldPosition,
 			false
 		);
+	}
+
+	if(ProjectileLoop && ProjectileLoopAttenuation)
+	{
+		ProjectileLoopComponent = UGameplayStatics::SpawnSoundAttached(
+				ProjectileLoop,
+				GetRootComponent(),
+				FName(),
+				GetActorLocation(),
+				EAttachLocation::KeepWorldPosition,
+				false,
+				1.f,
+				1.f,
+				0.f,
+				ProjectileLoopAttenuation,
+				(USoundConcurrency*)nullptr,
+				false
+			);
 	}
 }
 
@@ -142,9 +162,13 @@ void AProjectileRocket::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 	{
 		CollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
-	if(TrailSystemComponent)
+	if(TrailSystemComponent && TrailSystemComponent->GetSystemInstanceController())
 	{
-		TrailSystemComponent->Deactivate();
+		TrailSystemComponent->GetSystemInstanceController()->Deactivate();
+	}
+	if(ProjectileLoopComponent && ProjectileLoopComponent->IsPlaying())
+	{
+		ProjectileLoopComponent->Stop();
 	}
 }
 

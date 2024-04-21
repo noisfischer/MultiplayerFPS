@@ -34,6 +34,15 @@ protected:
 
 	UPROPERTY()
 	class UNiagaraComponent* TrailSystemComponent;
+
+	UPROPERTY(EditAnywhere)
+	USoundCue* ProjectileLoop;
+
+	UPROPERTY()
+	UAudioComponent* ProjectileLoopComponent;
+
+	UPROPERTY(EditAnywhere)
+	USoundAttenuation* ProjectileLoopAttenuation;
 	
 private:
 	UPROPERTY(VisibleAnywhere)
