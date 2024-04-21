@@ -5,6 +5,13 @@
 
 #include "Kismet/GameplayStatics.h"
 
+AProjectileRocket::AProjectileRocket()
+{
+	RocketMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Rocket Mesh"));
+	RocketMesh->SetupAttachment(RootComponent);
+	RocketMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
 void AProjectileRocket::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
                               FVector NormalImpulse, const FHitResult& Hit)
 {
