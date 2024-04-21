@@ -101,5 +101,15 @@ void AProjectileRocket::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 		}
 	}
 	
-	Super::OnHit(HitComp, OtherActor, OtherComp, NormalImpulse, Hit);
+	GetWorldTimerManager().SetTimer(
+		DestroyTimer,
+		this,
+		&AProjectileRocket::DestroyTimerFinished,
+		DestroyTime
+	);
+}
+
+void AProjectileRocket::DestroyTimerFinished()
+{
+	Destroy();
 }
