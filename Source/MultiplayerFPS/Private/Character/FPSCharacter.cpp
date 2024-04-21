@@ -597,6 +597,8 @@ void AFPSCharacter::SimProxiesTurn()
 
 void AFPSCharacter::Jump()
 {
+	if(bDisableGameplay) return;
+	
 	if(bIsCrouched)
 	{
 		UnCrouch();
