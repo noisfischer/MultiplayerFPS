@@ -100,6 +100,7 @@ void AProjectileRocket::Multicast_RagdollBlast_Implementation()
 void AProjectileRocket::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
                               FVector NormalImpulse, const FHitResult& Hit)
 {
+	
 	Multicast_RagdollBlast();
 
 	/*
