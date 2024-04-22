@@ -13,6 +13,9 @@ class MULTIPLAYERFPS_API AProjectileBullet : public AProjectile, public IRagdoll
 {
 	GENERATED_BODY()
 
+public:
+	AProjectileBullet();
+
 private:
 	TArray<FName> BoneNames {
 		"upperarm_r",

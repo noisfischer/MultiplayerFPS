@@ -43,6 +43,9 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	USoundAttenuation* ProjectileLoopAttenuation;
+
+	UPROPERTY(VisibleAnywhere)
+	class URocketMovementComponent* RocketMovementComponent;
 	
 private:
 	UPROPERTY(VisibleAnywhere)

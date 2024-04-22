@@ -11,12 +11,17 @@
 #include "Components/AudioComponent.h"
 #include "Components/BoxComponent.h"
 #include "Sound/SoundCue.h"
+#include "Weapon/RocketMovementComponent.h"
 
 AProjectileRocket::AProjectileRocket()
 {
 	RocketMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Rocket Mesh"));
 	RocketMesh->SetupAttachment(RootComponent);
 	RocketMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	RocketMovementComponent = CreateDefaultSubobject<URocketMovementComponent>(TEXT("RocketMovementComponent"));
+	RocketMovementComponent->bRotationFollowsVelocity = true;
+	RocketMovementComponent->SetIsReplicated(true);
 }
 
 
@@ -100,6 +105,10 @@ void AProjectileRocket::Multicast_RagdollBlast_Implementation()
 void AProjectileRocket::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
                               FVector NormalImpulse, const FHitResult& Hit)
 {
+	if(OtherActor == GetOwner())
+	{
+		return;
+	}
 	
 	Multicast_RagdollBlast();
 
