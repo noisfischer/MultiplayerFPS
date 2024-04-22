@@ -13,5 +13,14 @@ UCLASS()
 class MULTIPLAYERFPS_API AHitScanWeapon : public AWeapon
 {
 	GENERATED_BODY()
-	
+
+public:
+    virtual void Fire(const FVector& HitTarget);
+
+private:
+	UPROPERTY(EditAnywhere)
+	float Damage = 20.f;
+
+	UPROPERTY(EditAnywhere)
+	class UParticleSystem* ImpactParticles;
 };
