@@ -37,14 +37,17 @@ void AHitScanWeapon::Fire(const FVector& HitTarget)
 				AFPSCharacter* HitPlayer = Cast<AFPSCharacter>(FireHit.GetActor());
 				if(HitPlayer)
 				{
-					UGameplayStatics::ApplyDamage(
+					if(HasAuthority())
+					{
+						UGameplayStatics::ApplyDamage(
 						HitPlayer,
 						Damage,
 						InstigatorController,
 						this,
 						UDamageType::StaticClass()
-					);
-
+						);
+					}
+					
 					if(ImpactParticles)
 					{
 						UGameplayStatics::SpawnEmitterAtLocation(
