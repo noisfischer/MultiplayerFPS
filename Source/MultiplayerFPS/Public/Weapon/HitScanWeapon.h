@@ -33,4 +33,7 @@ private:
 		"thigh_l",
 		"thigh_r",
 	};
+
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* BeamParticles;
 };

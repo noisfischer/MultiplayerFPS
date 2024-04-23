@@ -7,6 +7,7 @@
 #include "Engine/SkeletalMeshSocket.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Particles/ParticleSystemComponent.h"
 
 void AHitScanWeapon::Fire(const FVector& HitTarget)
 {
@@ -17,7 +18,7 @@ void AHitScanWeapon::Fire(const FVector& HitTarget)
 	AController* InstigatorController = OwnerPawn->GetController();
 
 	const USkeletalMeshSocket* MuzzleFlashSocket = GetWeaponMesh()->GetSocketByName("MuzzleFlash");
-	if(MuzzleFlashSocket && InstigatorController)
+	if(MuzzleFlashSocket)
 	{
 		FTransform SocketTransform = MuzzleFlashSocket->GetSocketTransform(GetWeaponMesh());
 		FVector Start = SocketTransform.GetLocation();
@@ -34,23 +35,25 @@ void AHitScanWeapon::Fire(const FVector& HitTarget)
 				End,
 				ECC_Visibility
 			);
+
+			FVector BeamEnd = End;
+			
 			if(FireHit.bBlockingHit)
 			{
+				BeamEnd = FireHit.ImpactPoint;
+				
 				AFPSCharacter* HitPlayer = Cast<AFPSCharacter>(FireHit.GetActor());
-				if(HitPlayer)
+				if(HitPlayer && HasAuthority() && InstigatorController)
 				{
 					GetRagdollInfo(FireHit, HitPlayer, Direction);
 					
-					if(HasAuthority())
-					{
-						UGameplayStatics::ApplyDamage(
+					UGameplayStatics::ApplyDamage(
 						HitPlayer,
 						Damage,
 						InstigatorController,
 						this,
 						UDamageType::StaticClass()
 						);
-					}
 					
 					if(ImpactParticles)
 					{
@@ -61,6 +64,18 @@ void AHitScanWeapon::Fire(const FVector& HitTarget)
 							FireHit.ImpactNormal.Rotation()
 						);
 					}
+				}
+			}
+			if(BeamParticles)
+			{
+				UParticleSystemComponent* Beam = UGameplayStatics::SpawnEmitterAtLocation(
+					World,
+					BeamParticles,
+					SocketTransform
+				);
+				if(Beam)
+				{
+					Beam->SetVectorParameter(FName("Target"), BeamEnd);
 				}
 			}
 		}
