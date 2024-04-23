@@ -63,8 +63,7 @@ void AShotgun::Fire(const FVector& HitTarget)
 				this,
 				HitSound,
 				FireHit.ImpactPoint,
-				.5f,
-				FMath::FRandRange(-.5f, .5f)
+				.5f
 				);
 			}
 		}
