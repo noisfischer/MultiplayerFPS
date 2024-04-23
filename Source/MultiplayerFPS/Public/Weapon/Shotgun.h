@@ -13,5 +13,11 @@ UCLASS()
 class MULTIPLAYERFPS_API AShotgun : public AHitScanWeapon
 {
 	GENERATED_BODY()
-	
+
+public:
+	virtual void Fire(const FVector& HitTarget) override;
+
+private:
+	UPROPERTY(EditAnywhere)
+	uint32 NumberOfPellets = 10;
 };
