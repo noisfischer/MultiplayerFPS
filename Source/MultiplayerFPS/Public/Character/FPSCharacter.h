@@ -73,6 +73,12 @@ public:
 	UPROPERTY(Replicated)
 	bool bDisableGameplay = false;
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void ShowSniperScopeWidget(bool bShowScope);
+
+	UPROPERTY(EditAnywhere)
+	float AimSensitivityMultiplier = 1.f;
+	
 protected:
 	virtual void BeginPlay() override;
 	void RotateInPlace(float DeltaTime);

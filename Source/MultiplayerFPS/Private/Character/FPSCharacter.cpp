@@ -199,6 +199,12 @@ void AFPSCharacter::MulticastElim_Implementation()
 		DynamicDissolveMaterialInstance2->SetScalarParameterValue(TEXT("Dissolve"), 0.55f);
 		DynamicDissolveMaterialInstance2->SetScalarParameterValue(TEXT("Glow Intensity"), 50.f);
 	}
+	bool bHideSniperScope = IsLocallyControlled() && Combat && Combat->bAiming && Combat->EquippedWeapon && Combat->EquippedWeapon->GetWeaponType() == EWeaponType::EWT_SniperRifle;
+	if(bHideSniperScope)
+	{
+		ShowSniperScopeWidget(false);
+	}
+	
 	StartDissolve();
 }
 
@@ -424,8 +430,8 @@ void AFPSCharacter::Look(const FInputActionValue& Value)
 	if (Controller != nullptr)
 	{
 		// add yaw and pitch input to controller
-		AddControllerYawInput(LookAxisVector.X);
-		AddControllerPitchInput(LookAxisVector.Y);
+		AddControllerYawInput(LookAxisVector.X * AimSensitivityMultiplier);
+		AddControllerPitchInput(LookAxisVector.Y * AimSensitivityMultiplier);
 	}
 }
 

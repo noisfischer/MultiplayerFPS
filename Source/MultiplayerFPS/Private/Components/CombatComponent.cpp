@@ -210,10 +210,23 @@ void UCombatComponent::SetAiming(bool bIsAiming)
 // ON CLIENT
 void UCombatComponent::ServerSetAiming_Implementation(bool bIsAiming)
 {
+	if(PlayerRef == nullptr || EquippedWeapon == nullptr) return;
 	bAiming = bIsAiming;
 	if(PlayerRef)
 	{
 		PlayerRef->GetCharacterMovement()->MaxWalkSpeed = bIsAiming ? AimWalkSpeed : BaseWalkSpeed;
+	}
+	if(PlayerRef->IsLocallyControlled() && EquippedWeapon->GetWeaponType() == EWeaponType::EWT_SniperRifle)
+	{
+		PlayerRef->ShowSniperScopeWidget(bIsAiming);
+		if(bIsAiming)
+		{
+			PlayerRef->AimSensitivityMultiplier = .15f;
+		}
+		else
+		{
+			PlayerRef->AimSensitivityMultiplier = 1.f;
+		}
 	}
 }
 
