@@ -4,14 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Weapon/Projectile.h"
-#include "Interfaces/RagdollInterface.h"
 #include "ProjectileRocket.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MULTIPLAYERFPS_API AProjectileRocket : public AProjectile, public IRagdollInterface
+class MULTIPLAYERFPS_API AProjectileRocket : public AProjectile
 {
 	GENERATED_BODY()
 	
@@ -23,9 +22,6 @@ public:
 protected:
 	virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) override;
 	virtual void BeginPlay() override;
-
-	UFUNCTION(NetMulticast, Reliable)
-	void Multicast_RagdollBlast();
 
 	UPROPERTY(EditAnywhere)
 	USoundCue* ProjectileLoop;

@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Interfaces/RagdollInterface.h"
 #include "Projectile.generated.h"
 
 UCLASS()
-class MULTIPLAYERFPS_API AProjectile : public AActor
+class MULTIPLAYERFPS_API AProjectile : public AActor, public IRagdollInterface 
 {
 	GENERATED_BODY()
 	
@@ -20,9 +21,13 @@ protected:
 	virtual void BeginPlay() override;
 
 	void StartDestroyTimer();
-
 	void DestroyTimerFinished();
-
+	void SpawnTrailSystem();
+	void ExplodeDamage();
+	
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_RagdollBlast();
+	
 	UFUNCTION()
 	virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
@@ -47,11 +52,15 @@ protected:
 	UPROPERTY()
 	class UNiagaraComponent* TrailSystemComponent;
 
-	void SpawnTrailSystem();
-
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* ProjectileMesh;
 
+	UPROPERTY(EditAnywhere)
+	float DamageInnerRadius = 200.f;
+
+	UPROPERTY(EditAnywhere)
+	float DamageOuterRadius = 500.f;
+	
 private:
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* Tracer;

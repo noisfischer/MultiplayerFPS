@@ -3,13 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Interfaces/RagdollInterface.h"
 #include "Weapon/Projectile.h"
 #include "ProjectileBullet.generated.h"
 
 
 UCLASS()
-class MULTIPLAYERFPS_API AProjectileBullet : public AProjectile, public IRagdollInterface
+class MULTIPLAYERFPS_API AProjectileBullet : public AProjectile
 {
 	GENERATED_BODY()
 

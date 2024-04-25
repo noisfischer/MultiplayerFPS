@@ -8,6 +8,7 @@
 #include "Character/FPSCharacter.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Sound/SoundCue.h"
 #include "MultiplayerFPS/MultiplayerFPS.h"
 
@@ -67,6 +68,75 @@ void AProjectile::SpawnTrailSystem()
 			EAttachLocation::KeepWorldPosition,
 			false
 		);
+	}
+}
+
+
+void AProjectile::Multicast_RagdollBlast_Implementation()
+{
+	/*
+	 * FOR RAGDOLL ON DEATH
+	 */
+	TArray<FHitResult> HitResults;
+	FCollisionQueryParams QueryParams;
+	QueryParams.bTraceComplex = false;
+	QueryParams.bReturnPhysicalMaterial = false;
+	ECollisionChannel CollisionChannel = ECC_Pawn;
+	
+	bool bHit = GetWorld()->SweepMultiByChannel(
+		HitResults,
+		GetActorLocation(),
+		GetActorLocation(),
+		FQuat::Identity,
+		CollisionChannel,
+		FCollisionShape::MakeSphere(500.f),
+		QueryParams
+	);
+
+	if(bHit)
+	{
+		for(auto HitPlayer : HitResults)
+		{
+			if(HitPlayer.GetActor()->Implements<URagdollInterface>())
+			{
+				FVector PlayerLocation = HitPlayer.GetActor()->GetActorLocation();
+				FVector RagdollDirection = UKismetMathLibrary::GetDirectionUnitVector(GetActorLocation(), PlayerLocation);
+	
+				Execute_GetRagdollInfo(HitPlayer.GetActor(), FName("spine_03"), RagdollDirection);
+			}
+		}
+	}
+}
+
+void AProjectile::ExplodeDamage()
+{
+	Multicast_RagdollBlast();
+
+	/*
+	 *Apply Radial Damage
+	 */
+	
+	// GetInstigator returns the pawn that fired the rocket
+	APawn* FiringPawn = GetInstigator();
+	if(FiringPawn && HasAuthority())
+	{
+		AController* FiringController = FiringPawn->GetController();
+		if(FiringController)
+		{
+			UGameplayStatics::ApplyRadialDamageWithFalloff(
+				this,
+				Damage,
+				10.f,
+				GetActorLocation(),
+				DamageInnerRadius,
+				DamageOuterRadius,
+				1.f,
+				UDamageType::StaticClass(),
+				TArray<AActor*>(), // just an empty array for ignore actors
+				this,
+				FiringController // instigator controller
+			);
+		}
 	}
 }
 
