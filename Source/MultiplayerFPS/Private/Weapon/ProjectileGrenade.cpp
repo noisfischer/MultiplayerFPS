@@ -33,6 +33,8 @@ void AProjectileGrenade::OnBounce(const FHitResult& ImpactResult, const FVector&
 {
 	if(ImpactResult.GetActor()->Implements<URagdollInterface>())
 	{
+		DestroyTimer.Invalidate();
+		ExplodeDamage();
 		Destroy();
 	}
 	

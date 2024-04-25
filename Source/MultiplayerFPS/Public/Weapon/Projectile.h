@@ -61,14 +61,14 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float DamageOuterRadius = 500.f;
 	
+	FTimerHandle DestroyTimer;
+	
 private:
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* Tracer;
 
 	UPROPERTY()
 	class UParticleSystemComponent* TracerComponent;
-
-	FTimerHandle DestroyTimer;
 
 	UPROPERTY(EditAnywhere)
 	float DestroyTime = 3.f;
