@@ -11,6 +11,7 @@
 #include "Weapon/BulletCasing.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "PlayerController/FPSPlayerController.h"
+#include "Components/CombatComponent.h"
 
 AWeapon::AWeapon()
 {
@@ -113,6 +114,10 @@ void AWeapon::SpendRound()
 void AWeapon::OnRep_Ammo()
 {
 	FPSOwnerPlayer = FPSOwnerPlayer == nullptr ? Cast<AFPSCharacter>(GetOwner()) : FPSOwnerPlayer;
+	if(FPSOwnerPlayer && FPSOwnerPlayer->GetCombat() && IsFull())
+	{
+		FPSOwnerPlayer->GetCombat()->JumpToShotgunEnd();
+	}
 	SetHUDAmmo();
 }
 
@@ -248,4 +253,9 @@ void AWeapon::AddAmmo(int32 AmmoToAdd)
 bool AWeapon::IsEmpty()
 {
 	return Ammo <= 0;
+}
+
+bool AWeapon::IsFull()
+{
+	return Ammo == MagCapacity;
 }

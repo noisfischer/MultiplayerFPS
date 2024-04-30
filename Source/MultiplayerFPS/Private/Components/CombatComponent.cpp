@@ -14,6 +14,7 @@
 #include "HUD/PlayerHUD.h"
 #include "TimerManager.h"
 #include "Sound/SoundCue.h"
+#include "Character/CharacterAnimInstance.h"
 
 UCombatComponent::UCombatComponent()
 {
@@ -257,7 +258,10 @@ void UCombatComponent::OnRep_EquippedWeapon()
 bool UCombatComponent::CanFire()
 {
 	if(EquippedWeapon == nullptr) return false;
-
+	if(!EquippedWeapon->IsEmpty() && bCanFire && CombatState == ECombatState::ECS_Reloading && EquippedWeapon->GetWeaponType() == EWeaponType::EWT_Shotgun)
+	{
+		return true;
+	}
 	return !EquippedWeapon->IsEmpty() && bCanFire && CombatState == ECombatState::ECS_Unoccupied;
 }
 
@@ -267,6 +271,15 @@ void UCombatComponent::OnRep_CarriedAmmo()
 	if(PlayerController)
 	{
 		PlayerController->SetHUDCarriedAmmo(CarriedAmmo);
+	}
+	bool bJumpToShotgunEnd = CombatState == ECombatState::ECS_Reloading &&
+		EquippedWeapon != nullptr &&
+			EquippedWeapon->GetWeaponType() == EWeaponType::EWT_Shotgun &&
+				CarriedAmmo == 0;
+
+	if(bJumpToShotgunEnd)
+	{
+		JumpToShotgunEnd();
 	}
 }
 
@@ -304,6 +317,14 @@ void UCombatComponent::FireWeaponButtonPressed(bool bPressed)
 	if(bFireButtonPressed && EquippedWeapon)
 	{
 		Fire();
+	}
+}
+
+void UCombatComponent::ShotgunShellReload()
+{
+	if(PlayerRef && PlayerRef->HasAuthority())
+	{
+		UpdateShotgunAmmoValues();
 	}
 }
 
@@ -368,8 +389,12 @@ void UCombatComponent::ServerFire_Implementation(const FVector_NetQuantize& Trac
 // Multicast RPC - happens to server and all clients - Our end result
 void UCombatComponent::MultiCastFire_Implementation(const FVector_NetQuantize& TraceHitTarget)
 {
-	if(EquippedWeapon == nullptr)
+	if(EquippedWeapon == nullptr) return;
+	if(PlayerRef && CombatState == ECombatState::ECS_Reloading && EquippedWeapon->GetWeaponType() == EWeaponType::EWT_Shotgun)
 	{
+		PlayerRef->PlayFireMontage(bAiming);
+		EquippedWeapon->Fire(TraceHitTarget);
+		CombatState = ECombatState::ECS_Unoccupied;
 		return;
 	}
 	if(PlayerRef && CombatState == ECombatState::ECS_Unoccupied)
@@ -459,6 +484,43 @@ void UCombatComponent::UpdateAmmoValues()
 	}
 		
 	EquippedWeapon->AddAmmo(-ReloadAmount);
+}
+
+void UCombatComponent::UpdateShotgunAmmoValues()
+{
+	if(PlayerRef == nullptr || EquippedWeapon == nullptr) return;
+
+	if(CarriedAmmoMap.Contains(EquippedWeapon->GetWeaponType()))
+	{
+		CarriedAmmoMap[EquippedWeapon->GetWeaponType()] -= 1;
+		CarriedAmmo = CarriedAmmoMap[EquippedWeapon->GetWeaponType()];
+	}
+
+	PlayerController = PlayerController == nullptr ? Cast<AFPSPlayerController>(PlayerRef->Controller) : PlayerController;
+	if(PlayerController)
+	{
+		PlayerController->SetHUDCarriedAmmo(CarriedAmmo);
+	}
+	
+	EquippedWeapon->AddAmmo(-1);
+	bCanFire = true;
+	if(EquippedWeapon->IsFull() || CarriedAmmo == 0)
+	{
+		JumpToShotgunEnd();
+	}
+}
+
+void UCombatComponent::JumpToShotgunEnd()
+{
+	if(EquippedWeapon->IsFull())
+	{
+		// Jump to ShotgunEnd montage section
+		UAnimInstance* AnimInstance = PlayerRef->GetMesh()->GetAnimInstance();
+		if(AnimInstance && PlayerRef->GetReloadMontage())
+		{
+			AnimInstance->Montage_JumpToSection(FName("ShotgunEnd"));
+		}
+	}
 }
 
 // For server only
