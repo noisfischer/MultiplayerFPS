@@ -64,6 +64,11 @@ public:
 	UPROPERTY(EditAnywhere)
 	class USoundCue* EquipSound;
 
+	/*
+	 * Enable or disable custom depth (for post process)
+	 */
+	void EnableCustomDepth(bool bEnable);
+
 protected:
 	virtual void BeginPlay() override;
 

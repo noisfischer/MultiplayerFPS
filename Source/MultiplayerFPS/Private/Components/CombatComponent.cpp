@@ -200,11 +200,16 @@ void UCombatComponent::FireTimerFinished()
 // ON SERVER
 void UCombatComponent::SetAiming(bool bIsAiming)
 {
+	if (PlayerRef == nullptr || EquippedWeapon == nullptr) return;
 	bAiming =  bIsAiming; // so the client can aim before the server receives the RPC message
 	ServerSetAiming(bIsAiming);
 	if(PlayerRef)
 	{
 		PlayerRef->GetCharacterMovement()->MaxWalkSpeed = bIsAiming ? AimWalkSpeed : BaseWalkSpeed;
+	}
+	if(PlayerRef->IsLocallyControlled() && EquippedWeapon->GetWeaponType() == EWeaponType::EWT_SniperRifle)
+	{
+		PlayerRef->ShowSniperScopeWidget(bIsAiming);
 	}
 }
 
