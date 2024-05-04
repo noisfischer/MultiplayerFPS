@@ -28,11 +28,12 @@ void AHitScanWeapon::Fire(const FVector& HitTarget)
 		FHitResult FireHit;
 		WeaponTraceHit(Start, HitTarget, FireHit);
 		AFPSCharacter* HitPlayer = Cast<AFPSCharacter>(FireHit.GetActor());
+
+		FVector Direction = UKismetMathLibrary::GetDirectionUnitVector(Start, FireHit.ImpactPoint);
+		GetRagdollInfo(FireHit, HitPlayer, Direction);
+		
 		if(HitPlayer && HasAuthority() && InstigatorController)
 		{
-			FVector Direction = UKismetMathLibrary::GetDirectionUnitVector(Start, FireHit.ImpactPoint);
-			GetRagdollInfo(FireHit, HitPlayer, Direction);
-			
 			UGameplayStatics::ApplyDamage(
 				HitPlayer,
 				Damage,

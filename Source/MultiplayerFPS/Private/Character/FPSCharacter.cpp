@@ -175,6 +175,11 @@ void AFPSCharacter::MulticastElim_Implementation()
 	{
 		ImpulsePower = 1000.f;
 	}
+	if(LastHitBone.IsNone())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("HELLO"));
+		LastHitBone = FName("spine_04");
+	}
 
 	GetMesh()->AddImpulseToAllBodiesBelow(RagdollDirection * ImpulsePower, LastHitBone, true, true);
 	
