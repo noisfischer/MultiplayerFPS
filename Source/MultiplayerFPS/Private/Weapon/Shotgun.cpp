@@ -32,10 +32,15 @@ void AShotgun::Fire(const FVector& HitTarget)
 			WeaponTraceHit(Start, HitTarget, FireHit);
 
 			AFPSCharacter* HitPlayer = Cast<AFPSCharacter>(FireHit.GetActor());
-			if(HitPlayer && HasAuthority() && InstigatorController)
+
+			if(HitPlayer)
 			{
 				FVector Direction = UKismetMathLibrary::GetDirectionUnitVector(Start, FireHit.ImpactPoint);
 				GetRagdollInfo(FireHit, HitPlayer, Direction);
+			}
+			
+			if(HitPlayer && HasAuthority() && InstigatorController)
+			{
 			
 				if(HitMap.Contains(HitPlayer))
 				{
