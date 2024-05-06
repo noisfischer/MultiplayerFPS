@@ -411,10 +411,9 @@ void UCombatComponent::MultiCastFire_Implementation(const FVector_NetQuantize& T
 
 void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 {
-	if(PlayerRef == nullptr || WeaponToEquip == nullptr)
-	{
-		return;
-	}
+	if(PlayerRef == nullptr || WeaponToEquip == nullptr) return;
+	if(CombatState != ECombatState::ECS_Unoccupied) return;
+	
 	if(EquippedWeapon)
 	{
 		EquippedWeapon->Dropped();
@@ -528,6 +527,15 @@ void UCombatComponent::JumpToShotgunEnd()
 	}
 }
 
+void UCombatComponent::ThrowGrenadeFinished()
+{
+	if(EquippedWeapon)
+	{
+		EquippedWeapon->GetWeaponMesh()->SetVisibility(true);
+	}
+	CombatState = ECombatState::ECS_Unoccupied; // called on an anim notify in grenade montage
+}
+
 // For server only
 void UCombatComponent::ServerReload_Implementation()
 {
@@ -558,10 +566,18 @@ void UCombatComponent::OnRep_CombatState()
 	case ECombatState::ECS_Reloading:
 		HandleReload(); // all clients see reload montage
 		break;
+		
 	case ECombatState::ECS_Unoccupied:
 		if(bFireButtonPressed)
 		{
 			Fire();
+		}
+		break;
+		
+	case ECombatState::ECS_ThrowingGrenade:
+		if(PlayerRef && !PlayerRef->IsLocallyControlled())
+		{
+			PlayerRef->PlayThrowGrenadeMontage();
 		}
 		break;
 	}
@@ -588,4 +604,31 @@ int32 UCombatComponent::AmountToReload()
 	}
 
 	return 0;
+}
+
+void UCombatComponent::ThrowGrenade()
+{
+	if(CombatState != ECombatState::ECS_Unoccupied) return;
+	
+	CombatState = ECombatState::ECS_ThrowingGrenade;
+	
+	if(PlayerRef)
+	{
+		PlayerRef->PlayThrowGrenadeMontage();
+	}
+
+	if(PlayerRef && !PlayerRef->HasAuthority())
+	{
+		ServerThrowGrenade();
+	}
+}
+
+void UCombatComponent::ServerThrowGrenade_Implementation()
+{
+	CombatState = ECombatState::ECS_ThrowingGrenade;
+
+	if(PlayerRef)
+	{
+		PlayerRef->PlayThrowGrenadeMontage();
+	}
 }

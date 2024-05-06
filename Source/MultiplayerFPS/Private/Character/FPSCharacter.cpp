@@ -141,6 +141,18 @@ void AFPSCharacter::PlayReloadMontage()
 	}
 }
 
+void AFPSCharacter::PlayThrowGrenadeMontage()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if(AnimInstance && ThrowGrenadeMontage)
+	{
+		if(Combat->EquippedWeapon)
+			Combat->EquippedWeapon->GetWeaponMesh()->SetVisibility(false);
+		
+		AnimInstance->Montage_Play(ThrowGrenadeMontage);
+	}
+}
+
 // Server only
 void AFPSCharacter::Elim()
 {
@@ -404,6 +416,7 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		EnhancedInputComponent->BindAction(FireWeaponAction, ETriggerEvent::Started, this, &AFPSCharacter::FireWeaponButtonPressed);
 		EnhancedInputComponent->BindAction(FireWeaponAction, ETriggerEvent::Completed, this, &AFPSCharacter::FireWeaponButtonReleased);
 		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &AFPSCharacter::ReloadButtonPressed);
+		EnhancedInputComponent->BindAction(ThrowGrenadeAction, ETriggerEvent::Triggered, this, &AFPSCharacter::GrenadeButtonPressed);
 	}	
 }
 
@@ -538,6 +551,14 @@ void AFPSCharacter::ReloadButtonPressed()
 	if(Combat)
 	{
 		Combat->Reload();
+	}
+}
+
+void AFPSCharacter::GrenadeButtonPressed()
+{
+	if(Combat)
+	{
+		Combat->ThrowGrenade();
 	}
 }
 

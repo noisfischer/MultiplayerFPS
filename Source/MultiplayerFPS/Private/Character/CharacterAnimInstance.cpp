@@ -81,7 +81,7 @@ void UCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		}
 	}
 
-	bUseFABRIK = PlayerRef->GetCombatState() != ECombatState::ECS_Reloading;
-	bUseAimOffsets = PlayerRef->GetCombatState() != ECombatState::ECS_Reloading && !PlayerRef->GetDisableGameplay();
-	bTransformRightHand = PlayerRef->GetCombatState() != ECombatState::ECS_Reloading && !PlayerRef->GetDisableGameplay();
+	bUseFABRIK = PlayerRef->GetCombatState() == ECombatState::ECS_Unoccupied;
+	bUseAimOffsets = PlayerRef->GetCombatState() == ECombatState::ECS_Unoccupied && !PlayerRef->GetDisableGameplay();
+	bTransformRightHand = PlayerRef->GetCombatState() == ECombatState::ECS_Unoccupied && !PlayerRef->GetDisableGameplay();
 }

@@ -25,6 +25,7 @@ public:
 	virtual void PostInitializeComponents() override;
 	void PlayFireMontage(bool bAiming);
 	void PlayReloadMontage();
+	void PlayThrowGrenadeMontage();
 
 	void Elim();
 	
@@ -67,6 +68,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ReloadAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ThrowGrenadeAction;
+
+
 	UPROPERTY()
 	class AFPSPlayerState* FPSPlayerState;
 
@@ -93,12 +98,13 @@ protected:
 	void FireWeaponButtonPressed();
 	void FireWeaponButtonReleased();
 	void ReloadButtonPressed();
+	void GrenadeButtonPressed();
 	void CalculateAO_Pitch();
 	float CalculateSpeed();
 	void AimOffset(float DeltaTime);
 	void SimProxiesTurn();
 	virtual void Jump() override;
-	void PlayHitReactMontage();
+	void PlayHitReactMontage(); 
 	
 	// callback for pre-existing ApplyDamage function
 	UFUNCTION()
@@ -149,6 +155,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = Combat)
 	UAnimMontage* ReloadMontage;
+
+	UPROPERTY(EditAnywhere, Category = Combat)
+	UAnimMontage* ThrowGrenadeMontage;
 	
 	void HideCameraIfCharacterClose();
 	UPROPERTY(EditAnywhere)
